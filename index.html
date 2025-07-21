@@ -28,6 +28,7 @@
             z-index: 100; /* Initially on top */
             background-color: #0d1117; /* Matches body background */
             pointer-events: none; /* Non-interactive by default */
+            transition: opacity 0.8s ease-out; /* Smooth fade out for the container */
         }
 
         /* Styles to manage the main content visibility and stacking */
@@ -36,7 +37,7 @@
             visibility: hidden;
             position: relative; /* Needed for z-index stacking */
             z-index: 10;
-            transition: opacity 2s ease-in; /* Slower, smoother fade-in */
+            transition: opacity 1s ease-in; /* Slower, smoother fade-in */
         }
 
         /* Custom gradient for hero text and other accents */
@@ -191,6 +192,52 @@
         ::-webkit-scrollbar-thumb:hover {
             background-color: #64748b; /* Lighter on hover */
         }
+
+        /* Modal styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #1a202c;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal.open .modal-content {
+            transform: translateY(0);
+        }
+        .modal-close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #cbd5e0;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body class="bg-[#0d1117] text-white antialiased">
@@ -203,21 +250,23 @@
         <!-- Navigation Bar -->
         <header class="sticky top-0 z-50 bg-[#0d1117]/90 backdrop-blur-md border-b border-gray-800">
             <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-white">
+                <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-white flex-shrink-0 whitespace-nowrap">
                     <!-- DNI Ltd Logo - Placeholder, replace with actual if available -->
                     <img src="https://placehold.co/40x40/00C853/FFFFFF?text=DNI" alt="DNI Ltd Logo" class="w-7 h-7 rounded-full">
                     <span>DNI Ltd</span>
                 </a>
-                <div class="hidden md:flex space-x-8 lg:space-x-12">
-                    <a href="#about-dni-ltd" class="text-gray-300 hover:text-white font-medium transition duration-200">About Us</a>
-                    <a href="#services-pricing" class="text-gray-300 hover:text-white font-medium transition duration-200">Services & Pricing</a>
-                    <a href="#how-it-works" class="text-gray-300 hover:text-white font-medium transition duration-200">How It Works</a>
-                    <a href="#ai-features" class="text-gray-300 hover:text-white font-medium transition duration-200">AI Features</a>
-                    <a href="#client-types" class="text-gray-300 hover:text-white font-medium transition duration-200">Clients</a>
-                    <a href="#why-different" class="text-gray-300 hover:text-white font-medium transition duration-200">Our Edge</a>
-                    <a href="#investor-faq" class="text-gray-300 hover:text-white font-medium transition duration-200">Investor FAQ</a>
+                <div class="hidden md:flex md:space-x-4 lg:space-x-6 xl:space-x-8"> <!-- Further adjusted space-x for better fit -->
+                    <a href="#our-unfair-edge" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">Our Edge</a>
+                    
+                    <a href="#what-we-deliver" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">What We Deliver</a>
+                    <a href="#ai-features" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">AI Features</a>
+                    <a href="#services-pricing" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">Pricing</a>
+                    <a href="#client-partners" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">Clients</a>
+                    <a href="#client-faq" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">Client FAQ</a>
+                    <a href="#security-governance" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">Security & Governance</a>
+                    <a href="#about-dni-ltd" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">About Us</a>
                 </div>
-                <a href="https://calendly.com/darmashru/30min-strategy-call" target="_blank" class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-2 rounded-full text-sm font-semibold transition duration-200">
+                <a href="https://calendly.com/darmashru/30min-strategy-call" target="_blank" class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-2 rounded-full text-sm font-semibold transition duration-200 whitespace-nowrap">
                     Book a Call
                 </a>
                 <button id="mobile-menu-button" class="md:hidden text-gray-400 hover:text-white">
@@ -227,13 +276,15 @@
             <!-- Mobile Menu (initially hidden) -->
             <div id="mobile-menu" class="md:hidden hidden bg-[#0d1117] py-4 border-t border-gray-800">
                 <div class="flex flex-col items-center space-y-4">
-                    <a href="#about-dni-ltd" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">About Us</a>
-                    <a href="#services-pricing" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Services & Pricing</a>
-                    <a href="#how-it-works" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">How It Works</a>
+                    <a href="#our-unfair-edge" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Our Edge</a>
+                    
+                    <a href="#what-we-deliver" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">What We Deliver</a>
                     <a href="#ai-features" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">AI Features</a>
-                    <a href="#client-types" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Clients</a>
-                    <a href="#why-different" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Our Edge</a>
-                    <a href="#investor-faq" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Investor FAQ</a>
+                    <a href="#services-pricing" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Pricing</a>
+                    <a href="#client-partners" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Clients</a>
+                    <a href="#client-faq" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Client FAQ</a>
+                    <a href="#security-governance" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Security & Governance</a>
+                    <a href="#about-dni-ltd" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">About Us</a>
                     <a href="https://calendly.com/darmashru/30min-strategy-call" target="_blank" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded-full text-sm font-semibold transition duration-200 w-max">
                         Book a Call
                     </a>
@@ -246,151 +297,179 @@
             <section class="relative min-h-[calc(100vh-6rem)] flex items-center justify-center text-center py-20 px-4 overflow-hidden">
                 <div class="hero-bg-shapes"></div>
                 <div class="relative z-10 container mx-auto flex flex-col items-center justify-center">
-                    <div class="bg-green-600 bg-opacity-80 text-white text-sm font-semibold px-4 py-2 rounded-full mb-6 shadow-lg">
-                        DNI Limited: Next-Generation Data Intelligence
-                    </div>
                     <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 max-w-4xl tracking-tight">
-                        Turn Raw Data into <br>
-                        <span class="text-gradient-green-purple">Real-Time Decisions & Unstoppable Growth</span>
+                        Turn Your Raw Data into <span class="text-gradient-green-purple">actionable insights</span> <br> in 90 Days
                     </h1>
-                    <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
-                        We build AI-powered dashboards that go far beyond reporting — delivering clarity, automation, and insight that changes how companies operate.
+                    <p class="text-lg md:text-xl text-gray-300 mb-6 max-w-2xl mx-auto">
+                        We build AI-powered dashboards that uncover hidden profits, slash process times, and put performance forecasting on autopilot.
                     </p>
+                    
                     <a href="https://calendly.com/darmashru/30min-strategy-call" target="_blank" class="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-10 py-4 rounded-full text-lg font-bold shadow-xl transition duration-300 ease-in-out transform hover:scale-105">
-                        Book Your Strategy Call
+                        Claim My 90-Day Revenue Guarantee
                     </a>
                     <p class="text-gray-400 text-sm mt-4">
-                        Free 6-month pilot for qualified firms to prove value first.
+                        Free 3-Month Pilot — No Upfront Fee for Qualified Teams
                     </p>
+                    <div class="text-md text-yellow-400 font-semibold mb-4 space-y-2 mt-2">
+                        <p>🔒 Only 3 Pilot Slots Available – Apply by August 15</p>
+                        <p>💡 Double Your ROI in 90 Days — or We Work Free Until You Do!</p>
+                    </div>
                     <div class="mt-16 flex flex-col items-center">
-                        <div class="flex avatar-group mb-3">
-                            <!-- Placeholder avatars - can be removed if not desired -->
-                            <img src="https://placehold.co/40x40/22C55E/FFFFFF?text=D1" alt="Avatar 1" class="avatar">
-                            <img src="https://placehold.co/40x40/10B981/FFFFFF?text=N2" alt="Avatar 2" class="avatar">
-                            <img src="https://placehold.co/40x40/059669/FFFFFF?text=I3" alt="Avatar 3" class="avatar">
-                            <img src="https://placehold.co/40x40/047857/FFFFFF?text=L4" alt="Avatar 4" class="avatar">
-                            <img src="https://placehold.co/40x40/065F46/FFFFFF?text=T5" alt="Avatar 5" class="avatar">
-                        </div>
-                        <p class="text-gray-300 text-md font-semibold">
-                            Trusted by innovative businesses worldwide.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- About DNI Ltd Section -->
-            <section id="about-dni-ltd" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
-                <div class="max-w-6xl mx-auto text-center">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-12">About <span class="text-gradient-blue-green">DNI Ltd</span></h2>
-                    <div class="grid md:grid-cols-2 gap-12 items-center text-left">
-                        <div>
-                            <h3 class="text-3xl font-bold text-white mb-4">Who We Are</h3>
-                            <p class="text-lg text-gray-300 leading-relaxed mb-4">
-                                DNI Limited is a **next-generation data intelligence agency** that helps small and medium-sized businesses turn raw data into real-time decisions and unstoppable growth. We build AI-powered dashboards that go far beyond reporting — we deliver clarity, automation, and insight that changes how companies operate.
-                            </p>
-                            <p class="text-lg text-gray-300 leading-relaxed">
-                                We specialize in turning cluttered spreadsheets and legacy systems into **beautiful, intelligent dashboards** that are usable by CEOs, department heads, and frontline staff alike. Our work combines world-class design, business storytelling, and next-level AI integration, including GPT-powered insights.
-                            </p>
-                        </div>
-                        <div class="relative group">
-                            <img src="https://images.unsplash.com/photo-1579547945413-49793175723b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Data visualization dashboard" class="rounded-xl shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-gradient-to-r from-green-500 to-blue-500 opacity-20 rounded-xl group-hover:opacity-30 transition-opacity duration-300"></div>
-                        </div>
-                    </div>
-                    <div class="mt-16 pt-12 border-t border-gray-700">
-                        <h3 class="text-3xl font-bold text-white mb-4">Mission & Vision</h3>
-                        <p class="text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto mb-4">
-                            **Mission:** To democratize business intelligence by giving every small and medium-sized firm access to enterprise-grade, AI-powered data dashboards that eliminate chaos and unlock clarity.
-                        </p>
-                        <p class="text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
-                            **Vision:** To become the world’s leading AI dashboard agency for accountants, startups, and service-led firms.
+                        <p class="text-gray-300 text-md font-semibold italic">
+                            “We uncovered £50K in hidden revenue in month one.” — Mahesh Bhatelia, CFO & Founder @ Lazer Enterprises Ltd
                         </p>
                     </div>
                 </div>
             </section>
 
             <!-- Why We're Different Section (Our Edge) -->
-            <section id="why-different" class="py-20 px-4 bg-[#0d1117] border-t border-gray-800">
+            <section id="our-unfair-edge" class="py-20 px-4 bg-[#0d1117] border-t border-gray-800">
                 <div class="max-w-7xl mx-auto text-center">
                     <h2 class="text-4xl md:text-5xl font-bold mb-12">Our <span class="text-gradient-purple-pink">Unfair Edge</span></h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
                             <svg class="w-12 h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-                            <h3 class="text-xl font-semibold text-white mb-2">Beyond Excel Chaos</h3>
-                            <p class="text-gray-300">We replace cluttered spreadsheets with smart dashboards that feel like software products.</p>
+                            <h3 class="text-xl font-semibold text-white mb-2">From Spreadsheets to Strategy</h3>
+                            <p class="text-gray-300">Replace manual workarounds with live dashboards that feel like purpose-built software—no more chasing cells.</p>
                         </div>
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-blue-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
-                            <h3 class="text-xl font-semibold text-white mb-2">Integrated GPT AI</h3>
-                            <p class="text-gray-300">GPT AI is directly integrated into dashboards for on-demand insights and strategic prompts.</p>
+                            <svg class="w-12 h-12 text-blue-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
+                            <h3 class="text-xl font-semibold text-white mb-2">Insights at Your Fingertips</h3>
+                            <p class="text-gray-300">Ask your data anything. Embedded Natural Language Generative AI turns raw numbers into instant, actionable recommendations.</p>
                         </div>
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
                             <svg class="w-12 h-12 text-purple-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                            <h3 class="text-xl font-semibold text-white mb-2">Decision-Focused Design</h3>
-                            <p class="text-gray-300">We design for decision-making, not just reporting. Every visual earns its place.</p>
+                            <h3 class="text-xl font-semibold text-white mb-2">Decisions First, Data Second</h3>
+                            <p class="text-gray-300">Every chart, table, and alert is built around one goal: speed up critical decisions, not just show numbers.</p>
                         </div>
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
                             <svg class="w-12 h-12 text-yellow-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2h-4v2h4V4zm6 15H4V8h16v11z"/></svg>
-                            <h3 class="text-xl font-semibold text-white mb-2">Free 6-Month Pilot</h3>
-                            <p class="text-gray-300">We offer a free 6-month pilot for qualified firms to prove value first, zero risk.</p>
+                            <h3 class="text-xl font-semibold text-white mb-2">Risk-Free 3-Month Trial</h3>
+                            <p class="text-gray-300">See real ROI in 90 days or we work free until you do.</p>
                         </div>
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-red-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c4.41 0 8-3.59 8-8s-3.59-8-8-8-8 3.59-8 8 3.59 8 8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-                            <h3 class="text-xl font-semibold text-white mb-2">Speak Your Language</h3>
-                            <p class="text-gray-300">Our dashboards are simple enough for staff, powerful enough for executives.</p>
+                            <svg class="w-12 h-12 text-red-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                            <h3 class="text-xl font-semibold text-white mb-2">Adopted by Your Team</h3>
+                            <p class="text-gray-300">Intuitive enough for frontline staff, powerful enough for executives—everyone wins.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Services & Pricing Section -->
-            <section id="services-pricing" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
-                <div class="max-w-7xl mx-auto text-center">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-12">Our <span class="text-gradient-green-purple">Services & Pricing</span></h2>
-
-                    <div class="mb-16">
-                        <h3 class="text-3xl font-bold text-white mb-6">What We Deliver:</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                            <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
-                                <svg class="w-8 h-8 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 15.93l-6-3V8.07l6 3 6-3v6.86l-6 3z"/></svg>
-                                <p class="text-gray-300 text-lg">AI-powered Power BI dashboards (built & hosted)</p>
-                            </div>
-                            <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
-                                <svg class="w-8 h-8 text-blue-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 17H6c-1.1 0-2-.9-2-2V9c0-1.1.9-2 2-2h7v10zm-6-2h5V9H7v6zm10-10v2h-2v-2h2zm-2 4h2v2h-2v-2zm2 4h-2v2h2v-2zm-2 4h2v2h-2v-2zm-2-12v2h-2v-2h2zm-2 4h2v2h-2v-2z"/></svg>
-                                <p class="text-gray-300 text-lg">KPI strategy and data storytelling</p>
-                            </div>
-                            <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
-                                <svg class="w-8 h-8 text-purple-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-                                <p class="text-gray-300 text-lg">Financial, operational, and HR insights</p>
-                            </div>
-                            <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
-                                <svg class="w-8 h-8 text-yellow-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H5v-2h14v2zm-2-4H7V7h10v2zM19 17H5v-2h14v2z"/></svg>
-                                <p class="text-gray-300 text-lg">GPT-powered decision prompts inside dashboards</p>
-                            </div>
-                            <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
-                                <svg class="w-8 h-8 text-red-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H6v-3h12v3zm0-5H6v-3h12v3zM6 8h12V5H6v3z"/></svg>
-                                <p class="text-gray-300 text-lg">White-labeled dashboards (branded to client)</p>
-                            </div>
-                            <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
-                                <svg class="w-8 h-8 text-indigo-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 19H7V5h10v14zm0-16H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 11h-2v2h2v-2zm0-4h-2v2h2v-2z"/></svg>
-                                <p class="text-gray-300 text-lg">Consulting on data pipeline design (optional)</p>
-                            </div>
+            <!-- How It Works Section -->
+            <section id="how-it-works" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
+                <div class="max-w-6xl mx-auto text-center">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-12">How It <span class="text-gradient-blue-green">Works</span></h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-3xl font-bold mb-4 text-white">1</div>
+                            <h3 class="text-xl font-semibold text-white mb-2">Discovery Call</h3>
+                            <p class="text-gray-300">Map your biggest data headaches and revenue gaps.</p>
+                        </div>
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-3xl font-bold mb-4 text-white">2</div>
+                            <h3 class="text-xl font-semibold text-white mb-2">Data & Mockup</h3>
+                            <p class="text-gray-300">Get a clickable demo using your real data in as little as one week.</p>
+                        </div>
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center text-3xl font-bold mb-4 text-white">3</div>
+                            <h3 class="text-xl font-semibold text-white mb-2">Demo Delivery</h3>
+                            <p class="text-gray-300">Review a live Power BI dashboard custom to your KPIs.</p>
+                        </div>
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-16 h-16 bg-yellow-600 rounded-full flex items-center justify-center text-3xl font-bold mb-4 text-white">4</div>
+                            <h3 class="text-xl font-semibold text-white mb-2">Risk-Free 3-Month Trial</h3>
+                            <p class="text-gray-300">Pilot full access risk-free—see ROI or pay nothing.</p>
+                        </div>
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-3xl font-bold mb-4 text-white">5</div>
+                            <h3 class="text-xl font-semibold text-white mb-2">Performance Review</h3>
+                            <p class="text-gray-300">We analyze results, optimize, and plan your next growth phase.</p>
                         </div>
                     </div>
+                </div>
+            </section>
 
-                    <h3 class="text-3xl font-bold text-white mb-8 mt-16">Our Pricing Model:</h3>
+            <!-- What We Deliver Section -->
+            <section id="what-we-deliver" class="py-20 px-4 bg-[#0d1117] border-t border-gray-800">
+                <div class="max-w-7xl mx-auto text-center">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-12">What We <span class="text-gradient-green-purple">Deliver</span></h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
+                            <svg class="w-8 h-8 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 15.93l-6-3V8.07l6 3 6-3v6.86l-6 3z"/></svg>
+                            <p class="text-gray-300 text-lg">Custom live dashboards that auto-refresh and highlight your top revenue opportunities.</p>
+                        </div>
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
+                            <svg class="w-8 h-8 text-blue-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 17H6c-1.1 0-2-.9-2-2V9c0-1.1.9-2 2-2h7v10zm-6-2h5V9H7v6zm10-10v2h-2v-2h2zm-2 4h2v2h-2v-2zm2 4h-2v2h2v-2zm-2 4h2v2h-2v-2zm-2-12v2h-2v-2h2zm-2 4h2v2h-2v-2z"/></svg>
+                            <p class="text-gray-300 text-lg">Tailored KPI playbooks and narrative dashboards that align growth goals to daily decisions.</p>
+                        </div>
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
+                            <svg class="w-8 h-8 text-purple-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                            <p class="text-gray-300 text-lg">One dashboard, all your metrics: finance, ops, HR—so you stop toggling between tools.</p>
+                        </div>
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
+                            <svg class="w-8 h-8 text-yellow-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H5v-2h14v2zm-2-4H7V7h10v2zM19 17H5v-2h14v2z"/></svg>
+                            <p class="text-gray-300 text-lg">Automated AI alerts that flag risks and recommend next steps before they become problems.</p>
+                        </div>
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
+                            <svg class="w-8 h-8 text-red-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H6v-3h12v3zm0-5H6v-3h12v3zM6 8h12V5H6v3z"/></svg>
+                            <p class="text-gray-300 text-lg">Fully branded, client-facing portals you can call your own.</p>
+                        </div>
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
+                            <svg class="w-8 h-8 text-indigo-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 19H7V5h10v14zm0-16H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 11h-2v2h2v-2zm0-4h-2v2h2v-2z"/></svg>
+                            <p class="text-gray-300 text-lg">End-to-end data engineering support so your dashboards never break.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Features Section -->
+            <section id="ai-features" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
+                <div class="max-w-6xl mx-auto text-center">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-12">AI <span class="text-gradient-purple-pink">Features</span></h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-12 h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
+                            <h3 class="text-xl font-semibold text-white mb-2">Natural Language Generative AI</h3>
+                            <p class="text-gray-300">Live natural language AI inside your dashboard—no more static reports.</p>
+                        </div>
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-12 h-12 text-blue-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
+                            <h3 class="text-xl font-semibold text-white mb-2">Predictive Trend Detection</h3>
+                            <p class="text-gray-300">AI-driven forecasts spot cashflow shortages and growth hotspots early.</p>
+                        </div>
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-12 h-12 text-purple-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            <h3 class="text-xl font-semibold text-white mb-2">Automated Insight Generation</h3>
+                            <p class="text-gray-300">Daily executive summaries emailed automatically—skip the slide deck prep.</p>
+                        </div>
+                        <!-- Removed AI Business Insight Generator Feature as requested -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services & Pricing Section -->
+            <section id="services-pricing" class="py-20 px-4 bg-[#0d1117] border-t border-gray-800">
+                <div class="max-w-7xl mx-auto text-center">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-12">Our <span class="text-gradient-green-purple">Pricing</span></h2>
+
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
                         <!-- Pricing Card 1: Essentials Plan -->
                         <div class="bg-gray-900 rounded-3xl p-8 flex flex-col justify-between shadow-2xl pricing-card-border">
                             <div>
                                 <h4 class="text-2xl font-bold mb-2">Essentials Plan</h4>
-                                <p class="text-gray-400 mb-6">Ideal for solo accountants or 1-2 user firms</p>
-                                <p class="text-5xl font-extrabold mb-8"><span class="text-green-500">£499</span><span class="text-lg text-gray-400 font-normal"> (one-time)</span></p>
+                                <p class="text-gray-400 mb-2">Fast-start dashboards for small teams. Get your first 3 views live in 2 weeks.</p>
+                                <p class="text-5xl font-extrabold mb-8"><span class="text-green-500">£499</span><span class="text-lg text-gray-400 font-normal"> one-time</span></p>
                                 <ul class="text-left space-y-4 mb-8">
-                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Single dashboard with up to 3 core views</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Single dashboard with up to 3 core views</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Custom KPI dashboards for finance, sales, and operations</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Automated data refresh (daily or real-time)</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Quick-start implementation guide & video walkthrough</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>2 hours of onboarding & best-practice training</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Email support during business hours</li>
                                 </ul>
                             </div>
-                            <a href="https://calendly.com/darmashru/30min-strategy-call" target="_blank" class="w-full bg-gray-700 hover:bg-gray-600 text-white px-8 py-3 rounded-full text-lg font-semibold transition duration-200 shadow">Get Started</a>
+                            <a href="https://calendly.com/darmashru/30min-strategy-call" target="_blank" class="w-full bg-gray-700 hover:bg-gray-600 text-white px-8 py-3 rounded-full text-lg font-semibold transition duration-200 shadow">Book a Call</a>
                         </div>
 
                         <!-- Pricing Card 2: Growth Plan -->
@@ -398,247 +477,372 @@
                             <div>
                                 <div class="text-sm font-bold text-center text-green-400 mb-4 animate-pulse">MOST POPULAR</div>
                                 <h4 class="text-2xl font-bold mb-2">Growth Plan</h4>
-                                <p class="text-gray-400 mb-6">Scale your insights & close more deals</p>
-                                <p class="text-5xl font-extrabold mb-8"><span class="text-green-500">£1,200</span><span class="text-lg text-gray-400 font-normal"> (one-time)</span></p>
+                                <p class="text-gray-400 mb-2">Full multi-tab dashboards + AI coaching call. Drive 20%+ revenue lift in 90 days.</p>
+                                <p class="text-5xl font-extrabold mb-8"><span class="text-green-500">£3,000</span><span class="lg:whitespace-nowrap text-lg text-gray-400 font-normal"> one-time</span></p>
                                 <ul class="text-left space-y-4 mb-8">
-                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Multi-tab Power BI dashboard (Financials, Ops, HR)</li>
-                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>GPT-powered insights + KPI coaching call</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Everything in Essentials, plus:</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Multi-tab Power BI dashboards (Financials, Ops, HR, Sales)</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Custom KPI playbook & narrative dashboard</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Automated AI alerts for anomalies & opportunities</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>One 90-minute KPI coaching call with our data strategist</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Integration with up to 3 data sources (CRM, ERP, ad platforms)</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>30 days of priority email & Slack support</li>
                                 </ul>
                             </div>
-                            <a href="https://calendly.com/darmashru/30min-strategy-call" target="_blank" class="w-full bg-gradient-to-r from-green-500 to-purple-600 hover:from-green-600 hover:to-purple-700 text-white px-8 py-3 rounded-full text-lg font-semibold transition duration-200 shadow-lg">Get Started</a>
+                            <a href="https://calendly.com/darmashru/30min-strategy-call" target="_blank" class="w-full bg-gradient-to-r from-green-500 to-purple-600 hover:from-green-600 hover:to-purple-700 text-white px-8 py-3 rounded-full text-lg font-semibold transition duration-200 shadow-lg">Book a Call</a>
                         </div>
 
                         <!-- Pricing Card 3: Premium Partner Plan -->
                         <div class="bg-gray-900 rounded-3xl p-8 flex flex-col justify-between shadow-2xl pricing-card-border">
                             <div>
                                 <h4 class="text-2xl font-bold mb-2">Premium Partner Plan</h4>
-                                <p class="text-gray-400 mb-6">For large organizations with custom needs</p>
-                                <p class="text-5xl font-extrabold mb-8"><span class="text-green-500">£2,000+</span><span class="text-lg text-gray-400 font-normal"> (one-time)</span></p>
+                                <p class="text-gray-400 mb-2">Enterprise rollout, custom integrations, ongoing AI tuning.</p>
+                                <p class="text-5xl font-extrabold mb-8"><span class="text-green-500">£10,000+</span><span class="lg:whitespace-nowrap text-lg text-gray-400 font-normal"> one-time</span></p>
                                 <ul class="text-left space-y-4 mb-8">
-                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Fully branded dashboard + ongoing GPT integration</li>
-                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Automation triggers, alerts, and predictive analytics</li>
-                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>White-label rights</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Everything in Growth, plus:</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Enterprise-grade reporting & data architecture design</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Unlimited data source integrations (APIs, databases, cloud apps)</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Branded client portal & white-label capabilities</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Ongoing AI model tuning & performance optimization</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Security hardening: SSO, MFA, and audit logging</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Quarterly strategy reviews & roadmap planning</li>
+                                    <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>24/7 dedicated support & SLA guarantees</li>
                                 </ul>
                             </div>
-                            <a href="https://calendly.com/darmashru/30min-strategy-call" target="_blank" class="w-full bg-gray-700 hover:bg-gray-600 text-white px-8 py-3 rounded-full text-lg font-semibold transition duration-200 shadow">Contact Us</a>
+                            <a href="https://calendly.com/darmashru/30min-strategy-call" target="_blank" class="w-full bg-gray-700 hover:bg-gray-600 text-white px-8 py-3 rounded-full text-lg font-semibold transition duration-200 shadow">Book a Call</a>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm mt-12">
-                        **Maintenance & Hosting:** from £49.99/month (post one-time build fee).
-                    </p>
                 </div>
             </section>
 
-            <!-- How It Works Section -->
-            <section id="how-it-works" class="py-20 px-4 bg-[#0d1117] border-t border-gray-800">
+            <!-- Client Partners Section -->
+            <section id="client-partners" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
                 <div class="max-w-7xl mx-auto text-center">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-12">Our <span class="text-gradient-orange-red">Seamless Process</span></h2>
-
-                    <div class="relative flex flex-col items-center">
-                        <!-- Connector Line (Vertical for mobile, hidden on larger screens) -->
-                        <div class="absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-1 bg-gray-700 md:hidden z-0"></div>
-                        <!-- Connector Line (Horizontal for desktop, hidden on smaller screens) -->
-                        <div class="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 h-1 bg-gray-700 hidden md:block z-0"></div>
-
-                        <div class="grid md:grid-cols-5 gap-y-12 md:gap-x-8 lg:gap-x-12 w-full">
-                            <!-- Step 1 -->
-                            <div class="relative flex flex-col items-center md:items-start text-center md:text-left z-10">
-                                <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center border-4 border-green-500 text-white text-3xl font-bold mb-4 shadow-lg">1</div>
-                                <h3 class="text-2xl font-bold text-white mb-2">Discovery Call</h3>
-                                <p class="text-gray-300">Understand your unique pain points and business goals.</p>
-                            </div>
-
-                            <!-- Step 2 -->
-                            <div class="relative flex flex-col items-center md:items-start text-center md:text-left md:col-start-2 z-10">
-                                <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center border-4 border-blue-500 text-white text-3xl font-bold mb-4 shadow-lg">2</div>
-                                <h3 class="text-2xl font-bold text-white mb-2">Data & Mockup</h3>
-                                <p class="text-gray-300">Quick turnaround with mockups using your data (or fake data).</p>
-                            </div>
-
-                            <!-- Step 3 -->
-                            <div class="relative flex flex-col items-center md:items-start text-center md:text-left md:col-start-3 z-10">
-                                <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center border-4 border-purple-500 text-white text-3xl font-bold mb-4 shadow-lg">3</div>
-                                <h3 class="text-2xl font-bold text-white mb-2">Demo Delivery</h3>
-                                <p class="text-gray-300">Receive a fully functional Power BI dashboard for review.</p>
-                            </div>
-
-                            <!-- Step 4 -->
-                            <div class="relative flex flex-col items-center md:items-start text-center md:text-left md:col-start-4 z-10">
-                                <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center border-4 border-yellow-500 text-white text-3xl font-bold mb-4 shadow-lg">4</div>
-                                <h3 class="text-2xl font-bold text-white mb-2">Free 6-Month Trial</h3>
-                                <p class="text-gray-300">Experience full access with zero risk for half a year.</p>
-                            </div>
-
-                            <!-- Step 5 -->
-                            <div class="relative flex flex-col items-center md:items-start text-center md:text-left md:col-start-5 z-10">
-                                <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center border-4 border-red-500 text-white text-3xl font-bold mb-4 shadow-lg">5</div>
-                                <h3 class="text-2xl font-bold text-white mb-2">Performance Review</h3>
-                                <p class="text-gray-300">If it brings clear ROI, we discuss scaling up.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="https://calendly.com/darmashru/30min-strategy-call" target="_blank" class="inline-block mt-16 bg-gradient-to-r from-red-500 to-purple-600 hover:from-red-600 hover:to-purple-700 text-white px-10 py-4 rounded-full text-lg font-bold shadow-xl transition duration-300 ease-in-out transform hover:scale-105">
-                        Start Your Journey
-                    </a>
-                </div>
-            </section>
-
-            <!-- AI Features Section -->
-            <section id="ai-features" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
-                <div class="max-w-7xl mx-auto text-center">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-12">Intelligent <span class="text-gradient-blue-green">AI Features</span></h2>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-12">Client <span class="text-gradient-orange-red">Partners</span></h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-start text-left transform hover:scale-105 transition-transform duration-300">
-                            <div class="bg-cyan-600 p-3 rounded-full mb-4">
-                                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm0-4h-2V7h2v7z"/></svg>
-                            </div>
-                            <h3 class="text-2xl font-bold text-white mb-3">GPT Chat Integration</h3>
-                            <p class="text-gray-300">Embedded GPT chat within your dashboards for instant explanations, recommendations, and strategic insights on demand.</p>
-                        </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-start text-left transform hover:scale-105 transition-transform duration-300">
-                            <div class="bg-yellow-600 p-3 rounded-full mb-4">
-                                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-4 0c1.66 0 2.99-1.34 2.99-3S13.66 5 12 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-4 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm8 8c1.66 0 2.99-1.34 2.99-3S17.66 13 16 13c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-4 0c1.66 0 2.99-1.34 2.99-3S13.66 13 12 13c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-4 0c1.66 0 2.99-1.34 2.99-3S9.66 13 8 13C6.34 13 5 14.34 5 16s1.34 3 3 3z"/></svg>
-                            </div>
-                            <h3 class="text-2xl font-bold text-white mb-3">Predictive Trend Detection</h3>
-                            <p class="text-gray-300">Proactively identify future risks (e.g., cashflow shortages) and opportunities before they impact your bottom line.</p>
-                        </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-start text-left transform hover:scale-105 transition-transform duration-300">
-                            <div class="bg-purple-600 p-3 rounded-full mb-4">
-                                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-                            </div>
-                            <h3 class="text-2xl font-bold text-white mb-3">Automated Insight Generation</h3>
-                            <p class="text-gray-300">Receive executive-level summaries and actionable insights automatically generated by AI, eliminating manual reporting.</p>
-                        </div>
-                    </div>
-                    <div class="text-center mt-16">
-                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="inline-flex items-center bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white px-10 py-4 rounded-full text-lg font-bold shadow-xl transition duration-300 ease-in-out transform hover:scale-105">
-                            <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-                            Watch Demo Dashboard Preview
-                        </a>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Client Types We Serve Section -->
-            <section id="client-types" class="py-20 px-4 bg-[#0d1117] border-t border-gray-800">
-                <div class="max-w-7xl mx-auto text-center">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-12">Our Ideal <span class="text-gradient-orange-red">Client Partners</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-16 h-16 text-orange-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h6v2H9V4zm9 16H6V8h12v12z"/></svg>
-                            <h3 class="text-2xl font-bold text-white mb-3">Accounting Firms</h3>
-                            <p class="text-gray-300">Helping firms like Fortis Accountants elevate their client services with smart data solutions.</p>
+                            <svg class="w-12 h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
+                            <h3 class="text-xl font-semibold text-white mb-2">Accounting Firms</h3>
+                            <p class="text-gray-300">How Fortis Accountants uncovered an extra £50K in month one.</p>
                         </div>
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-16 h-16 text-pink-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 11.55C9.64 9.35 6.48 8 3 8v11c3.48 0 6.64 1.35 9 3.55 2.36-2.2 5.52-3.55 9-3.55V8c-3.48 0-6.64 1.35-9 3.55zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-                            <h3 class="text-2xl font-bold text-white mb-3">Professional Service Firms</h3>
-                            <p class="text-gray-300">For those drowning in spreadsheets and needing clarity across their operations.</p>
+                            <svg class="w-12 h-12 text-blue-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
+                            <h3 class="text-xl font-semibold text-white mb-2">Professional Service Firms</h3>
+                            <p class="text-gray-300">Stop losing billable hours—streamline workflow and forecasting.</p>
                         </div>
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-16 h-16 text-indigo-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 11h-1.5c-.34 0-.67.04-1 .09V7c0-1.1-.9-2-2-2s-2 .9-2 2v2H9c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V13c0-1.1-.9-2-2-2zM9 19V11h8.5v8H9zM15.5 8H17v2h-1.5V8zM19 2h-4c-.55 0-1 .45-1 1s.45 1 1 1h4c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
-                            <h3 class="text-2xl font-bold text-white mb-3">Bootstrapped & VC-Backed Startups</h3>
-                            <p class="text-gray-300">Helping innovative firms quickly prove traction and scale with data-driven decisions.</p>
+                            <svg class="w-12 h-12 text-purple-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            <h3 class="text-xl font-semibold text-white mb-2">Bootstrapped & VC-Backed Startups</h3>
+                            <p class="text-gray-300">Validate product-market fit with data-backed growth metrics from day one.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Investor Questions We’re Ready For (FAQ Section) -->
-            <section id="investor-faq" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
-                <div class="max-w-4xl mx-auto">
-                    <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">Investor Questions <span class="text-gradient-orange-red">We're Ready For</span></h2>
-
-                    <div class="accordion space-y-6">
+            <!-- Client FAQ Section -->
+            <section id="client-faq" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-12">Client <span class="text-gradient-green-purple">FAQ</span></h2>
+                    <div class="accordion-container text-left">
                         <!-- FAQ Item 1 -->
-                        <div class="accordion-item bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
-                            <div class="accordion-header" onclick="toggleAccordion(this)">
-                                <h3 class="text-xl font-semibold">Why not just use Excel?</h3>
-                                <svg class="w-6 h-6 text-gray-400 accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                                Why not just stick with Excel?
+                                <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300">Excel can't predict future cashflow risk or automate decision prompts. We go beyond numbers — **we build executive-level intelligence that empowers proactive strategy, not just reactive reporting.**</p>
+                                <p class="text-gray-300 text-lg">Excel can’t automate risk alerts or surface hidden revenue streams like our AI dashboards can. We turn your data into actionable insights instantly.</p>
                             </div>
                         </div>
-
                         <!-- FAQ Item 2 -->
-                        <div class="accordion-item bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
-                            <div class="accordion-header" onclick="toggleAccordion(this)">
-                                <h3 class="text-xl font-semibold">What if clients drop off after the free trial?</h3>
-                                <svg class="w-6 h-6 text-gray-400 accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                                What if we don’t see results after the trial?
+                                <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300">We build in proprietary GPT logic and tailored automation that clients can't easily replicate themselves. Plus, **white-labeling makes our product sticky and deeply integrated into their brand,** making it a core part of their operations.</p>
+                                <p class="text-gray-300 text-lg">We offer a risk-free period: if you don’t see real ROI within that time, we’ll continue working at no cost until you do.</p>
                             </div>
                         </div>
-
                         <!-- FAQ Item 3 -->
-                        <div class="accordion-item bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
-                            <div class="accordion-header" onclick="toggleAccordion(this)">
-                                <h3 class="text-xl font-semibold">What's stopping others from copying this?</h3>
-                                <svg class="w-6 h-6 text-gray-400 accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                                How unique is your solution?
+                                <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300">Our edge is in execution: **world-class design, bespoke AI integration, superior UX, and constant iteration.** We don't just build dashboards; we build living, breathing decision engines tailored to each client's unique needs.</p>
+                                <p class="text-gray-300 text-lg">Our combination of bespoke AI, world-class UX, and continuous optimization ensures you get a solution that’s tailored specifically for your needs and is hard to replicate.</p>
                             </div>
                         </div>
-
                         <!-- FAQ Item 4 -->
-                        <div class="accordion-item bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
-                            <div class="accordion-header" onclick="toggleAccordion(this)">
-                                <h3 class="text-xl font-semibold">How will you make money and scale this?</h3>
-                                <svg class="w-6 h-6 text-gray-400 accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                                How do you ensure scalability for our business?
+                                <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300">Through **high-margin one-time build packages, scalable recurring revenue from hosting and maintenance, and white-label licensing opportunities.** The first dashboard takes time; after that, it's a template machine, allowing for efficient, rapid deployment.</p>
+                                <p class="text-gray-300 text-lg">We use dashboard solutions that allow for quick rollouts and easy scaling as your business grows.</p>
+                            </div>
+                        </div>
+                        <!-- FAQ Item 5 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                                How quickly can we get started with a dashboard?
+                                <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <p class="text-gray-300 text-lg">We can deliver a clickable demo using your real data in as little as one week, with full rollout shortly afterward.</p>
+                            </div>
+                        </div>
+                        <!-- FAQ Item 6 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                                What types of data sources can your dashboards integrate with?
+                                <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <p class="text-gray-300 text-lg">Our dashboards can seamlessly integrate with cloud platforms (AWS, Azure), databases (SQL Server, MySQL), spreadsheets (Excel, Google Sheets), and popular apps (Salesforce, Google Analytics).</p>
+                            </p>
+                        </div>
+                        <!-- FAQ Item 7 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                                How often is the data updated in the dashboards?
+                                <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <p class="text-gray-300 text-lg">Data updates can be scheduled from real-time to daily or weekly refreshes, based on your business needs.</p>
+                            </div>
+                        </div>
+                        <!-- FAQ Item 8 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                                What kind of support and training do you offer?
+                                <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <p class="text-gray-300 text-lg">We provide comprehensive onboarding, training sessions, and ongoing support to ensure your team can fully leverage the dashboards.</p>
+                            </div>
+                        </div>
+                        <!-- FAQ Item 9 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                                Can the dashboards be customized to fit our brand?
+                                <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <p class="text-gray-300 text-lg">Absolutely. We offer white-label options so you can customize the look and feel to match your brand identity.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Final CTA Section -->
-            <section class="py-20 px-4 bg-[#0d1117] text-center border-t border-gray-800">
-                <div class="max-w-4xl mx-auto bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl p-10 shadow-2xl">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to transform your business with data intelligence?</h2>
-                    <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">Stop drowning in data and start making real-time decisions. Let DNI Ltd. unlock your unstoppable growth.</p>
-                    <a href="https://calendly.com/darmashru/30min-strategy-call" target="_blank" class="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-10 py-4 rounded-full text-lg font-bold shadow-xl transition duration-300 ease-in-out transform hover:scale-105">Book Your Free Strategy Call Now</a>
+            <!-- Security & Governance Section -->
+            <section id="security-governance" class="py-20 px-4 bg-[#0d1117] border-t border-gray-800">
+                <div class="max-w-6xl mx-auto text-center">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-12">Security & <span class="text-gradient-blue-green">Governance</span></h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-12 h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2S10 7.9 10 9v6c0 1.1.9 2 2 2zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V8zm-2 9H7v2h2v-2zm-2-4H7v2h2v-2zM7 7h2v2H7V7zm12-4h-4V1h-2v2H9V1H7v2H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM21 19H3V5h18v14z"/></svg>
+                            <h3 class="text-xl font-semibold text-white mb-2">Advanced Data Encryption</h3>
+                            <p class="text-gray-300">We use AES-256 encryption to secure all data both in transit and at rest, ensuring your information is always protected.</p>
+                        </div>
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-12 h-12 text-blue-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 11c1.66 0 2.99-1.34 2.99-3S13.66 5 12 5s-3 1.34-3 3 1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                            <h3 class="text-xl font-semibold text-white mb-2">Strict Access Control</h3>
+                            <p class="text-gray-300">We implement role-based access control and multi-factor authentication, so only authorized personnel can access the data.</p>
+                        </div>
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-12 h-12 text-purple-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2h-4v2h4V4zm6 15H4V8h16v11z"/></svg>
+                            <h3 class="text-xl font-semibold text-white mb-2">Regular Security Audits</h3>
+                            <p class="text-gray-300">Our systems undergo regular, comprehensive audits by third-party security experts to identify and address any vulnerabilities.</p>
+                        </div>
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-12 h-12 text-yellow-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
+                            <h3 class="text-xl font-semibold text-white mb-2">GDPR Compliance</h3>
+                            <p class="text-gray-300">We adhere to strict data protection regulations, including GDPR, ensuring your data is handled with the highest standards of privacy.</p>
+                        </div>
+                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-12 h-12 text-red-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                            <h3 class="text-xl font-semibold text-white mb-2">Incident Response Plan</h3>
+                            <p class="text-gray-300">In the unlikely event of a data breach, we have a robust response plan that includes immediate containment, thorough investigation, and transparent communication.</p>
+                        </div>
+                    </div>
                 </div>
             </section>
+
         </main>
 
         <!-- Footer -->
-        <footer class="bg-[#14181f] py-12 px-6 border-t border-gray-800">
-            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
-                <div class="mb-4 md:mb-0 flex items-center space-x-2">
-                    <!-- DNI Ltd Logo in Footer -->
-                    <img src="https://placehold.co/30x30/00C853/FFFFFF?text=DNI" alt="DNI Ltd Logo" class="w-6 h-6 rounded-full">
-                    <p>&copy; 2025 DNI Limited. All rights reserved.</p>
+        <footer class="bg-[#14181f] py-12 px-4 border-t border-gray-800 text-gray-400 text-center">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                <!-- Contact Info -->
+                <div>
+                    <h3 class="text-white text-lg font-semibold mb-4">Contact Us</h3>
+                    <p>Email: <a href="mailto:info@dnianalytics.com" class="text-gray-300 hover:text-white">info@dnianalytics.com</a></p>
+                    <p>Phone: <a href="tel:+447946432335" class="text-gray-300 hover:text-white">+44 7946432335</a></p>
                 </div>
-                <div class="flex space-x-6">
-                    <a href="#" class="hover:text-white transition duration-200">Privacy Policy</a>
-                    <a href="#" class="hover:text-white transition duration-200">Terms of Service</a>
-                    <a href="https://linkedin.com/in/darshanmashru" target="_blank" class="hover:text-white transition duration-200">LinkedIn</a>
+                <!-- Navigation -->
+                <div>
+                    <h3 class="text-white text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul>
+                        <li><a href="#our-unfair-edge" class="text-gray-300 hover:text-white">Our Edge</a></li>
+                        <li><a href="#how-it-works" class="text-gray-300 hover:text-white">How It Works</a></li>
+                        <li><a href="#what-we-deliver" class="text-gray-300 hover:text-white">What We Deliver</a></li>
+                        <li><a href="#ai-features" class="text-gray-300 hover:text-white">AI Features</a></li>
+                        <li><a href="#services-pricing" class="text-gray-300 hover:text-white">Pricing</a></li>
+                        <li><a href="#client-partners" class="text-gray-300 hover:text-white">Clients</a></li>
+                        <li><a href="#client-faq" class="text-gray-300 hover:text-white">Client FAQ</a></li>
+                        <li><a href="#security-governance" class="text-gray-300 hover:text-white">Security & Governance</a></li>
+                        <li><a href="#about-dni-ltd" class="text-gray-300 hover:text-white">About Us</a></li>
+                    </ul>
+                </div>
+                <!-- Call to Action / Branding -->
+                <div class="flex flex-col items-center md:items-end text-right">
+                    <a href="https://calendly.com/darmashru/30min-strategy-call" target="_blank" class="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-8 py-3 rounded-full text-lg font-bold shadow-xl transition duration-300 ease-in-out transform hover:scale-105 mt-4 md:mt-0">
+                        Book Your Free Strategy Call
+                    </a>
+                    <p class="text-gray-500 text-sm mt-2">Unlock your data's full potential.</p>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
+                <p>&copy; 2025 DNI Ltd. All rights reserved.</p>
+                <div class="flex space-x-4 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white" onclick="openModal('privacyPolicyModal')">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white" onclick="openModal('termsOfServiceModal')">Terms of Service</a>
                 </div>
             </div>
         </footer>
     </div>
 
+    <!-- Privacy Policy Modal -->
+    <div id="privacyPolicyModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close-button" onclick="closeModal('privacyPolicyModal')">&times;</button>
+            <h2 class="text-2xl font-bold text-white mb-4">Privacy Policy for DNI Ltd</h2>
+            <p class="text-gray-300 mb-4"><strong>Last Updated: July 21, 2025</strong></p>
+
+            <p class="text-gray-300 mb-2">DNI Ltd ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website <a href="#" class="text-blue-400">www.dnianalytics.com</a>, use our services, or interact with us.</p>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">1. Information We Collect</h3>
+            <p class="text-gray-300 mb-2">We may collect personal information that you voluntarily provide to us when you express an interest in obtaining information about us or our products and services, when you participate in activities on the website (such as sending us inquiries), or otherwise when you contact us.</p>
+            <ul class="list-disc list-inside text-gray-300 ml-4 mb-4">
+                <li><strong>Personal Data:</strong> Name, email address, phone number, company name, job title, and any other information you choose to provide.</li>
+                <li><strong>Usage Data:</strong> Information about how you access and use our website, such as your IP address, browser type, operating system, referral URLs, pages viewed, and dates/times of access.</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">2. How We Use Your Information</h3>
+            <p class="text-gray-300 mb-2">We use the information we collect for various purposes, including:</p>
+            <ul class="list-disc list-inside text-gray-300 ml-4 mb-4">
+                <li>To provide, operate, and maintain our services.</li>
+                <li>To improve, personalize, and expand our services.</li>
+                <li>To understand and analyze how you use our services.</li>
+                <li>To develop new products, services, features, and functionality.</li>
+                <li>To communicate with you, either directly or through one of our partners, including for customer service, to provide you with updates and other information relating to the website, and for marketing and promotional purposes.</li>
+                <li>To process your inquiries and respond to your requests.</li>
+                <li>To find and prevent fraud.</li>
+                <li>For compliance with legal obligations.</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">3. Disclosure of Your Information</h3>
+            <p class="text-gray-300 mb-2">We may share your information with third parties in the following situations:</p>
+            <ul class="list-disc list-inside text-gray-300 ml-4 mb-4">
+                <li><strong>With Your Consent:</strong> We may disclose your personal information for any purpose with your consent.</li>
+                <li><strong>Service Providers:</strong> We may share your information with third-party vendors, service providers, contractors, or agents who perform services for us or on our behalf.</li>
+                <li><strong>Business Transfers:</strong> We may share or transfer your information in connection with, or during negotiations of, any merger, sale of company assets, financing, or acquisition of all or a portion of our business to another company.</li>
+                <li><strong>Legal Requirements:</strong> We may disclose your information if required to do so by law or in response to valid requests by public authorities (e.g., a court or a government agency).</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">4. Security of Your Information</h3>
+            <p class="text-gray-300 mb-4">We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against any interception or other type of misuse.</p>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">5. Your Data Protection Rights (GDPR)</h3>
+            <p class="text-gray-300 mb-2">If you are a resident of the European Economic Area (EEA), you have certain data protection rights. These include:</p>
+            <ul class="list-disc list-inside text-gray-300 ml-4 mb-4">
+                <li>The right to access, update or to delete the information we have on you.</li>
+                <li>The right of rectification.</li>
+                <li>The right to object.</li>
+                <li>The right of restriction.</li>
+                <li>The right to data portability.</li>
+                <li>The right to withdraw consent.</li>
+            </ul>
+            <p class="text-gray-300 mb-4">To exercise any of these rights, please contact us at info@dnianalytics.com.</p>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">6. Changes to This Privacy Policy</h3>
+            <p class="text-gray-300 mb-4">We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date. You are advised to review this Privacy Policy periodically for any changes.</p>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">7. Contact Us</h3>
+            <p class="text-gray-300">If you have any questions about this Privacy Policy, please contact us:</p>
+            <ul class="list-disc list-inside text-gray-300 ml-4">
+                <li>By email: info@dnianalytics.com</li>
+                <li>By phone: +44 7946432335</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Terms of Service Modal -->
+    <div id="termsOfServiceModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close-button" onclick="closeModal('termsOfServiceModal')">&times;</button>
+            <h2 class="text-2xl font-bold text-white mb-4">Terms of Service for DNI Ltd</h2>
+            <p class="text-gray-300 mb-4"><strong>Last Updated: July 21, 2025</strong></p>
+
+            <p class="text-gray-300 mb-2">Welcome to DNI Ltd! These Terms of Service ("Terms") govern your use of the DNI Ltd website and services. By accessing or using our website and services, you agree to be bound by these Terms. If you do not agree to these Terms, please do not use our website or services.</p>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">1. Acceptance of Terms</h3>
+            <p class="text-gray-300 mb-2">By accessing and using the DNI Ltd website and services, you acknowledge that you have read, understood, and agree to be bound by these Terms, as well as our Privacy Policy. These Terms apply to all visitors, users, and others who access or use the Service.</p>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">2. Services Provided</h3>
+            <p class="text-gray-300 mb-2">DNI Ltd provides AI-powered data intelligence services, including the development of custom dashboards, data analysis, and strategic insights. Our services are designed to help businesses transform raw data into actionable intelligence.</p>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">3. User Obligations</h3>
+            <p class="text-gray-300 mb-2">As a user of our website and services, you agree to:</p>
+            <ul class="list-disc list-inside text-gray-300 ml-4 mb-4">
+                <li>Provide accurate and complete information when requested.</li>
+                <li>Use our services only for lawful purposes and in accordance with these Terms.</li>
+                <li>Not engage in any activity that interferes with or disrupts the functionality of our website or services.</li>
+                <li>Maintain the confidentiality of any login credentials provided to you.</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">4. Intellectual Property</h3>
+            <p class="text-gray-300 mb-2">All content on the DNI Ltd website, including text, graphics, logos, images, and software, is the property of DNI Ltd or its licensors and is protected by intellectual property laws. You may not reproduce, distribute, modify, or create derivative works of any content without our prior written consent.</p>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">5. Disclaimers and Limitation of Liability</h3>
+            <p class="text-gray-300 mb-2">Our services are provided "as is" and "as available" without any warranties, express or implied. DNI Ltd does not guarantee that our services will be uninterrupted, error-free, or secure. To the fullest extent permitted by law, DNI Ltd shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses, resulting from (a) your access to or use of or inability to access or use the service; (b) any conduct or content of any third party on the service; (c) any content obtained from the service; and (d) unauthorized access, use or alteration of your transmissions or content, whether based on warranty, contract, tort (including negligence) or any other legal theory, whether or not we have been informed of the possibility of such damage, and even if a remedy set forth herein is found to have failed of its essential purpose.</p>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">6. Governing Law</h3>
+            <p class="text-gray-300 mb-4">These Terms shall be governed and construed in accordance with the laws of England and Wales, without regard to its conflict of law provisions.</p>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">7. Changes to Terms</h3>
+            <p class="text-gray-300 mb-4">We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.</p>
+
+            <h3 class="text-xl font-semibold text-white mt-6 mb-2">8. Contact Us</h3>
+            <p class="text-gray-300">If you have any questions about these Terms, please contact us:</p>
+            <ul class="list-disc list-inside text-gray-300 ml-4">
+                <li>By email: info@dnianalytics.com</li>
+                <li>By phone: +44 7946432335</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- JavaScript for 3D animation and menu toggling -->
     <script>
-        // --- 3D Intro & Background Animation Script ---
+        // --- Three.js 3D Intro & Background Animation Script ---
         window.onload = () => {
-            const container = document.getElementById('intro-container');
+            const introContainer = document.getElementById('intro-container');
             const mainContent = document.getElementById('main-content');
             let introFinished = false;
-            let starMaterial; // Make material accessible in broader scope
+            let starMaterial;
 
             // Scene setup
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ alpha: true }); // Enable transparent background
             renderer.setSize(window.innerWidth, window.innerHeight);
-            container.appendChild(renderer.domElement);
+            introContainer.appendChild(renderer.domElement);
 
-            // Create a starfield
+            // Create a starfield (using BufferGeometry as in your original file for performance)
             const starGeometry = new THREE.BufferGeometry();
             const starVertices = [];
             for (let i = 0; i < 15000; i++) {
@@ -653,13 +857,13 @@
                 color: 0xffffff,
                 size: 1.2,
                 transparent: true,
-                opacity: 0.8
+                opacity: 0.8 // Initial opacity
             });
 
             const stars = new THREE.Points(starGeometry, starMaterial);
             scene.add(stars);
 
-            // Set initial camera position for quicker intro
+            // Set initial camera position (original value for quick intro)
             camera.position.z = 500; 
 
             // Animation loop
@@ -668,7 +872,7 @@
 
                 // This part runs only for the intro sequence
                 if (!introFinished) {
-                    // Increased camera movement speed
+                    // Camera movement speed (original value)
                     camera.position.z -= 5; 
 
                     // Check if the intro fly-through is complete
@@ -693,15 +897,15 @@
                 mainContent.style.opacity = '1';
 
                 // Move the canvas container to the background
-                container.style.zIndex = '0';
+                introContainer.style.zIndex = '0';
                 
                 // Make the renderer's background transparent
                 renderer.setClearColor(0x000000, 0);
 
                 // Smoothly fade the stars to a faint background level
                 let currentOpacity = starMaterial.opacity;
-                const targetOpacity = 0.15; // Faint background level
-                const duration = 800; // 0.8 seconds for a quicker fade
+                const targetOpacity = 0.15; // Faint background level (original value)
+                const duration = 800; // 0.8 seconds for a quicker fade (original value)
                 const intervalTime = 16; // ~60fps
                 const step = (currentOpacity - targetOpacity) / (duration / intervalTime);
 
@@ -711,7 +915,12 @@
                     } else {
                         starMaterial.opacity = targetOpacity;
                         clearInterval(fadeInterval);
-                    }
+                        // Once stars are faded, also fade out the intro container itself
+                        introContainer.style.opacity = '0';
+                        setTimeout(() => {
+                            introContainer.style.display = 'none'; // Completely remove from layout
+                        }, 800); // Give it time to transition opacity (matched to star fade duration)
+                        }
                 }, intervalTime);
             }
             
@@ -754,19 +963,20 @@
         });
 
         // --- FAQ Accordion Script ---
+        // This function is called by the onclick event in the HTML
         function toggleAccordion(element) {
             const content = element.nextElementSibling;
             const arrow = element.querySelector('.accordion-arrow');
 
             if (content.classList.contains('open')) {
                 content.classList.remove('open');
-                content.style.maxHeight = null;
+                content.style.maxHeight = null; // Reset max-height
                 arrow.classList.remove('rotate');
             } else {
                 // Close all other open accordions
                 document.querySelectorAll('.accordion-content.open').forEach(item => {
                     item.classList.remove('open');
-                    item.style.maxHeight = null;
+                    item.style.maxHeight = null; // Reset max-height
                     item.previousElementSibling.querySelector('.accordion-arrow').classList.remove('rotate');
                 });
                 
@@ -775,6 +985,31 @@
                 arrow.classList.add('rotate');
             }
         }
+
+        // --- Modal Script ---
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('open');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('open');
+        }
+
+        // Close modal if clicked outside content
+        window.addEventListener('click', (event) => {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('open');
+            }
+        });
+
+        // Close modal on Escape key press
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                document.querySelectorAll('.modal.open').forEach(modal => {
+                    modal.classList.remove('open');
+                });
+            }
+        });
     </script>
 
 </body>
