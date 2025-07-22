@@ -255,7 +255,8 @@
                     <img src="https://placehold.co/40x40/00C853/FFFFFF?text=DNI" alt="DNI Ltd Logo" class="w-7 h-7 rounded-full">
                     <span>DNI Ltd</span>
                 </a>
-                <div class="hidden md:flex md:space-x-4 lg:space-x-6 xl:space-x-8"> <!-- Further adjusted space-x for better fit -->
+                <!-- Desktop Navigation (always visible) -->
+                <div class="flex space-x-8">
                     <a href="#our-mission" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">Our Mission</a>
                     <a href="#our-unfair-edge" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">Our Edge</a>
                     <a href="#ai-features" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">AI Features</a>
@@ -268,12 +269,13 @@
                 <a href="javascript:void(0)" onclick="openModal('contactEmailModal')" class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-2 rounded-full text-sm font-semibold transition duration-200 whitespace-nowrap">
                     Book a Call
                 </a>
-                <button id="mobile-menu-button" class="md:hidden text-gray-400 hover:text-white">
+                <!-- Mobile menu button (always hidden) -->
+                <button id="mobile-menu-button" class="hidden text-gray-400 hover:text-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
             </nav>
-            <!-- Mobile Menu (initially hidden) -->
-            <div id="mobile-menu" class="md:hidden hidden bg-[#0d1117] py-4 border-t border-gray-800">
+            <!-- Mobile Menu (always hidden) -->
+            <div id="mobile-menu" class="hidden bg-[#0d1117] py-4 border-t border-gray-800">
                 <div class="flex flex-col items-center space-y-4">
                     <a href="#our-mission" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Our Mission</a>
                     <a href="#our-unfair-edge" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Our Edge</a>
@@ -296,10 +298,10 @@
             <section class="relative min-h-[calc(100vh-6rem)] flex items-center justify-center text-center py-20 px-4 overflow-hidden">
                 <div class="hero-bg-shapes"></div>
                 <div class="relative z-10 container mx-auto flex flex-col items-center justify-center">
-                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 max-w-4xl tracking-tight">
+                    <h1 class="text-7xl font-extrabold leading-tight mb-6 max-w-4xl tracking-tight">
                         Turn Your Raw Data into <span class="text-gradient-green-purple">actionable insights</span> <br> in 90 Days
                     </h1>
-                    <p class="text-lg md:text-xl text-gray-300 mb-6 max-w-2xl mx-auto">
+                    <p class="text-xl text-gray-300 mb-6 max-w-2xl mx-auto">
                         We build AI-powered dashboards that uncover hidden profits, slash process times, and put performance forecasting on autopilot.
                     </p>
                     
@@ -356,7 +358,7 @@
             <section id="our-unfair-edge" class="py-20 px-4 bg-[#0d1117] border-t border-gray-800">
                 <div class="max-w-7xl mx-auto text-center">
                     <h2 class="text-4xl md:text-5xl font-bold mb-12">Our <span class="text-gradient-purple-pink">Unfair Edge</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="grid grid-cols-3 gap-8">
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
                             <svg class="w-12 h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">From Spreadsheets to Strategy</h3>
@@ -380,7 +382,7 @@
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
                             <svg class="w-12 h-12 text-red-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Adopted by Your Team</h3>
-                            <p class="text-300">Intuitive enough for frontline staff, powerful enough for executives—everyone wins.</p>
+                            <p class="text-gray-300">Intuitive enough for frontline staff, powerful enough for executives—everyone wins.</p>
                         </div>
                     </div>
                 </div>
@@ -390,7 +392,7 @@
             <section id="how-it-works" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
                 <div class="max-w-6xl mx-auto text-center">
                     <h2 class="text-4xl md:text-5xl font-bold mb-12">How It <span class="text-gradient-blue-green">Works</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="grid grid-cols-3 gap-8">
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
                             <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-3xl font-bold mb-4 text-white">1</div>
                             <h3 class="text-xl font-semibold text-white mb-2">Discovery Call</h3>
@@ -424,7 +426,7 @@
             <section id="what-we-deliver" class="py-20 px-4 bg-[#0d1117] border-t border-gray-800">
                 <div class="max-w-7xl mx-auto text-center">
                     <h2 class="text-4xl md:text-5xl font-bold mb-12">What We <span class="text-gradient-green-purple">Deliver</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                    <div class="grid grid-cols-3 gap-6 max-w-4xl mx-auto">
                         <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
                             <svg class="w-8 h-8 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 15.93l-6-3V8.07l6 3 6-3v6.86l-6 3z"/></svg>
                             <p class="text-gray-300 text-lg">Custom live dashboards that auto-refresh and highlight your top revenue opportunities.</p>
@@ -457,7 +459,7 @@
             <section id="ai-features" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
                 <div class="max-w-6xl mx-auto text-center">
                     <h2 class="text-4xl md:text-5xl font-bold mb-12">AI <span class="text-gradient-purple-pink">Features</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="grid grid-cols-3 gap-8">
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
                             <svg class="w-12 h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Natural Language Generative AI</h3>
@@ -483,7 +485,7 @@
                 <div class="max-w-7xl mx-auto text-center">
                     <h2 class="text-4xl md:text-5xl font-bold mb-12">Our <span class="text-gradient-green-purple">Packages</span></h2>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+                    <div class="grid grid-cols-3 gap-8 items-stretch">
                         <!-- Pricing Card 1: Essentials Plan -->
                         <div class="bg-gray-900 rounded-3xl p-8 flex flex-col justify-between shadow-2xl pricing-card-border">
                             <div>
@@ -509,7 +511,7 @@
                                 <div class="text-sm font-bold text-center text-green-400 mb-4 animate-pulse">MOST POPULAR</div>
                                 <h4 class="text-2xl font-bold mb-2">Growth Plan</h4>
                                 <p class="text-gray-400 mb-2">Full multi-tab dashboards + AI coaching call. Drive 20%+ revenue lift in 90 days.</p>
-                                <p class="text-5xl font-extrabold mb-8"><span class="text-green-500">£3,000</span><span class="lg:whitespace-nowrap text-lg text-gray-400 font-normal"> one-time</span></p>
+                                <p class="text-5xl font-extrabold mb-8"><span class="text-green-500">£3,000</span><span class="text-lg text-gray-400 font-normal"> one-time</span></p>
                                 <ul class="text-left space-y-4 mb-8">
                                     <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Everything in Essentials, plus:</li>
                                     <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Multi-tab Power BI dashboards (Financials, Ops, HR, Sales)</li>
@@ -529,7 +531,7 @@
                             <div>
                                 <h4 class="text-2xl font-bold mb-2">Premium Partner Plan</h4>
                                 <p class="text-gray-400 mb-2">Enterprise rollout, custom integrations, ongoing AI tuning.</p>
-                                <p class="text-5xl font-extrabold mb-8"><span class="text-green-500">£10,000+</span><span class="lg:whitespace-nowrap text-lg text-gray-400 font-normal"> one-time</span></p>
+                                <p class="text-5xl font-extrabold mb-8"><span class="text-green-500">£10,000+</span><span class="text-lg text-gray-400 font-normal"> one-time</span></p>
                                 <ul class="text-left space-y-4 mb-8">
                                     <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Everything in Growth, plus:</li>
                                     <li class="flex items-center"><svg class="w-6 h-6 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 0 00-1.414 1.414l2 2a1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Enterprise-grade reporting & data architecture design</li>
@@ -552,7 +554,7 @@
             <section id="client-partners" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
                 <div class="max-w-7xl mx-auto text-center">
                     <h2 class="text-4xl md:text-5xl font-bold mb-12">Client <span class="text-gradient-orange-red">Partners</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="grid grid-cols-3 gap-8">
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
                             <svg class="w-12 h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Accounting Firms</h3>
@@ -584,7 +586,7 @@
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">Excel can’t automate risk alerts or surface hidden revenue streams like our AI dashboards can. We turn your data into actionable insights instantly.</p>
+                                <p class="text-gray-300 text-lg">Excel can’t automate risk alerts or surface hidden revenue streams like our AI dashboards can. We turn your data into actionable insights instantly.</p>
                             </div>
                         </div>
                         <!-- FAQ Item 2 -->
@@ -594,7 +596,7 @@
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">We offer a risk-free period: if you don’t see real ROI within that time, we’ll continue working at no cost until you do.</p>
+                                <p class="text-gray-300 text-lg">We offer a risk-free period: if you don’t see real ROI within that time, we’ll continue working at no cost until you do.</p>
                             </div>
                         </div>
                         <!-- FAQ Item 3 -->
@@ -604,7 +606,7 @@
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">Our combination of bespoke AI, world-class UX, and continuous optimization ensures you get a solution that’s tailored specifically for your needs and is hard to replicate.</p>
+                                <p class="text-gray-300 text-lg">Our combination of bespoke AI, world-class UX, and continuous optimization ensures you get a solution that’s tailored specifically for your needs and is hard to replicate.</p>
                             </div>
                         </div>
                         <!-- FAQ Item 4 -->
@@ -614,7 +616,7 @@
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">We use dashboard solutions that allow for quick rollouts and easy scaling as your business grows.</p>
+                                <p class="text-gray-300 text-lg">We use dashboard solutions that allow for quick rollouts and easy scaling as your business grows.</p>
                             </div>
                         </div>
                         <!-- FAQ Item 5 -->
@@ -624,7 +626,7 @@
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">We can deliver a clickable demo using your real data in as little as one week, with full rollout shortly afterward.</p>
+                                <p class="text-gray-300 text-lg">We can deliver a clickable demo using your real data in as little as one week, with full rollout shortly afterward.</p>
                             </div>
                         </div>
                         <!-- FAQ Item 6 -->
@@ -634,7 +636,7 @@
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">Our dashboards can seamlessly integrate with cloud platforms (AWS, Azure), databases (SQL Server, MySQL), spreadsheets (Excel, Google Sheets), and popular apps (Salesforce, Google Analytics).</p>
+                                <p class="text-gray-300 text-lg">Our dashboards can seamlessly integrate with cloud platforms (AWS, Azure), databases (SQL Server, MySQL), spreadsheets (Excel, Google Sheets), and popular apps (Salesforce, Google Analytics).</p>
                             </p>
                         </div>
                         <!-- FAQ Item 7 -->
@@ -644,7 +646,7 @@
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">Data updates can be scheduled from real-time to daily or weekly refreshes, based on your business needs.</p>
+                                <p class="text-gray-300 text-lg">Data updates can be scheduled from real-time to daily or weekly refreshes, based on your business needs.</p>
                             </div>
                         </div>
                         <!-- FAQ Item 8 -->
@@ -654,7 +656,7 @@
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">We provide comprehensive onboarding, training sessions, and ongoing support to ensure your team can fully leverage the dashboards.</p>
+                                <p class="text-gray-300 text-lg">We provide comprehensive onboarding, training sessions, and ongoing support to ensure your team can fully leverage the dashboards.</p>
                             </div>
                         </div>
                         <!-- FAQ Item 9 -->
@@ -664,7 +666,7 @@
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">Absolutely. We offer white-label options so you can customize the look and feel to match your brand identity.</p>
+                                <p class="text-gray-300 text-lg">Absolutely. We offer white-label options so you can customize the look and feel to match your brand identity.</p>
                             </div>
                         </div>
                     </div>
@@ -675,7 +677,7 @@
             <section id="security-governance" class="py-20 px-4 bg-[#0d1117] border-t border-gray-800">
                 <div class="max-w-6xl mx-auto text-center">
                     <h2 class="text-4xl md:text-5xl font-bold mb-12">Security & <span class="text-gradient-blue-green">Governance</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="grid grid-cols-3 gap-8">
                         <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
                             <svg class="w-12 h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2S10 7.9 10 9v6c0 1.1.9 2 2 2zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V8zm-2 9H7v2h2v-2zm-2-4H7v2h2v-2zM7 7h2v2H7V7zm12-4h-4V1h-2v2H9V1H7v2H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM21 19H3V5h18v14z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Advanced Data Encryption</h3>
@@ -709,7 +711,7 @@
 
         <!-- Footer -->
         <footer class="bg-[#0c0f13] py-12 px-6 text-gray-400">
-            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-12 gap-y-12 justify-items-start lg:justify-items-center">
+            <div class="max-w-7xl mx-auto grid grid-cols-5 gap-x-12 gap-y-12 justify-items-start lg:justify-items-center">
                 <!-- Column 1: Contact Us -->
                 <div class="flex flex-col space-y-4 items-start">
                     <h3 class="text-white text-lg font-semibold">Contact Us</h3>
@@ -763,7 +765,7 @@
                     <p class="text-gray-400 text-sm">Unlock actionable insights before your competitors do.</p>
                 </div>
             </div>
-            <div class="mt-8 border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+            <div class="mt-8 border-t border-gray-700 pt-8 flex flex-row justify-between items-center text-sm text-gray-500">
                 <p>&copy; 2025 DNI Ltd. All rights reserved.</p>
                 <div class="flex space-x-4 mt-4 md:mt-0">
                     <a href="#" class="hover:text-white" onclick="openModal('privacyPolicyModal')">Privacy Policy</a>
