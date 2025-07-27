@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,6 +27,11 @@
     <!-- Google Fonts - Inter for clean typography -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- Chart.js for interactive dashboards -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <!-- Chart.js Datalabels plugin for displaying values on bars/lines -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
     <!-- JSON-LD Structured Data for SEO -->
     <script type="application/ld+json">
     {
@@ -87,7 +92,7 @@
         },
         {
           "@type": "WebPage",
-          "name": "Our Packages",
+          "name": "Pricing",
           "url": "https://www.dnialytics.com/#services-pricing"
         },
         {
@@ -97,18 +102,18 @@
         },
         {
           "@type": "WebPage",
-          "name": "Client FAQ",
-          "url": "https://www.dnialytics.com/#client-faq"
+          "name": "FAQ",
+          "url": "https://www.dnianalytics.com/#client-faq"
         },
         {
           "@type": "WebPage",
           "name": "Security & Governance",
-          "url": "https://www.dnialytics.com/#security-governance"
+          "url": "https://www.dnianalytics.com/#security-governance"
         },
         {
           "@type": "WebPage",
           "name": "Book a Call",
-          "url": "https://www.dnialytics.com/#contact"
+          "url": "https://www.dnianalytics.com/#contact"
         }
       ]
     }
@@ -342,6 +347,65 @@
             color: #cbd5e0;
             cursor: pointer;
         }
+
+        /* AI Insight Loading Spinner */
+        .loader {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Custom scrollbar for AI insights chat */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #1f2937; /* Darker track */
+            border-radius: 3px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: #4b5563; /* Grayish thumb */
+            border-radius: 3px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background-color: #6b7280; /* Lighter on hover */
+        }
+
+        /* Chart container height constraint */
+        .chart-container {
+            height: 300px; /* Fixed height for charts for consistency */
+            display: flex; /* Use flex to ensure canvas fills available space */
+            align-items: center;
+            justify-content: center;
+            position: relative; /* Added for absolute positioning of title */
+        }
+
+        /* Styles for AI chat bubbles */
+        .ai-chat-bubble {
+            background-color: #2d3748; /* Darker gray for AI messages */
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            align-self: flex-start; /* Align to left */
+            max-width: 90%;
+        }
+
+        .user-chat-bubble {
+            background-color: #4a5568; /* Slightly lighter gray for user messages */
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            align-self: flex-end; /* Align to right */
+            max-width: 90%;
+        }
     </style>
 </head>
 <body class="bg-[#0d1117] text-white antialiased">
@@ -352,24 +416,24 @@
     <!-- Main Website Content (Initially hidden) -->
     <div id="main-content">
         <!-- Navigation Bar -->
-        <header class="sticky top-0 z-50 bg-[#0d1117]/90 backdrop-blur-md border-b border-gray-800">
-            <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-white flex-shrink-0 whitespace-nowrap">
+        <header class="sticky top-0 z-50 bg-[#0d1117]/90 backdrop-blur-md border-b border-gray-800 py-3 md:py-4">
+            <nav class="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center">
+                <a href="#" class="flex items-center space-x-2 text-xl md:text-2xl font-bold text-white flex-shrink-0 whitespace-nowrap">
                     <!-- DNI Ltd Logo - Placeholder, replace with actual if available -->
-                    <img src="https://placehold.co/40x40/00C853/FFFFFF?text=DNI" alt="DNI Ltd Logo" class="w-7 h-7 rounded-full">
+                    <img src="https://placehold.co/40x40/00C853/FFFFFF?text=DNI" alt="DNI Ltd Logo" class="w-6 h-6 md:w-7 md:h-7 rounded-full">
                     <span>DNI Ltd</span>
                 </a>
-                <div class="hidden md:flex md:space-x-4 lg:space-x-6 xl:space-x-8"> <!-- Further adjusted space-x for better fit -->
+                <div class="hidden md:flex md:space-x-4 lg:space-x-6 xl:space-x-8 text-sm lg:text-base">
                     <a href="#our-mission" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">Our Mission</a>
                     <a href="#our-unfair-edge" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">Our Edge</a>
                     <a href="#ai-features" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">AI Features</a>
-                    <a href="#services-pricing" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">Our Packages</a>
+                    <a href="#services-pricing" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">Pricing</a>
                     <a href="#client-partners" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">Clients</a>
-                    <a href="#client-faq" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">Client FAQ</a>
+                    <a href="#client-faq" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">FAQ</a>
                     <a href="#security-governance" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap">Security & Governance</a>
                 </div>
                 <!-- Changed to open modal -->
-                <a href="javascript:void(0)" onclick="openModal('contactEmailModal')" class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-2 rounded-full text-sm font-semibold transition duration-200 whitespace-nowrap">
+                <a href="javascript:void(0)" onclick="openModal('contactEmailModal')" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-1.5 md:px-6 md:py-2 rounded-full text-xs md:text-sm font-semibold transition duration-200 whitespace-nowrap">
                     Book a Call
                 </a>
                 <button id="mobile-menu-button" class="md:hidden text-gray-400 hover:text-white">
@@ -378,14 +442,14 @@
             </nav>
             <!-- Mobile Menu (initially hidden) -->
             <div id="mobile-menu" class="md:hidden hidden bg-[#0d1117] py-4 border-t border-gray-800">
-                <div class="flex flex-col items-center space-y-4">
+                <div class="flex flex-col items-center space-y-4 text-sm">
                     <a href="#our-mission" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Our Mission</a>
                     <a href="#our-unfair-edge" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Our Edge</a>
                     
                     <a href="#ai-features" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">AI Features</a>
-                    <a href="#services-pricing" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Our Packages</a>
+                    <a href="#services-pricing" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Pricing</a>
                     <a href="#client-partners" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Clients</a>
-                    <a href="#client-faq" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Client FAQ</a>
+                    <a href="#client-faq" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">FAQ</a>
                     <a href="#security-governance" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Security & Governance</a>
                     <!-- Changed to open modal -->
                     <a href="javascript:void(0)" onclick="openModal('contactEmailModal'); document.getElementById('mobile-menu').classList.add('hidden');" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded-full text-sm font-semibold transition duration-200 w-max">
@@ -397,18 +461,18 @@
 
         <main>
             <!-- Hero Section -->
-            <section class="relative min-h-[calc(100vh-6rem)] flex items-center justify-center text-center py-20 px-4 overflow-hidden">
+            <section class="relative min-h-[calc(100vh-6rem)] flex items-center justify-center text-center py-16 md:py-20 px-4 md:px-6 overflow-hidden">
                 <div class="hero-bg-shapes"></div>
                 <div class="relative z-10 container mx-auto flex flex-col items-center justify-center">
-                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 max-w-4xl tracking-tight">
-                        Turn Your Raw Data into <span class="text-gradient-green-purple">actionable insights</span> <br> in 90 Days
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-4 md:mb-6 max-w-4xl tracking-tight">
+                        Turn Your Raw Data into <span class="text-gradient-green-purple">actionable insights</span> <br class="hidden lg:block"> in 90 Days
                     </h1>
                     <p class="text-lg md:text-xl text-gray-300 mb-6 max-w-2xl mx-auto">
                         We build AI-powered dashboards that uncover hidden profits, slash process times, and put performance forecasting on autopilot.
                     </p>
                     
                     <!-- Changed to open modal -->
-                    <a href="javascript:void(0)" onclick="openModal('contactEmailModal')" class="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-10 py-4 rounded-full text-lg font-bold shadow-xl transition duration-300 ease-in-out transform hover:scale-105">
+                    <a href="javascript:void(0)" onclick="openModal('contactEmailModal')" class="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-8 py-3 rounded-full text-lg font-bold shadow-xl transition duration-300 ease-in-out transform hover:scale-105">
                         Claim My 90-Day Revenue Guarantee
                     </a>
                     <p class="text-gray-400 text-sm mt-4">
@@ -418,8 +482,8 @@
                         <p>🔒 Only 3 Pilot Slots Available – Apply by August 15</p>
                         <p>💡 Double Your ROI in 90 Days — or We Work Free Until You Do!</p>
                     </div>
-                    <div class="mt-16 flex flex-col items-center">
-                        <p class="text-gray-300 text-md font-semibold italic">
+                    <div class="mt-12 md:mt-16 flex flex-col items-center">
+                        <p class="text-gray-300 text-base md:text-lg font-semibold italic max-w-xl text-center">
                             “We uncovered £6.7K in hidden revenue in month one” - Mahesh Bhatelia, CFO & Founder @ Lazer Enterprises Ltd
                         </p>
                     </div>
@@ -427,26 +491,26 @@
             </section>
 
             <!-- Our Mission Section (formerly About Us) -->
-            <section id="our-mission" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
+            <section id="our-mission" class="py-16 md:py-20 px-4 md:px-6 bg-[#14181f] border-t border-gray-800">
                 <div class="max-w-6xl mx-auto text-center">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-12">Our <span class="text-gradient-purple-pink">Mission</span></h2>
-                    <div class="text-base text-gray-300 max-w-3xl mx-auto text-left leading-relaxed">
-                        <p class="mb-8">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-8 md:mb-12">Our <span class="text-gradient-purple-pink">Mission</span></h2>
+                    <div class="text-base text-gray-300 max-w-3xl mx-auto text-left leading-relaxed space-y-6">
+                        <p>
                             <strong>Building the Future - for Profit and for Purpose.</strong> At DNI Ltd., we believe data should empower the boldest missions on the planet—whether you're a founder scaling a startup or a changemaker uplifting communities.
                         </p>
-                        <p class="mb-8">
+                        <p>
                             We proudly dedicate a portion of our time, talent, and revenue to building world-class dashboards—entirely free—for organisations driving real social impact.
                         </p>
-                        <p class="mb-8">
+                        <p>
                             If you're on a mission to empower and teach young women how to code, protect endangered wildlife, bring clean water to rural villages, or fight for mental health justice—our team will help you <strong>bring your data to life so others can rally behind your vision.</strong>
                         </p>
-                        <p class="mb-8">
+                        <p>
                             Through sleek design, AI-powered storytelling, and powerful insights, we transform complex data into <strong>clarity, credibility, and momentum.</strong>
                         </p>
-                        <p class="mb-8">
+                        <p>
                             And for businesses ready to scale—we offer premium dashboard packages built for <strong>speed, strategy, and smarter decisions.</strong>
                         </p>
-                        <p class="mb-8">
+                        <p>
                             We exist to serve both the visionary and the impact-driven.
                         </p>
                         <p>
@@ -457,434 +521,419 @@
             </section>
 
             <!-- Why We're Different Section (Our Edge) -->
-            <section id="our-unfair-edge" class="py-20 px-4 bg-[#0d1117] border-t border-gray-800">
+            <section id="our-unfair-edge" class="py-16 md:py-20 px-4 md:px-6 bg-[#0d1117] border-t border-gray-800">
                 <div class="max-w-7xl mx-auto text-center">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-12">Our <span class="text-gradient-purple-pink">Unfair Edge</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-8 md:mb-12">Our <span class="text-gradient-purple-pink">Unfair Edge</span></h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">From Spreadsheets to Strategy</h3>
-                            <p class="text-gray-300">Replace manual workarounds with live dashboards that feel like purpose-built software—no more chasing cells.</p>
+                            <p class="text-gray-300 text-sm">Replace manual workarounds with live dashboards that feel like purpose-built software—no more chasing cells.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-blue-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-blue-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Insights at Your Fingertips</h3>
-                            <p class="text-gray-300">Ask your data anything. Embedded Natural Language Generative AI turns raw numbers into instant, actionable recommendations.</p>
+                            <p class="text-gray-300 text-sm">Ask your data anything. Embedded Natural Language Generative AI turns raw numbers into instant, actionable recommendations.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-purple-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-purple-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Decisions First, Data Second</h3>
-                            <p class="text-gray-300">Every chart, table, and alert is built around one goal: speed up critical decisions, not just show numbers.</p>
+                            <p class="text-gray-300 text-sm">Every chart, table, and alert is built around one goal: speed up critical decisions, not just show numbers.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-yellow-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2h-4v2h4V4zm6 15H4V8h16v11z"/></svg>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-yellow-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2h-4v2h4V4zm6 15H4V8h16v11z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Risk-Free 3-Month Trial</h3>
-                            <p class="text-gray-300">See real ROI in 90 days or we work free until you do.</p>
+                            <p class="text-gray-300 text-sm">See real ROI in 90 days or we work free until you do.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-red-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-red-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Adopted by Your Team</h3>
-                            <p class="text-gray-300">Intuitive enough for frontline staff, powerful enough for executives—everyone wins.</p>
+                            <p class="text-gray-300 text-sm">Intuitive enough for frontline staff, powerful enough for executives—everyone wins.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- How It Works Section -->
-            <section id="how-it-works" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
+            <section id="how-it-works" class="py-16 md:py-20 px-4 md:px-6 bg-[#14181f] border-t border-gray-800">
                 <div class="max-w-6xl mx-auto text-center">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-12">How It <span class="text-gradient-blue-green">Works</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-3xl font-bold mb-4 text-white">1</div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-8 md:mb-12">How It <span class="text-gradient-blue-green">Works</span></h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-14 h-14 md:w-16 md:h-16 bg-blue-600 rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold mb-4 text-white">1</div>
                             <h3 class="text-xl font-semibold text-white mb-2">Discovery Call</h3>
-                            <p class="text-gray-300">Map your biggest data headaches and revenue gaps.</p>
+                            <p class="text-gray-300 text-sm">Map your biggest data headaches and revenue gaps.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-3xl font-bold mb-4 text-white">2</div>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-14 h-14 md:w-16 md:h-16 bg-green-600 rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold mb-4 text-white">2</div>
                             <h3 class="text-xl font-semibold text-white mb-2">Data & Mockup</h3>
-                            <p class="text-gray-300">Get a clickable demo using your real data in as little as one week.</p>
+                            <p class="text-gray-300 text-sm">Get a clickable demo using your real data in as little as one week.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center text-3xl font-bold mb-4 text-white">3</div>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-14 h-14 md:w-16 md:h-16 bg-purple-600 rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold mb-4 text-white">3</div>
                             <h3 class="text-xl font-semibold text-white mb-2">Demo Delivery</h3>
-                            <p class="text-gray-300">Review a live Power BI dashboard custom to your KPIs.</p>
+                            <p class="text-gray-300 text-sm">Review a live Power BI dashboard custom to your KPIs.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <div class="w-16 h-16 bg-yellow-600 rounded-full flex items-center justify-center text-3xl font-bold mb-4 text-white">4</div>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-14 h-14 md:w-16 md:h-16 bg-yellow-600 rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold mb-4 text-white">4</div>
                             <h3 class="text-xl font-semibold text-white mb-2">Risk-Free 3-Month Trial</h3>
-                            <p class="text-gray-300">Pilot full access risk-free—see ROI or pay nothing.</p>
+                            <p class="text-gray-300 text-sm">Pilot full access risk-free—see ROI or pay nothing.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-3xl font-bold mb-4 text-white">5</div>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-14 h-14 md:w-16 md:h-16 bg-red-600 rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold mb-4 text-white">5</div>
                             <h3 class="text-xl font-semibold text-white mb-2">Performance Review</h3>
-                            <p class="text-gray-300">We analyse results, optimise, and plan your next growth phase.</p>
+                            <p class="text-gray-300 text-sm">We analyse results, optimise, and plan your next growth phase.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- What We Deliver Section -->
-            <section id="what-we-deliver" class="py-20 px-4 bg-[#0d1117] border-t border-gray-800">
+            <section id="what-we-deliver" class="py-16 md:py-20 px-4 md:px-6 bg-[#0d1117] border-t border-gray-800">
                 <div class="max-w-7xl mx-auto text-center">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-12">What We <span class="text-gradient-green-purple">Deliver</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
-                            <svg class="w-8 h-8 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 15.93l-6-3V8.07l6 3 6-3v6.86l-6 3z"/></svg>
-                            <p class="text-gray-300 text-lg">Custom live dashboards that auto-refresh and highlight your top revenue opportunities.</p>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-8 md:mb-12">What We <span class="text-gradient-green-purple">Deliver</span></h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-4xl mx-auto">
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-start space-x-4">
+                            <svg class="w-8 h-8 text-green-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 15.93l-6-3V8.07l6 3 6-3v6.86l-6 3z"/></svg>
+                            <p class="text-gray-300 text-base">Custom live dashboards that auto-refresh and highlight your top revenue opportunities.</p>
                         </div>
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
-                            <svg class="w-8 h-8 text-blue-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 17H6c-1.1 0-2-.9-2-2V9c0-1.1.9-2 2-2h7v10zm-6-2h5V9H7v6zm10-10v2h-2v-2h2zm-2 4h2v2h-2v-2zm2 4h-2v2h2v-2zm-2 4h2v2h-2v-2zm-2-12v2h-2v-2h2zm-2 4h2v2h-2v-2z"/></svg>
-                            <p class="text-gray-300 text-lg">Tailored KPI playbooks and narrative dashboards that align growth goals to daily decisions.</p>
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-start space-x-4">
+                            <svg class="w-8 h-8 text-blue-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 17H6c-1.1 0-2-.9-2-2V9c0-1.1.9-2 2-2h7v10zm-6-2h5V9H7v6zm10-10v2h-2v-2h2zm-2 4h2v2h-2v-2zm2 4h-2v2h2v-2zm-2 4h2v2h-2v-2zm-2-12v2h-2v-2h2zm-2 4h2v2h-2v-2z"/></svg>
+                            <p class="text-gray-300 text-base">Tailored KPI playbooks and narrative dashboards that align growth goals to daily decisions.</p>
                         </div>
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
-                            <svg class="w-8 h-8 text-purple-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-                            <p class="text-gray-300 text-lg">One dashboard, all your metrics: finance, ops, HR—so you stop toggling between tools.</p>
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-start space-x-4">
+                            <svg class="w-8 h-8 text-purple-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                            <p class="text-gray-300 text-base">One dashboard, all your metrics: finance, ops, HR—so you stop toggling between tools.</p>
                         </div>
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
-                            <svg class="w-8 h-8 text-yellow-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H5v-2h14v2zm-2-4H7V7h10v2zM19 17H5v-2h14v2z"/></svg>
-                            <p class="text-gray-300 text-lg">Automated AI alerts that flag risks and recommend next steps before they become problems.</p>
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-start space-x-4">
+                            <svg class="w-8 h-8 text-yellow-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H5v-2h14v2zm-2-4H7V7h10v2zM19 17H5v-2h14v2z"/></svg>
+                            <p class="text-gray-300 text-base">Automated AI alerts that flag risks and recommend next steps before they become problems.</p>
                         </div>
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
-                            <svg class="w-8 h-8 text-red-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H6v-3h12v3zm0-5H6v-3h12v3zM6 8h12V5H6v3z"/></svg>
-                            <p class="text-gray-300 text-lg">Fully branded, client-facing portals you can call your own.</p>
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-start space-x-4">
+                            <svg class="w-8 h-8 text-red-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H6v-3h12v3zm0-5H6v-3h12v3zM6 8h12V5H6v3z"/></svg>
+                            <p class="text-gray-300 text-base">Fully branded, client-facing portals you can call your own.</p>
                         </div>
-                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-center space-x-4">
-                            <svg class="w-8 h-8 text-indigo-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 19H7V5h10v14zm0-16H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 11h-2v2h2v-2zm0-4h-2v2h2v-2z"/></svg>
-                            <p class="text-gray-300 text-lg">End-to-end data engineering support so your dashboards never break.</p>
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 flex items-start space-x-4">
+                            <svg class="w-8 h-8 text-indigo-400 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 19H7V5h10v14zm0-16H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 11h-2v2h2v-2zm0-4h-2v2h2v-2zm2 4h-2v2h2v-2zm-2 4h2v2h-2v-2zm-2-12v2h-2v-2h2zm-2 4h2v2h-2v-2z"/></svg>
+                            <p class="text-gray-300 text-base">End-to-end data engineering support so your dashboards never break.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- AI Features Section -->
-            <section id="ai-features" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
+            <section id="ai-features" class="py-16 md:py-20 px-4 md:px-6 bg-[#14181f] border-t border-gray-800">
                 <div class="max-w-6xl mx-auto text-center">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-12">AI <span class="text-gradient-purple-pink">Features</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-8 md:mb-12">AI <span class="text-gradient-purple-pink">Features</span></h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Natural Language Generative AI</h3>
-                            <p class="text-gray-300">Live natural language AI inside your dashboard—no more static reports.</p>
+                            <p class="text-gray-300 text-sm">Live natural language AI inside your dashboard—no more static reports.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-blue-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-blue-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Predictive Trend Detection</h3>
-                            <p class="text-gray-300">AI-driven forecasts spot cashflow shortages and growth hotspots early.</p>
+                            <p class="text-gray-300 text-sm">AI-driven forecasts spot cashflow shortages and growth hotspots early.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-purple-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-purple-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Automated Insight Generation</h3>
-                            <p class="text-gray-300">Daily executive summaries emailed automatically—skip the slide deck prep.</p>
+                            <p class="text-gray-300 text-sm">Daily executive summaries emailed automatically—skip the slide deck prep.</p>
                         </div>
-                        <!-- Removed AI Business Insight Generator Feature as requested -->
                     </div>
                 </div>
             </section>
 
-            <!-- Services & Pricing Section -->
-            <section id="services-pricing" class="py-20 px-4 bg-[#0d1117] border-t border-gray-800">
+            <!-- Services & Pricing Section (Our Packages) -->
+            <section id="services-pricing" class="py-16 md:py-20 px-4 md:px-6 bg-[#0d1117] border-t border-gray-800">
                 <div class="max-w-7xl mx-auto text-center">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-12">Our <span class="text-gradient-green-purple">Packages</span></h2>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-8 md:mb-12">Our <span class="text-gradient-orange-red">Pricing</span></h2>
+                    <p class="text-gray-300 text-base md:text-lg mb-12 max-w-3xl mx-auto">
+                        Choose the package that best fits your business needs. All packages include our 90-day revenue guarantee.
+                    </p>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-                        <!-- Pricing Card 1: Essentials Plan -->
-                        <div class="bg-gray-900 rounded-3xl p-8 flex flex-col justify-between shadow-2xl pricing-card-border">
-                            <div>
-                                <h4 class="text-2xl font-bold mb-2">Essentials Plan</h4>
-                                <p class="text-gray-400 mb-2">Fast-start dashboards for small teams. Get your first 3 views live in 2 weeks.</p>
-                                <p class="text-5xl font-extrabold mb-8"><span class="text-green-500">£499</span><span class="text-lg text-gray-400 font-normal"> one-time</span></p>
-                                <ul class="text-left space-y-4 mb-8">
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Single dashboard with up to 3 core views
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Custom KPI dashboards for finance, sales, and operations
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Automated data refresh (daily or real-time)
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Quick-start implementation guide & video walkthrough
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        2 hours of onboarding & best-practice training
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Email support during business hours
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Changed to open modal -->
-                            <a href="javascript:void(0)" onclick="openModal('contactEmailModal')" class="w-full bg-gray-700 hover:bg-gray-600 text-white px-8 py-3 rounded-full text-lg font-semibold transition duration-200 shadow">Book a Call</a>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10">
+                        <!-- Starter Package -->
+                        <div class="bg-gray-800 p-8 rounded-3xl shadow-lg border border-gray-700 flex flex-col transform hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-2xl font-bold text-white mb-4">Starter</h3>
+                            <p class="text-gray-400 text-base mb-6">Ideal for small businesses and startups looking for core insights.</p>
+                            <div class="text-5xl font-extrabold text-green-400 mb-6">£999<span class="text-xl text-gray-400">/month</span></div>
+                            <ul class="text-gray-300 text-left space-y-3 mb-8 flex-grow">
+                                <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> 1 Custom Dashboard</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Monthly Data Refresh</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Basic AI Insights</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Email Support</li>
+                            </ul>
+                            <a href="javascript:void(0)" onclick="openModal('contactEmailModal')" class="bg-gray-700 hover:bg-gray-600 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-md transition duration-300 w-full text-center">
+                                Get Started
+                            </a>
                         </div>
 
-                        <!-- Pricing Card 2: Growth Plan -->
-                        <div class="bg-gray-900 rounded-3xl p-8 flex flex-col justify-between shadow-2xl pricing-card-border pricing-card-popular transform scale-105">
-                            <div>
-                                <div class="text-sm font-bold text-center text-green-400 mb-4 animate-pulse">MOST POPULAR</div>
-                                <h4 class="text-2xl font-bold mb-2">Growth Plan</h4>
-                                <p class="text-gray-400 mb-2">Full multi-tab dashboards + AI coaching call. Drive 20%+ revenue lift in 90 days.</p>
-                                <p class="text-5xl font-extrabold mb-8"><span class="text-green-500">£3,000</span><span class="lg:whitespace-nowrap text-lg text-gray-400 font-normal"> one-time</span></p>
-                                <ul class="text-left space-y-4 mb-8">
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Everything in Essentials, plus:
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Multi-tab Power BI dashboards (Financials, Ops, HR, Sales)
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Custom KPI playbook & narrative dashboard
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Automated AI alerts for anomalies & opportunities
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        One 90-minute KPI coaching call with our data strategist
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Integration with up to 3 data sources (CRM, ERP, ad platforms)
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        30 days of priority email & Slack support
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Changed to open modal -->
-                            <a href="javascript:void(0)" onclick="openModal('contactEmailModal')" class="w-full bg-gradient-to-r from-green-500 to-purple-600 hover:from-green-600 hover:to-purple-700 text-white px-8 py-3 rounded-full text-lg font-semibold transition duration-200 shadow-lg">Book a Call</a>
+                        <!-- Growth Package (Most Popular) -->
+                        <div class="bg-gray-900 p-8 rounded-3xl shadow-xl border-2 border-green-500 flex flex-col transform scale-100 lg:scale-105 hover:scale-110 transition-transform duration-300 pricing-card-border pricing-card-popular">
+                            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md">Most Popular</div>
+                            <h3 class="text-2xl font-bold text-white mb-4">Growth</h3>
+                            <p class="text-gray-400 text-base mb-6">For growing businesses ready to scale with advanced analytics.</p>
+                            <div class="text-5xl font-extrabold text-blue-400 mb-6">£2,499<span class="text-xl text-gray-400">/month</span></div>
+                            <ul class="text-gray-300 text-left space-y-3 mb-8 flex-grow">
+                                <li class="flex items-center"><svg class="w-5 h-5 text-blue-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> 3 Custom Dashboards</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-blue-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Weekly Data Refresh</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-blue-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Advanced AI Insights & Forecasting</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-blue-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Dedicated Account Manager</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-blue-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Priority Support</li>
+                            </ul>
+                            <a href="javascript:void(0)" onclick="openModal('contactEmailModal')" class="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-8 py-3 rounded-full text-lg font-bold shadow-xl transition duration-300 w-full text-center">
+                                Choose Plan
+                            </a>
                         </div>
 
-                        <!-- Pricing Card 3: Premium Partner Plan -->
-                        <div class="bg-gray-900 rounded-3xl p-8 flex flex-col justify-between shadow-2xl pricing-card-border">
-                            <div>
-                                <h4 class="text-2xl font-bold mb-2">Premium Partner Plan</h4>
-                                <p class="text-gray-400 mb-2">Enterprise rollout, custom integrations, ongoing AI tuning.</p>
-                                <p class="text-5xl font-extrabold mb-8"><span class="text-green-500">£4,999+</span><span class="lg:whitespace-nowrap text-lg text-gray-400 font-normal"> one-time</span></p>
-                                <ul class="text-left space-y-4 mb-8">
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Everything in Growth, plus:
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Enterprise-grade reporting & data architecture design
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Unlimited data source integrations (APIs, databases, cloud apps)
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Branded client portal & white-label capabilities
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Ongoing AI model tuning & performance optimization
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Security hardening: SSO, MFA, and audit logging
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        Quarterly strategy reviews & roadmap planning
-                                    </li>
-                                    <li class="flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="10" fill="currentColor"/>
-                                            <path fill="#0d1117" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                        24/7 dedicated support & SLA guarantees
-                                    </li>
-                                </ul>
+                        <!-- Enterprise Package -->
+                        <div class="bg-gray-800 p-8 rounded-3xl shadow-lg border border-gray-700 flex flex-col transform hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-2xl font-bold text-white mb-4">Enterprise</h3>
+                            <p class="text-gray-400 text-base mb-6">Comprehensive solution for large organizations with complex data needs.</p>
+                            <div class="text-5xl font-extrabold text-purple-400 mb-6">Custom<span class="text-xl text-gray-400">/quote</span></div>
+                            <ul class="text-gray-300 text-left space-y-3 mb-8 flex-grow">
+                                <li class="flex items-center"><svg class="w-5 h-5 text-purple-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Unlimited Custom Dashboards</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-purple-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Real-time Data Refresh</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-purple-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Full AI Suite & Predictive Modeling</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-purple-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Dedicated Data Engineer & Strategist</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-purple-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> 24/7 Premium Support</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-purple-400 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> On-site Workshops & Training</li>
+                            </ul>
+                            <a href="javascript:void(0)" onclick="openModal('contactEmailModal')" class="bg-gray-700 hover:bg-gray-600 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-md transition duration-300 w-full text-center">
+                                Contact for Quote
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive Demo Dashboard Section -->
+            <section id="interactive-dashboard-demo" class="py-16 md:py-20 px-4 md:px-6 bg-[#14181f] border-t border-gray-800">
+                <div class="max-w-7xl mx-auto text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-8 md:mb-12">Interactive <span class="text-gradient-green-purple">Financial Dashboard</span></h2>
+                    <p class="text-gray-300 text-base md:text-lg mb-8 max-w-2xl mx-auto">
+                        Experience a slice of the financial clarity we bring. This Power BI-inspired demo showcases real-time insights for accounting firms.
+                    </p>
+
+                    <div class="bg-gray-900 p-4 md:p-8 rounded-xl shadow-lg border border-gray-700">
+                        <!-- Filters -->
+                        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 md:gap-6 flex-wrap">
+                            <h3 class="text-xl md:text-2xl font-semibold text-white mb-2 md:mb-0">Performance Overview</h3>
+                            <div class="flex flex-wrap items-center justify-center gap-2 md:gap-4 text-sm">
+                                <div class="flex items-center space-x-1 md:space-x-2">
+                                    <label for="year-select" class="text-gray-300 text-xs md:text-sm">Year:</label>
+                                    <select id="year-select" class="bg-gray-800 text-white border border-gray-700 rounded-md p-1.5 text-xs md:text-sm focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="2023">2023</option>
+                                        <option value="2024" selected>2024</option>
+                                        <option value="2025">2025</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center space-x-1 md:space-x-2">
+                                    <label for="quarter-select" class="text-gray-300 text-xs md:text-sm">Quarter:</label>
+                                    <select id="quarter-select" class="bg-gray-800 text-white border border-gray-700 rounded-md p-1.5 text-xs md:text-sm focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="All">All</option>
+                                        <option value="Q1">Q1</option>
+                                        <option value="Q2">Q2</option>
+                                        <option value="Q3">Q3</option>
+                                        <option value="Q4">Q4</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center space-x-1 md:space-x-2">
+                                    <label for="industry-select" class="text-gray-300 text-xs md:text-sm">Industry:</label>
+                                    <select id="industry-select" class="bg-gray-800 text-white border border-gray-700 rounded-md p-1.5 text-xs md:text-sm focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="All">All</option>
+                                        <option value="Manufacturing">Manufacturing</option>
+                                        <option value="Retail">Retail</option>
+                                        <option value="Tech">Tech</option>
+                                        <option value="Healthcare">Healthcare</option>
+                                        <option value="Services">Services</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center space-x-1 md:space-x-2">
+                                    <label for="service-type-select" class="text-gray-300 text-xs md:text-sm">Service:</label>
+                                    <select id="service-type-select" class="bg-gray-800 text-white border border-gray-700 rounded-md p-1.5 text-xs md:text-sm focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="All">All</option>
+                                        <option value="Tax Prep">Tax Prep</option>
+                                        <option value="Payroll">Payroll</option>
+                                        <option value="Bookkeeping">Bookkeeping</option>
+                                        <option value="Advisory">Advisory</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center space-x-1 md:space-x-2">
+                                    <label for="tenure-select" class="text-gray-300 text-xs md:text-sm">Tenure:</label>
+                                    <select id="tenure-select" class="bg-gray-800 text-white border border-gray-700 rounded-md p-1.5 text-xs md:text-sm focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="All">All</option>
+                                        <option value="0-6 months">0-6 months</option>
+                                        <option value="6-12 months">6-12 months</option>
+                                        <option value="1+ year">1+ year</option>
+                                    </select>
+                                </div>
                             </div>
-                            <!-- Changed to open modal -->
-                            <a href="javascript:void(0)" onclick="openModal('contactEmailModal')" class="w-full bg-gray-700 hover:bg-gray-600 text-white px-8 py-3 rounded-full text-lg font-semibold transition duration-200 shadow">Book a Call</a>
+                        </div>
+
+                        <!-- Key Metrics -->
+                        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
+                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 text-center transform hover:scale-105 transition duration-300">
+                                <p class="text-gray-400 text-xs sm:text-sm">Total Revenue</p>
+                                <p id="total-revenue" class="text-2xl md:text-3xl font-bold text-green-400 mt-1 md:mt-2">£0.00</p>
+                            </div>
+                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 text-center transform hover:scale-105 transition duration-300">
+                                <p class="text-gray-400 text-xs sm:text-sm">Avg. Billable Hours/Client</p>
+                                <p id="avg-billable-hours" class="text-2xl md:text-3xl font-bold text-blue-400 mt-1 md:mt-2">0</p>
+                            </div>
+                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 text-center transform hover:scale-105 transition duration-300">
+                                <p class="text-gray-400 text-xs sm:text-sm">Client Retention Rate</p>
+                                <p id="retention-rate" class="text-2xl md:text-3xl font-bold text-purple-400 mt-1 md:mt-2">0%</p>
+                            </div>
+                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 text-center transform hover:scale-105 transition duration-300">
+                                <p class="text-gray-400 text-xs sm:text-sm">Outstanding Invoices</p>
+                                <p id="outstanding-invoices" class="text-2xl md:text-3xl font-bold text-red-400 mt-1 md:mt-2">£0.00</p>
+                            </div>
+                        </div>
+
+                        <!-- Charts and AI Insights -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 chart-container">
+                                <h4 class="text-xl font-semibold text-white mb-4 absolute top-6 left-6">Revenue Trend Over Time</h4>
+                                <canvas id="revenueTrendChart"></canvas>
+                            </div>
+                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 chart-container">
+                                <h4 class="text-xl font-semibold text-white mb-4 absolute top-6 left-6">Top 5 Clients by Revenue</h4>
+                                <canvas id="topClientsChart"></canvas>
+                            </div>
+                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 chart-container">
+                                <h4 class="text-xl font-semibold text-white mb-4 absolute top-6 left-6">Services Sold per Client</h4>
+                                <canvas id="servicesSoldChart"></canvas>
+                            </div>
+                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 flex flex-col relative overflow-hidden chart-container">
+                                <h4 class="text-xl font-semibold text-white mb-4">AI-Powered Insights</h4>
+                                <div id="ai-insights-chat" class="flex flex-col flex-grow overflow-y-auto custom-scroll p-2 pr-4 mb-4">
+                                    <!-- AI and user messages will be appended here -->
+                                </div>
+                                <div id="ai-insights-loading" class="flex justify-center items-center h-full absolute inset-0 bg-gray-800/80 hidden">
+                                    <div class="loader"></div>
+                                </div>
+                                <div class="flex mt-auto">
+                                    <input type="text" id="ai-question-input" placeholder="Ask about the data..." class="flex-grow bg-gray-700 text-white rounded-l-md p-3 text-sm border border-gray-600 focus:outline-none focus:border-blue-500">
+                                    <button id="ai-send-button" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-md text-sm font-semibold transition duration-200">
+                                        Send
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- Client Partners Section -->
-            <section id="client-partners" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
+            <section id="client-partners" class="py-16 md:py-20 px-4 md:px-6 bg-[#14181f] border-t border-gray-800">
                 <div class="max-w-7xl mx-auto text-center">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-12">Client <span class="text-gradient-orange-red">Partners</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-8 md:mb-12">Client <span class="text-gradient-orange-red">Partners</span></h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Accounting Firms</h3>
-                            <p class="text-gray-300">How Fortis Accountants uncovered an extra £50K in month one.</p>
+                            <p class="text-gray-300 text-sm">How Fortis Accountants uncovered an extra £50K in month one.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-blue-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-blue-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Professional Service Firms</h3>
-                            <p class="text-gray-300">Stop losing billable hours—streamline workflow and forecasting.</p>
+                            <p class="text-gray-300 text-sm">Stop losing billable hours—streamline workflow and forecasting.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-purple-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-purple-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Bootstrapped & VC-Backed Startups</h3>
-                            <p class="text-gray-300">Validate product-market fit with data-backed growth metrics from day one.</p>
+                            <p class="text-gray-300 text-sm">Validate product-market fit with data-backed growth metrics from day one.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- Client FAQ Section -->
-            <section id="client-faq" class="py-20 px-4 bg-[#14181f] border-t border-gray-800">
+            <section id="client-faq" class="py-16 md:py-20 px-4 md:px-6 bg-[#14181f] border-t border-gray-800">
                 <div class="max-w-4xl mx-auto text-center">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-12">Client <span class="text-gradient-green-purple">FAQ</span></h2>
-                    <div class="accordion-container text-left">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-8 md:mb-12">Client <span class="text-gradient-green-purple">FAQ</span></h2>
+                    <div class="accordion-container text-left text-sm md:text-base">
                         <!-- FAQ Item 1 -->
                         <div class="accordion-item">
-                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                            <div class="accordion-header flex justify-between items-center text-white text-lg md:text-xl font-semibold" onclick="toggleAccordion(this)">
                                 Why not just stick with Excel?
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">Excel can’t automate risk alerts or surface hidden revenue streams like our AI dashboards can. We turn your data into actionable insights instantly.</p>
+                                <p class="text-gray-300 text-sm md:text-base">Excel can’t automate risk alerts or surface hidden revenue streams like our AI dashboards can. We turn your data into actionable insights instantly.</p>
                             </div>
                         </div>
                         <!-- FAQ Item 2 -->
                         <div class="accordion-item">
-                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                            <div class="accordion-header flex justify-between items-center text-white text-lg md:text-xl font-semibold" onclick="toggleAccordion(this)">
                                 What if we don’t see results after the 90 Day trial?
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">We offer a risk-free period: if you don’t see real ROI within that time, we’ll continue working at no cost until you do.</p>
+                                <p class="text-gray-300 text-sm md:text-base">We offer a risk-free period: if you don’t see real ROI within that time, we’ll continue working at no cost until you do.</p>
                             </div>
                         </div>
                         <!-- FAQ Item 3 -->
                         <div class="accordion-item">
-                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                            <div class="accordion-header flex justify-between items-center text-white text-lg md:text-xl font-semibold" onclick="toggleAccordion(this)">
                                 How unique is our solution?
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">Our combination of bespoke AI, world-class UX, and continuous optimisation ensures you get a solution that’s tailored specifically for your needs and is hard to replicate.</p>
+                                <p class="text-gray-300 text-sm md:text-base">Our combination of bespoke AI, world-class UX, and continuous optimisation ensures you get a solution that’s tailored specifically for your needs and is hard to replicate.</p>
                             </div>
                         </div>
                         <!-- FAQ Item 4 -->
                         <div class="accordion-item">
-                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                            <div class="accordion-header flex justify-between items-center text-white text-lg md:text-xl font-semibold" onclick="toggleAccordion(this)">
                                 How quickly can we get started with a dashboard?
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">We can deliver a clickable demo using your real data in as little as one week, with full rollout shortly afterward.</p>
+                                <p class="text-gray-300 text-sm md:text-base">We can deliver a clickable demo using your real data in as little as one week, with full rollout shortly afterward.</p>
                             </div>
                         </div>
                         <!-- FAQ Item 5 -->
                         <div class="accordion-item">
-                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                            <div class="accordion-header flex justify-between items-center text-white text-lg md:text-xl font-semibold" onclick="toggleAccordion(this)">
                                 What types of data sources can our dashboards integrate with?
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">Our dashboards can seamlessly integrate with cloud platforms (AWS, Azure), databases (SQL Server, MySQL), spreadsheets (Excel, Google Sheets), and popular apps (Salesforce, Google Analytics).</p>
+                                <p class="text-gray-300 text-sm md:text-base">Our dashboards can seamlessly integrate with cloud platforms (AWS, Azure), databases (SQL Server, MySQL), spreadsheets (Excel, Google Sheets), and popular apps (Salesforce, Google Analytics).</p>
                             </p>
                         </div>
                         <!-- FAQ Item 6 -->
                         <div class="accordion-item">
-                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                            <div class="accordion-header flex justify-between items-center text-white text-lg md:text-xl font-semibold" onclick="toggleAccordion(this)">
                                 How often is the data updated in the dashboards?
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">Data updates can be scheduled from real-time to daily or weekly refreshes, based on your business needs.</p>
+                                <p class="text-gray-300 text-sm md:text-base">Data updates can be scheduled from real-time to daily or weekly refreshes, based on your business needs.</p>
                             </div>
                         </div>
                         <!-- FAQ Item 7 -->
                         <div class="accordion-item">
-                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                            <div class="accordion-header flex justify-between items-center text-white text-lg md:text-xl font-semibold" onclick="toggleAccordion(this)">
                                 What kind of support and training do you offer?
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">We provide comprehensive onboarding, training sessions, and ongoing support to ensure your team can fully leverage the dashboards.</p>
+                                <p class="text-gray-300 text-sm md:text-base">We provide comprehensive onboarding, training sessions, and ongoing support to ensure your team can fully leverage the dashboards.</p>
                             </div>
                         </div>
                         <!-- FAQ Item 8 -->
                         <div class="accordion-item">
-                            <div class="accordion-header flex justify-between items-center text-white text-xl font-semibold" onclick="toggleAccordion(this)">
+                            <div class="accordion-header flex justify-between items-center text-white text-lg md:text-xl font-semibold" onclick="toggleAccordion(this)">
                                 Can the dashboards be customised to fit our brand?
                                 <svg class="accordion-arrow w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             <div class="accordion-content">
-                                <p class="text-gray-300 text-base">Absolutely. We offer white-label options so you can customise the look and feel to match your brand identity.</p>
+                                <p class="text-gray-300 text-sm md:text-base">Absolutely. We offer white-label options so you can customise the look and feel to match your brand identity.</p>
                             </div>
                         </div>
                     </div>
@@ -892,34 +941,34 @@
             </section>
 
             <!-- Security & Governance Section -->
-            <section id="security-governance" class="py-20 pb-20 px-4 bg-[#0d1117] border-t border-gray-800">
+            <section id="security-governance" class="py-16 md:py-20 px-4 md:px-6 bg-[#0d1117] border-t border-gray-800">
                 <div class="max-w-6xl mx-auto text-center">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-12">Security & <span class="text-gradient-blue-green">Governance</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2S10 7.9 10 9v6c0 1.1.9 2 2 2zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V8zm-2 9H7v2h2v-2zm-2-4H7v2h2v-2zM7 7h2v2H7V7zm12-4h-4V1h-2v2H9V1H7v2H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM21 19H3V5h18v14z"/></svg>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-8 md:mb-12">Security & <span class="text-gradient-blue-green">Governance</span></h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2S10 7.9 10 9v6c0 1.1.9 2 2 2zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V8zm-2 9H7v2h2v-2zm-2-4H7v2h2v-2zM7 7h2v2H7V7zm12-4h-4V1h-2v2H9V1H7v2H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM21 19H3V5h18v14z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Advanced Data Encryption</h3>
-                            <p class="text-gray-300">We use AES-256 encryption to secure all data both in transit and at rest, ensuring your information is always protected.</p>
+                            <p class="text-gray-300 text-sm">We use AES-256 encryption to secure all data both in transit and at rest, ensuring your information is always protected.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-blue-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 11c1.66 0 2.99-1.34 2.99-3S13.66 5 12 5s-3 1.34-3 3 1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-blue-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 11c1.66 0 2.99-1.34 2.99-3S13.66 5 12 5s-3 1.34-3 3 1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Strict Access Control</h3>
-                            <p class="text-300">We implement role-based access control and multi-factor authentication, so only authorised personnel can access the data.</p>
+                            <p class="text-300 text-sm">We implement role-based access control and multi-factor authentication, so only authorised personnel can access the data.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-purple-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2h-4v2h4V4zm6 15H4V8h16v11z"/></svg>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-purple-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2h-4v2h4V4zm6 15H4V8h16v11z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Regular Security Audits</h3>
-                            <p class="text-gray-300">Our systems undergo regular, comprehensive audits by third-party security experts to identify and address any vulnerabilities.</p>
+                            <p class="text-gray-300 text-sm">Our systems undergo regular, comprehensive audits by third-party security experts to identify and address any vulnerabilities.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-yellow-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-yellow-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">GDPR Compliance</h3>
-                            <p class="text-gray-300">We adhere to strict data protection regulations, including GDPR, ensuring your data is handled with the highest standards of privacy.</p>
+                            <p class="text-gray-300 text-sm">We adhere to strict data protection regulations, including GDPR, ensuring your data is handled with the highest standards of privacy.</p>
                         </div>
-                        <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-12 h-12 text-red-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                        <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-red-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8-8 3.59-8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
                             <h3 class="text-xl font-semibold text-white mb-2">Incident Response Plan</h3>
-                            <p class="text-gray-300">In the unlikely event of a data breach, we have a robust response plan that includes immediate containment, thorough investigation, and transparent communication.</p>
+                            <p class="text-gray-300 text-sm">In the unlikely event of a data breach, we have a robust response plan that includes immediate containment, thorough investigation, and transparent communication.</p>
                         </div>
                     </div>
                 </div>
@@ -928,64 +977,63 @@
         </main>
 
         <!-- Footer -->
-        <footer class="bg-[#0c0f13] py-12 px-6 text-gray-400 overflow-x-auto">
-            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-12 gap-y-12 justify-items-start lg:justify-items-center">
+        <footer class="bg-[#0c0f13] py-10 md:py-12 px-4 md:px-6 text-gray-400 overflow-x-auto">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-8 gap-y-10 md:gap-y-12 justify-items-start text-sm md:text-base">
                 <!-- Column 1: Contact Us -->
-                <div class="flex flex-col space-y-4 items-start">
+                <div class="flex flex-col space-y-3 items-start">
                     <h3 class="text-white text-lg font-semibold">Contact Us</h3>
                     
-                    <div class="mt-4 space-y-3">
-                        <p class="flex items-center text-gray-300 text-base">
-                            <svg class="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <div class="mt-3 space-y-2">
+                        <p class="flex items-center text-gray-300 text-sm">
+                            <svg class="w-4 h-4 mr-2 text-green-400" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                             <a href="mailto:info@dnianalytics.com" class="hover:text-white">info@dnianalytics.com</a>
                         </p>
-                        <!-- Phone number removed as requested -->
                     </div>
                 </div>
 
                 <!-- Column 2: Solutions -->
-                <div class="flex flex-col space-y-4 items-start">
+                <div class="flex flex-col space-y-3 items-start">
                     <h3 class="text-white text-lg font-semibold">Solutions</h3>
-                    <ul class="space-y-4">
-                        <li><a href="#our-unfair-edge" class="text-gray-300 hover:text-white transition duration-200 text-base">Our Edge</a></li>
-                        <li><a href="#how-it-works" class="text-gray-300 hover:text-white transition duration-200 text-base">How It Works</a></li>
-                        <li><a href="#ai-features" class="text-gray-300 hover:text-white transition duration-200 text-base">AI Features</a></li>
+                    <ul class="space-y-2">
+                        <li><a href="#our-unfair-edge" class="text-gray-300 hover:text-white transition duration-200 text-sm">Our Edge</a></li>
+                        <li><a href="#how-it-works" class="text-gray-300 hover:text-white transition duration-200 text-sm">How It Works</a></li>
+                        <li><a href="#ai-features" class="text-gray-300 hover:text-white transition duration-200 text-sm">AI Features</a></li>
                     </ul>
                 </div>
 
-                <!-- Column 3: Our Packages -->
-                <div class="flex flex-col space-y-4 items-start">
-                    <h3 class="text-white text-lg font-semibold">Our Packages</h3>
-                    <ul class="space-y-4">
-                        <li><a href="#services-pricing" class="text-gray-300 hover:text-white transition duration-200 text-base">Our Packages</a></li>
-                        <li><a href="#client-partners" class="text-gray-300 hover:text-white transition duration-200 text-base">Clients</a></li>
+                <!-- Column 3: Pricing -->
+                <div class="flex flex-col space-y-3 items-start">
+                    <h3 class="text-white text-lg font-semibold">Pricing</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#services-pricing" class="text-gray-300 hover:text-white transition duration-200 text-sm">Pricing</a></li>
+                        <li><a href="#client-partners" class="text-gray-300 hover:text-white transition duration-200 text-sm">Clients</a></li>
                     </ul>
                 </div>
 
                 <!-- Column 4: Support & Policies -->
-                <div class="flex flex-col space-y-4 items-start">
+                <div class="flex flex-col space-y-3 items-start">
                     <h3 class="text-white text-lg font-semibold">Support & Policies</h3>
-                    <ul class="space-y-4">
-                        <li><a href="#client-faq" class="text-gray-300 hover:text-white transition duration-200 text-base">Client FAQ</a></li>
-                        <li><a href="#security-governance" class="hover:text-white transition duration-200 text-base">Security & Governance</a></li>
+                    <ul class="space-y-2">
+                        <li><a href="#client-faq" class="text-gray-300 hover:text-white transition duration-200 text-sm">FAQ</a></li>
+                        <li><a href="#security-governance" class="hover:text-white transition duration-200 text-sm">Security & Governance</a></li>
                     </ul>
                 </div>
 
                 <!-- Column 5: CTA Panel -->
-                <div class="flex flex-col items-center space-y-4 text-center flex-shrink-0 min-w-max">
-                    <a href="javascript:void(0)" onclick="openModal('contactEmailModal')" class="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-8 py-3 rounded-full text-lg font-bold shadow-xl transition duration-300 ease-in-out transform hover:scale-105 whitespace-nowrap min-w-fit">
+                <div class="flex flex-col items-center space-y-3 text-center flex-shrink-0 min-w-max">
+                    <a href="javascript:void(0)" onclick="openModal('contactEmailModal')" class="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-xl transition duration-300 ease-in-out transform hover:scale-105 whitespace-nowrap min-w-fit">
                         Book Your Free Strategy Call
                     </a>
-                    <p class="text-gray-400 text-sm whitespace-nowrap min-w-fit">Unlock actionable insights before your competitors do.</p>
+                    <p class="text-gray-400 text-xs whitespace-nowrap min-w-fit">Unlock actionable insights before your competitors do.</p>
                 </div>
             </div>
-            <div class="mt-8 border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+            <div class="mt-8 border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
                 <p>&copy; 2025 DNI Ltd. All rights reserved.</p>
-                <div class="flex space-x-4 mt-4 md:mt-0">
-                    <a href="#" class="hover:text-white text-base" onclick="openModal('privacyPolicyModal')">Privacy Policy</a>
-                    <a href="#" class="hover:text-white text-base" onclick="openModal('termsOfServiceModal')">Terms of Service</a>
-                    <a href="#" class="hover:text-white transition duration-200 text-base" onclick="openModal('cookiePolicyModal')">Cookie Policy</a>
-                    <a href="#" class="hover:text-white transition duration-200 text-base" onclick="openModal('dataProtectionAddendumModal')">Data Protection</a>
+                <div class="flex space-x-3 mt-4 md:mt-0 text-xs">
+                    <a href="#" class="hover:text-white" onclick="openModal('privacyPolicyModal')">Privacy Policy</a>
+                    <a href="#" class="hover:text-white" onclick="openModal('termsOfServiceModal')">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition duration-200" onclick="openModal('cookiePolicyModal')">Cookie Policy</a>
+                    <a href="#" class="hover:text-white transition duration-200" onclick="openModal('dataProtectionAddendumModal')">Data Protection</a>
                 </div>
             </div>
         </footer>
@@ -1463,6 +1511,592 @@
                 copyConfirmation.classList.add('hidden');
             }, 1999); // Hide after 3 seconds
         }
+
+        // --- Interactive Dashboard Script ---
+        // Register the datalabels plugin globally
+        Chart.register(ChartDataLabels);
+
+        // Mock Data for the Dashboard
+        const dashboardData = {
+            "2023": {
+                clients: [
+                    { id: "C001", name: "Alpha Dynamics", industry: "Manufacturing", tenure: "1+ year", services: ["Tax Prep", "Advisory"], monthlyRevenue: [12500, 13200, 14100, 13800, 15000, 14500, 15800, 16200, 17000, 16500, 17200, 18000], billableHours: [50, 52, 55, 53, 58, 56, 60, 62, 65, 63, 67, 70], outstanding: 0 },
+                    { id: "C002", name: "Beta Innovations", industry: "Tech", tenure: "0-6 months", services: ["Payroll", "Bookkeeping"], monthlyRevenue: [2800, 3100, 3500, 3300, 3600, 3400, 3800, 3900, 4100, 4000, 4200, 4500], billableHours: [12, 13, 15, 14, 16, 15, 17, 18, 19, 18, 20, 22], outstanding: 750 },
+                    { id: "C003", name: "Gamma Retail Solutions", industry: "Retail", tenure: "6-12 months", services: ["Bookkeeping", "Tax Prep"], monthlyRevenue: [4200, 4500, 4800, 4600, 4900, 4700, 5100, 5200, 5400, 5300, 5500, 5800], billableHours: [18, 19, 20, 19, 21, 20, 22, 23, 24, 23, 25, 26], outstanding: 0 },
+                    { id: "C004", name: "Delta Healthcare", industry: "Healthcare", tenure: "1+ year", services: ["Advisory"], monthlyRevenue: [7500, 7800, 8100, 7900, 8300, 8100, 8500, 8700, 8900, 8800, 9000, 9200], billableHours: [30, 31, 32, 31, 33, 32, 34, 35, 36, 35, 37, 38], outstanding: 0 },
+                    { id: "C005", name: "Epsilon Services Group", industry: "Services", tenure: "0-6 months", services: ["Tax Prep"], monthlyRevenue: [2200, 2400, 2600, 2500, 2700, 2600, 2800, 2900, 3000, 2900, 3100, 3200], billableHours: [10, 11, 12, 11, 13, 12, 14, 14, 15, 14, 15, 16], outstanding: 300 },
+                    { id: "C006", name: "Fusion Manufacturing", industry: "Manufacturing", tenure: "1+ year", services: ["Payroll", "Bookkeeping"], monthlyRevenue: [6800, 7100, 7400, 7200, 7600, 7400, 7800, 8000, 8200, 8100, 8300, 8500], billableHours: [28, 29, 30, 29, 31, 30, 32, 33, 34, 33, 35, 36], outstanding: 0 },
+                    { id: "C007", name: "Global Tech Solutions", industry: "Tech", tenure: "6-12 months", services: ["Advisory"], monthlyRevenue: [5500, 5700, 5900, 5800, 6100, 6000, 6300, 6500, 6700, 6600, 6800, 7000], billableHours: [22, 23, 24, 23, 25, 24, 26, 27, 28, 27, 28, 29], outstanding: 0 },
+                    { id: "C008", name: "Horizon Retail", industry: "Retail", tenure: "1+ year", services: ["Tax Prep", "Advisory"], monthlyRevenue: [8800, 9100, 9400, 9200, 9600, 9400, 9800, 10000, 10200, 10100, 10300, 10500], billableHours: [35, 36, 37, 36, 38, 37, 39, 40, 41, 40, 41, 42], outstanding: 0 },
+                    { id: "C009", name: "Infinity Health", industry: "Healthcare", tenure: "0-6 months", services: ["Bookkeeping"], monthlyRevenue: [3800, 4000, 4200, 4100, 4300, 4200, 4400, 4500, 4600, 4500, 4700, 4800], billableHours: [16, 17, 18, 17, 19, 18, 19, 20, 21, 20, 21, 22], outstanding: 500 },
+                    { id: "C010", name: "Jupiter Services", industry: "Services", tenure: "6-12 months", services: ["Payroll"], monthlyRevenue: [5200, 5400, 5600, 5500, 5700, 5600, 5800, 5900, 6000, 5900, 6100, 6200], billableHours: [20, 21, 22, 21, 23, 22, 24, 24, 25, 24, 25, 26], outstanding: 0 },
+                    { id: "C011", name: "Krypton Industries", industry: "Manufacturing", tenure: "1+ year", services: ["Advisory", "Tax Prep"], monthlyRevenue: [10500, 10800, 11100, 10900, 11300, 11100, 11500, 11700, 11900, 11800, 12000, 12200], billableHours: [40, 41, 42, 41, 43, 42, 44, 45, 46, 45, 46, 47], outstanding: 0 },
+                    { id: "C012", name: "Lunar Tech", industry: "Tech", tenure: "0-6 months", services: ["Tax Prep"], monthlyRevenue: [3500, 3700, 3900, 3800, 4000, 3900, 4100, 4200, 4300, 4200, 4400, 4500], billableHours: [14, 15, 16, 15, 17, 16, 17, 18, 19, 18, 19, 20], outstanding: 150 },
+                    { id: "C017", name: "Vanguard Ventures", industry: "Tech", tenure: "0-6 months", services: ["Advisory"], monthlyRevenue: [1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600], billableHours: [8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14], outstanding: 0 },
+                    { id: "C018", name: "Vivid Solutions", industry: "Services", tenure: "0-6 months", services: ["Bookkeeping"], monthlyRevenue: [1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900], billableHours: [7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13], outstanding: 0 },
+                    { id: "C019", name: "Apex Manufacturing", industry: "Manufacturing", tenure: "0-6 months", services: ["Payroll"], monthlyRevenue: [2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600], billableHours: [10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16], outstanding: 0 },
+                    { id: "C020", name: "Bright Retail", industry: "Retail", tenure: "0-6 months", services: ["Tax Prep"], monthlyRevenue: [2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100], billableHours: [8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14], outstanding: 0 },
+                ],
+                newClientIDs: ["C002", "C003", "C005", "C007", "C009", "C010", "C012", "C017", "C018", "C019", "C020"],
+                retainedClientIDs: []
+            },
+            "2024": {
+                clients: [
+                    { id: "C001", name: "Alpha Dynamics", industry: "Manufacturing", tenure: "1+ year", services: ["Tax Prep", "Advisory", "Payroll"], monthlyRevenue: [13500, 14200, 15100, 14800, 16000, 15500, 16800, 17200, 18000, 17500, 18200, 19000], billableHours: [55, 57, 60, 58, 62, 60, 64, 66, 68, 67, 69, 72], outstanding: 0 },
+                    { id: "C002", name: "Beta Innovations", industry: "Tech", tenure: "6-12 months", services: ["Payroll", "Bookkeeping"], monthlyRevenue: [3000, 3300, 3700, 3500, 3800, 3600, 4000, 4100, 4300, 4200, 4400, 4700], billableHours: [13, 14, 16, 15, 17, 16, 18, 19, 20, 19, 21, 23], outstanding: 0 },
+                    { id: "C003", name: "Gamma Retail Solutions", industry: "Retail", tenure: "1+ year", services: ["Bookkeeping", "Tax Prep"], monthlyRevenue: [4500, 4800, 5100, 4900, 5200, 5000, 5400, 5500, 5700, 5600, 5800, 6100], billableHours: [19, 20, 21, 20, 22, 21, 23, 24, 25, 24, 26, 27], outstanding: 0 },
+                    { id: "C004", name: "Delta Healthcare", industry: "Healthcare", tenure: "1+ year", services: ["Advisory", "Tax Prep"], monthlyRevenue: [8000, 8300, 8600, 8400, 8800, 8600, 9000, 9200, 9400, 9300, 9500, 9700], billableHours: [32, 33, 34, 33, 35, 34, 36, 37, 38, 37, 39, 40], outstanding: 0 },
+                    { id: "C005", name: "Epsilon Services Group", industry: "Services", tenure: "6-12 months", services: ["Tax Prep", "Bookkeeping"], monthlyRevenue: [2400, 2600, 2800, 2700, 2900, 2800, 3000, 3100, 3200, 3100, 3300, 3400], billableHours: [11, 12, 13, 12, 14, 13, 15, 15, 16, 15, 16, 17], outstanding: 0 },
+                    { id: "C006", name: "Fusion Manufacturing", industry: "Manufacturing", tenure: "1+ year", services: ["Payroll", "Bookkeeping"], monthlyRevenue: [7200, 7500, 7800, 7600, 8000, 7800, 8200, 8400, 8600, 8500, 8700, 8900], billableHours: [30, 31, 32, 31, 33, 32, 34, 35, 36, 35, 37, 38], outstanding: 0 },
+                    { id: "C007", name: "Global Tech Solutions", industry: "Tech", tenure: "1+ year", services: ["Advisory"], monthlyRevenue: [5800, 6000, 6200, 6100, 6400, 6300, 6600, 6800, 7000, 6900, 7100, 7300], billableHours: [23, 24, 25, 24, 26, 25, 27, 28, 29, 28, 29, 30], outstanding: 0 },
+                    { id: "C008", name: "Horizon Retail", industry: "Retail", tenure: "1+ year", services: ["Tax Prep", "Advisory", "Payroll"], monthlyRevenue: [9500, 9800, 10100, 9900, 10300, 10100, 10500, 10700, 10900, 10800, 11000, 11200], billableHours: [38, 39, 40, 39, 41, 40, 42, 43, 44, 43, 44, 45], outstanding: 0 },
+                    { id: "C009", name: "Infinity Health", industry: "Healthcare", tenure: "6-12 months", services: ["Bookkeeping", "Advisory"], monthlyRevenue: [4000, 4200, 4400, 4300, 4500, 4400, 4600, 4700, 4800, 4700, 4900, 5000], billableHours: [17, 18, 19, 18, 20, 19, 20, 21, 22, 21, 22, 23], outstanding: 0 },
+                    { id: "C010", name: "Jupiter Services", industry: "Services", tenure: "1+ year", services: ["Payroll", "Tax Prep"], monthlyRevenue: [5500, 5700, 5900, 5800, 6100, 6000, 6300, 6500, 6700, 6600, 6800, 7000], billableHours: [21, 22, 23, 22, 24, 23, 25, 25, 26, 25, 26, 27], outstanding: 0 },
+                    { id: "C011", name: "Krypton Industries", industry: "Manufacturing", tenure: "1+ year", services: ["Advisory", "Tax Prep", "Bookkeeping"], monthlyRevenue: [11500, 11800, 12100, 11900, 12300, 12100, 12500, 12700, 12900, 12800, 13000, 13200], billableHours: [44, 45, 46, 45, 47, 46, 48, 49, 50, 49, 50, 51], outstanding: 0 },
+                    { id: "C012", name: "Lunar Tech", industry: "Tech", tenure: "6-12 months", services: ["Tax Prep", "Payroll"], monthlyRevenue: [3700, 3900, 4100, 4000, 4200, 4100, 4300, 4400, 4500, 4400, 4600, 4700], billableHours: [15, 16, 17, 16, 18, 17, 18, 19, 20, 19, 20, 21], outstanding: 0 },
+                    // New clients for 2024
+                    { id: "C013", name: "Nova Logistics", industry: "Services", tenure: "0-6 months", services: ["Bookkeeping"], monthlyRevenue: [2000, 2100, 2200, 2150, 2300, 2250, 2400, 2450, 2500, 2480, 2550, 2600], billableHours: [8, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 12], outstanding: 0 },
+                    { id: "C014", name: "Orion Pharma", industry: "Healthcare", tenure: "0-6 months", services: ["Advisory"], monthlyRevenue: [6000, 6200, 6400, 6300, 6500, 6400, 6600, 6700, 6800, 6750, 6900, 7000], billableHours: [25, 26, 27, 26, 28, 27, 28, 29, 30, 29, 30, 31], outstanding: 0 },
+                    { id: "C017", name: "Vanguard Ventures", industry: "Tech", tenure: "6-12 months", services: ["Advisory"], monthlyRevenue: [1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700], billableHours: [8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14], outstanding: 0 },
+                    { id: "C018", name: "Vivid Solutions", industry: "Services", tenure: "6-12 months", services: ["Bookkeeping"], monthlyRevenue: [1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000], billableHours: [7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13], outstanding: 0 },
+                    { id: "C019", name: "Apex Manufacturing", industry: "Manufacturing", tenure: "6-12 months", services: ["Payroll"], monthlyRevenue: [2600, 2700, 2800, 2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600, 3700], billableHours: [10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16], outstanding: 0 },
+                    { id: "C020", name: "Bright Retail", industry: "Retail", tenure: "6-12 months", services: ["Tax Prep"], monthlyRevenue: [2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200], billableHours: [8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14], outstanding: 0 },
+                ],
+                newClientIDs: ["C013", "C014"],
+                retainedClientIDs: ["C001", "C002", "C003", "C004", "C005", "C006", "C007", "C008", "C009", "C010", "C011", "C012", "C017", "C018", "C019", "C020"]
+            },
+            "2025": {
+                clients: [
+                    { id: "C001", name: "Alpha Dynamics", industry: "Manufacturing", tenure: "1+ year", services: ["Tax Prep", "Advisory", "Payroll", "Bookkeeping"], monthlyRevenue: [14500, 15200, 16100, 15800, 17000, 16500, 17800, 18200, 19000, 18500, 19200, 20000], billableHours: [60, 62, 65, 63, 68, 66, 70, 72, 75, 73, 77, 80], outstanding: 0 },
+                    { id: "C002", name: "Beta Innovations", industry: "Tech", tenure: "1+ year", services: ["Payroll", "Bookkeeping"], monthlyRevenue: [3200, 3500, 3900, 3700, 4000, 3800, 4200, 4300, 4500, 4400, 4600, 4900], billableHours: [14, 15, 17, 16, 18, 17, 19, 20, 21, 20, 22, 24], outstanding: 0 },
+                    { id: "C003", name: "Gamma Retail Solutions", industry: "Retail", tenure: "1+ year", services: ["Bookkeeping", "Tax Prep"], monthlyRevenue: [4800, 5100, 5400, 5200, 5500, 5300, 5700, 5800, 6000, 5900, 6100, 6400], billableHours: [20, 21, 22, 21, 23, 22, 24, 25, 26, 25, 27, 28], outstanding: 0 },
+                    { id: "C004", name: "Delta Healthcare", industry: "Healthcare", tenure: "1+ year", services: ["Advisory", "Tax Prep", "Payroll"], monthlyRevenue: [8500, 8800, 9100, 8900, 9300, 9100, 9500, 9700, 9900, 9800, 10000, 10200], billableHours: [34, 35, 36, 35, 37, 36, 38, 39, 40, 39, 41, 42], outstanding: 0 },
+                    { id: "C005", name: "Epsilon Services Group", industry: "Services", tenure: "1+ year", services: ["Tax Prep", "Bookkeeping"], monthlyRevenue: [2600, 2800, 3000, 2900, 3100, 3000, 3200, 3300, 3400, 3300, 3500, 3600], billableHours: [12, 13, 14, 13, 15, 14, 16, 16, 17, 16, 17, 18], outstanding: 0 },
+                    { id: "C006", name: "Fusion Manufacturing", industry: "Manufacturing", tenure: "1+ year", services: ["Payroll", "Bookkeeping"], monthlyRevenue: [7500, 7800, 8100, 7900, 8300, 8100, 8500, 8700, 8900, 8800, 9000, 9200], billableHours: [31, 32, 33, 32, 34, 33, 35, 36, 37, 36, 38, 39], outstanding: 0 },
+                    { id: "C007", name: "Global Tech Solutions", industry: "Tech", tenure: "1+ year", services: ["Advisory"], monthlyRevenue: [6000, 6200, 6400, 6300, 6600, 6500, 6800, 7000, 7200, 7100, 7300, 7500], billableHours: [24, 25, 26, 25, 27, 26, 28, 29, 30, 29, 30, 31], outstanding: 0 },
+                    { id: "C008", name: "Horizon Retail", industry: "Retail", tenure: "1+ year", services: ["Tax Prep", "Advisory", "Payroll"], monthlyRevenue: [10000, 10300, 10600, 10400, 10800, 10600, 11000, 11200, 11400, 11300, 11500, 11700], billableHours: [40, 41, 42, 41, 43, 42, 44, 45, 46, 45, 46, 47], outstanding: 0 },
+                    { id: "C009", name: "Infinity Health", industry: "Healthcare", tenure: "1+ year", services: ["Bookkeeping", "Advisory"], monthlyRevenue: [4200, 4400, 4600, 4500, 4700, 4600, 4800, 4900, 5000, 4900, 5100, 5200], billableHours: [18, 19, 20, 19, 21, 20, 21, 22, 23, 22, 23, 24], outstanding: 0 },
+                    { id: "C010", name: "Jupiter Services", industry: "Services", tenure: "1+ year", services: ["Payroll", "Tax Prep"], monthlyRevenue: [5800, 6000, 6200, 6100, 6400, 6300, 6600, 6800, 7000, 6900, 7100, 7300], billableHours: [22, 23, 24, 23, 25, 24, 26, 26, 27, 26, 27, 28], outstanding: 0 },
+                    { id: "C011", name: "Krypton Industries", industry: "Manufacturing", tenure: "1+ year", services: ["Advisory", "Tax Prep", "Bookkeeping"], monthlyRevenue: [12000, 12300, 12600, 12400, 12800, 12600, 13000, 13200, 13400, 13300, 13500, 13700], billableHours: [46, 47, 48, 47, 49, 48, 50, 51, 52, 51, 52, 53], outstanding: 0 },
+                    { id: "C012", name: "Lunar Tech", industry: "Tech", tenure: "1+ year", services: ["Tax Prep", "Payroll"], monthlyRevenue: [3900, 4100, 4300, 4200, 4400, 4300, 4500, 4600, 4700, 4600, 4800, 4900], billableHours: [16, 17, 18, 17, 19, 18, 19, 20, 21, 20, 21, 22], outstanding: 0 },
+                    { id: "C013", name: "Nova Logistics", industry: "Services", tenure: "6-12 months", services: ["Bookkeeping"], monthlyRevenue: [2200, 2300, 2400, 2350, 2500, 2450, 2600, 2650, 2700, 2680, 2750, 2800], billableHours: [9, 10, 10, 10, 11, 11, 11, 11, 12, 12, 12, 13], outstanding: 0 },
+                    { id: "C014", name: "Orion Pharma", industry: "Healthcare", tenure: "6-12 months", services: ["Advisory"], monthlyRevenue: [6500, 6700, 6900, 6800, 7000, 6900, 7100, 7200, 7300, 7250, 7400, 7500], billableHours: [27, 28, 29, 28, 30, 29, 30, 31, 32, 31, 32, 33], outstanding: 0 },
+                    // New clients for 2025
+                    { id: "C015", name: "Pioneer Foods", industry: "Retail", tenure: "0-6 months", services: ["Bookkeeping", "Payroll"], monthlyRevenue: [3000, 3100, 3200, 3150, 3300, 3250, 3400, 3450, 3500, 3480, 3550, 3600], billableHours: [12, 13, 13, 13, 14, 14, 14, 14, 15, 15, 15, 16], outstanding: 0 },
+                    { id: "C016", name: "Quantum Energy", industry: "Manufacturing", tenure: "0-6 months", services: ["Advisory"], monthlyRevenue: [9000, 9200, 9400, 9300, 9500, 9400, 9600, 9700, 9800, 9750, 9900, 10000], billableHours: [35, 36, 37, 36, 38, 37, 38, 39, 40, 39, 40, 41], outstanding: 0 },
+                    { id: "C021", name: "Vivid Solutions", industry: "Services", tenure: "1+ year", services: ["Bookkeeping", "Tax Prep"], monthlyRevenue: [2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100], billableHours: [8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14], outstanding: 0 },
+                    { id: "C022", name: "Apex Manufacturing", industry: "Manufacturing", tenure: "1+ year", services: ["Payroll", "Advisory"], monthlyRevenue: [2800, 2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600, 3700, 3800, 3900], billableHours: [11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17], outstanding: 0 },
+                    { id: "C023", name: "Bright Retail", industry: "Retail", tenure: "1+ year", services: ["Tax Prep", "Bookkeeping"], monthlyRevenue: [2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3300, 3400], billableHours: [9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15], outstanding: 0 },
+                    { id: "C024", name: "Zenith Services", industry: "Services", tenure: "0-6 months", services: ["Advisory"], monthlyRevenue: [1000, 1100, 1200, 1150, 1300, 1250, 1400, 1450, 1500, 1480, 1550, 1600], billableHours: [5, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 9], outstanding: 0 },
+                    { id: "C025", name: "Vanguard Ventures", industry: "Tech", tenure: "1+ year", services: ["Advisory", "Payroll"], monthlyRevenue: [1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900], billableHours: [9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15], outstanding: 0 },
+                    { id: "C026", name: "Stellar Healthcare", industry: "Healthcare", tenure: "0-6 months", services: ["Bookkeeping"], monthlyRevenue: [3500, 3600, 3700, 3800, 3900, 4000, 4100, 4200, 4300, 4400, 4500, 4600], billableHours: [14, 15, 15, 16, 16, 17, 17, 18, 18, 19, 19, 20], outstanding: 0 },
+                ],
+                newClientIDs: ["C015", "C016", "C024", "C026"],
+                retainedClientIDs: ["C001", "C002", "C003", "C004", "C005", "C006", "C007", "C008", "C009", "C010", "C011", "C012", "C013", "C014", "C017", "C018", "C019", "C020"]
+            }
+        };
+
+        let revenueTrendChartInstance;
+        let topClientsChartInstance;
+        let servicesSoldChartInstance;
+        let aiChatHistory = []; // To store AI conversation for context
+
+        // Function to format currency
+        const formatCurrency = (value) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(value);
+
+        // Function to get quarter from month index (0-11)
+        const getQuarterFromMonth = (monthIndex) => {
+            if (monthIndex >= 0 && monthIndex <= 2) return "Q1";
+            if (monthIndex >= 3 && monthIndex <= 5) return "Q2";
+            if (monthIndex >= 6 && monthIndex <= 8) return "Q3";
+            if (monthIndex >= 9 && monthIndex <= 11) return "Q4";
+            return "Unknown";
+        };
+
+        // Function to filter data based on selections
+        function getFilteredData() {
+            const selectedYear = document.getElementById('year-select').value;
+            const selectedQuarter = document.getElementById('quarter-select').value;
+            const selectedIndustry = document.getElementById('industry-select').value;
+            const selectedService = document.getElementById('service-type-select').value;
+            const selectedTenure = document.getElementById('tenure-select').value;
+
+            const yearData = dashboardData[selectedYear] ? dashboardData[selectedYear].clients : [];
+
+            return yearData.filter(client => {
+                let matches = true;
+
+                // Filter by Quarter (if not "All")
+                if (selectedQuarter !== "All") {
+                    const clientMonthsInQuarter = client.monthlyRevenue.filter((_, index) => getQuarterFromMonth(index) === selectedQuarter);
+                    if (clientMonthsInQuarter.length === 0) {
+                        matches = false;
+                    }
+                }
+
+                // Filter by Industry
+                if (selectedIndustry !== "All" && client.industry !== selectedIndustry) {
+                    matches = false;
+                }
+
+                // Filter by Service Type
+                if (selectedService !== "All" && !client.services.includes(selectedService)) {
+                    matches = false;
+                }
+
+                // Filter by Client Tenure
+                if (selectedTenure !== "All" && client.tenure !== selectedTenure) {
+                    matches = false;
+                }
+
+                return matches;
+            });
+        }
+
+        // Function to calculate and update key metrics
+        function updateKeyMetrics(filteredData, currentYear) {
+            const selectedQuarter = document.getElementById('quarter-select').value;
+            let totalRevenue = 0;
+            let totalBillableHours = 0;
+            let totalOutstandingInvoices = 0;
+            const uniqueClientIDs = new Set();
+
+            filteredData.forEach(client => {
+                uniqueClientIDs.add(client.id);
+                totalOutstandingInvoices += client.outstanding; // Sum up outstanding from all filtered clients
+
+                if (selectedQuarter === "All") {
+                    totalRevenue += client.monthlyRevenue.reduce((sum, val) => sum + val, 0);
+                    totalBillableHours += client.billableHours.reduce((sum, val) => sum + val, 0);
+                } else {
+                    client.monthlyRevenue.forEach((revenue, index) => {
+                        if (getQuarterFromMonth(index) === selectedQuarter) {
+                            totalRevenue += revenue;
+                            totalBillableHours += client.billableHours[index];
+                        }
+                    });
+                }
+            });
+
+            document.getElementById('total-revenue').innerText = formatCurrency(totalRevenue);
+            document.getElementById('avg-billable-hours').innerText = uniqueClientIDs.size > 0 ? (totalBillableHours / uniqueClientIDs.size).toFixed(0) : '0';
+            document.getElementById('outstanding-invoices').innerText = formatCurrency(totalOutstandingInvoices);
+
+            // Client Retention Rate Calculation
+            const previousYearData = dashboardData[parseInt(currentYear) - 1];
+            const currentYearData = dashboardData[parseInt(currentYear)];
+
+            let retentionRate = 'N/A';
+            if (previousYearData && currentYearData) {
+                const clientsPreviousYear = new Set(previousYearData.retainedClientIDs.concat(previousYearData.newClientIDs));
+                const clientsCurrentYear = new Set(currentYearData.retainedClientIDs.concat(currentYearData.newClientIDs));
+
+                let retainedCount = 0;
+                clientsCurrentYear.forEach(clientId => {
+                    if (clientsPreviousYear.has(clientId)) {
+                        retainedCount++;
+                    }
+                });
+                // Base for retention is clients from previous year who were active
+                const baseClients = clientsPreviousYear.size;
+                if (baseClients > 0) {
+                    retentionRate = ((retainedCount / baseClients) * 100).toFixed(1);
+                }
+            }
+            document.getElementById('retention-rate').innerText = `${retentionRate}%`;
+        }
+
+        // Function to render/update the charts
+        function updateDashboardCharts(filteredData) {
+            // Destroy existing chart instances if they exist
+            if (revenueTrendChartInstance) revenueTrendChartInstance.destroy();
+            if (topClientsChartInstance) topClientsChartInstance.destroy();
+            if (servicesSoldChartInstance) servicesSoldChartInstance.destroy();
+
+            const selectedQuarter = document.getElementById('quarter-select').value;
+
+            // --- Revenue Trend Over Time (Line Chart) ---
+            const monthlyRevenue = new Array(12).fill(0);
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+            filteredData.forEach(client => {
+                client.monthlyRevenue.forEach((revenue, index) => {
+                    if (selectedQuarter === "All" || getQuarterFromMonth(index) === selectedQuarter) {
+                        monthlyRevenue[index] += revenue;
+                    }
+                });
+            });
+
+            const revenueCtx = document.getElementById('revenueTrendChart').getContext('2d');
+            revenueTrendChartInstance = new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: `Revenue`,
+                        data: monthlyRevenue,
+                        borderColor: 'rgb(0, 200, 83)', // Green
+                        backgroundColor: 'rgba(0, 200, 83, 0.2)',
+                        fill: true,
+                        tension: 0.3,
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgb(0, 200, 83)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(98, 0, 234)' // Purple
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#cbd5e0' } },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`
+                            }
+                        },
+                        datalabels: { display: false }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#cbd5e0' } },
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: {
+                                color: '#cbd5e0',
+                                callback: (value) => `£${(value / 1000).toFixed(0)}K`
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1000, // Animation duration
+                        easing: 'easeInOutQuad'
+                    }
+                }
+            });
+
+            // --- Top 5 Clients by Revenue (Horizontal Bar Chart) ---
+            const clientRevenue = {};
+            filteredData.forEach(client => {
+                let clientTotalRevenue = 0;
+                if (selectedQuarter === "All") {
+                    clientTotalRevenue = client.monthlyRevenue.reduce((sum, val) => sum + val, 0);
+                } else {
+                    client.monthlyRevenue.forEach((revenue, index) => {
+                        if (getQuarterFromMonth(index) === selectedQuarter) {
+                            clientTotalRevenue += revenue;
+                        }
+                    });
+                }
+                clientRevenue[client.name] = (clientRevenue[client.name] || 0) + clientTotalRevenue;
+            });
+
+            const sortedClients = Object.entries(clientRevenue)
+                .sort(([, a], [, b]) => b - a)
+                .slice(0, 5);
+
+            const topClientLabels = sortedClients.map(([client]) => client);
+            const topClientData = sortedClients.map(([, revenue]) => revenue);
+
+            const topClientsCtx = document.getElementById('topClientsChart').getContext('2d');
+            topClientsChartInstance = new Chart(topClientsCtx, {
+                type: 'bar',
+                data: {
+                    labels: topClientLabels,
+                    datasets: [{
+                        label: `Revenue`,
+                        data: topClientData,
+                        backgroundColor: [
+                            '#3B82F6', '#34D399', '#8B5CF6', '#EC4899', '#F97316'
+                        ],
+                        borderColor: [
+                            '#2563EB', '#10B981', '#7C3AED', '#E11D48', '#EA580C'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => `${context.label}: ${formatCurrency(context.parsed.x)}`
+                            }
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            anchor: 'end',
+                            align: 'right',
+                            formatter: (value) => `£${(value / 1000).toFixed(0)}K`
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: {
+                                color: '#cbd5e0',
+                                callback: (value) => `£${(value / 1000).toFixed(0)}K`
+                            }
+                        },
+                        y: { grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#cbd5e0' } }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeInOutQuad'
+                    }
+                }
+            });
+
+            // --- Services Sold per Client (Bar Chart) ---
+            const serviceCounts = { "Tax Prep": 0, "Payroll": 0, "Bookkeeping": 0, "Advisory": 0 };
+            filteredData.forEach(client => {
+                client.services.forEach(service => {
+                    if (serviceCounts.hasOwnProperty(service)) {
+                        serviceCounts[service]++;
+                    }
+                });
+            });
+
+            const serviceLabels = Object.keys(serviceCounts);
+            const serviceData = Object.values(serviceCounts);
+
+            const servicesSoldCtx = document.getElementById('servicesSoldChart').getContext('2d');
+            servicesSoldChartInstance = new Chart(servicesSoldCtx, {
+                type: 'bar',
+                data: {
+                    labels: serviceLabels,
+                    datasets: [{
+                        label: `Clients Served`,
+                        data: serviceData,
+                        backgroundColor: [
+                            '#00C853', '#6200EA', '#3B82F6', '#EC4899'
+                        ],
+                        borderColor: [
+                            '#00A042', '#4D00B8', '#2563EB', '#E11D48'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => `${context.label}: ${context.parsed.y} clients`
+                            }
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            anchor: 'end',
+                            align: 'top',
+                            formatter: (value) => value > 0 ? value : ''
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#cbd5e0' } },
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#cbd5e0', precision: 0 }
+                        }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeInOutQuad'
+                    }
+                }
+            });
+        }
+
+        // --- AI Insights Generation ---
+        async function generateAIInsights(query = null) {
+            const aiInsightsChat = document.getElementById('ai-insights-chat');
+            const aiInsightsLoading = document.getElementById('ai-insights-loading');
+            const aiQuestionInput = document.getElementById('ai-question-input');
+
+            // Show loading spinner
+            aiInsightsLoading.classList.remove('hidden');
+            aiQuestionInput.disabled = true; // Disable input during generation
+
+            // Add user query to chat history if it's a new question
+            if (query) {
+                aiChatHistory.push({ role: "user", parts: [{ text: query }] });
+                const userBubble = document.createElement('div');
+                userBubble.className = 'user-chat-bubble text-gray-200 text-sm md:text-base';
+                userBubble.innerText = query;
+                aiInsightsChat.appendChild(userBubble);
+                aiInsightsChat.scrollTop = aiInsightsChat.scrollHeight; // Scroll to bottom
+                aiQuestionInput.value = ''; // Clear input
+            } else {
+                // If no specific query, it's a filter-triggered insight generation
+                aiChatHistory = []; // Clear history for new filter context
+                aiInsightsChat.innerHTML = ''; // Clear chat bubbles
+                const initialMessage = document.createElement('div');
+                initialMessage.className = 'ai-chat-bubble text-gray-300 text-sm md:text-base';
+                initialMessage.innerText = 'Hello! I\'m your AI financial assistant. I\'m analyzing the data based on your current filters...';
+                aiInsightsChat.appendChild(initialMessage);
+                aiInsightsChat.scrollTop = aiInsightsChat.scrollHeight;
+            }
+
+            try {
+                const filteredData = getFilteredData();
+                const selectedYear = document.getElementById('year-select').value;
+                const selectedQuarter = document.getElementById('quarter-select').value;
+                const selectedIndustry = document.getElementById('industry-select').value;
+                const selectedServiceType = document.getElementById('service-type-select').value;
+                const selectedTenure = document.getElementById('tenure-select').value;
+
+                // Aggregate data for the prompt
+                const totalRevenue = filteredData.reduce((sum, d) => {
+                    if (selectedQuarter === "All") return sum + d.monthlyRevenue.reduce((s, v) => s + v, 0);
+                    return sum + d.monthlyRevenue.filter((_, idx) => getQuarterFromMonth(idx) === selectedQuarter).reduce((s, v) => s + v, 0);
+                }, 0);
+
+                const totalBillableHours = filteredData.reduce((sum, d) => {
+                    if (selectedQuarter === "All") return sum + d.billableHours.reduce((s, v) => s + v, 0);
+                    return sum + d.billableHours.filter((_, idx) => getQuarterFromMonth(idx) === selectedQuarter).reduce((s, v) => s + v, 0);
+                }, 0);
+                const uniqueClientIDs = new Set(filteredData.map(d => d.id)).size;
+                const avgBillableHours = uniqueClientIDs > 0 ? (totalBillableHours / uniqueClientIDs).toFixed(0) : '0';
+                const outstandingInvoices = filteredData.reduce((sum, d) => sum + d.outstanding, 0);
+
+                const clientRetentionRate = document.getElementById('retention-rate').innerText;
+
+                const clientRevenueMap = {};
+                filteredData.forEach(d => {
+                    let clientTotalRevenue = 0;
+                    if (selectedQuarter === "All") {
+                        clientTotalRevenue = d.monthlyRevenue.reduce((s, v) => s + v, 0);
+                    } else {
+                        d.monthlyRevenue.forEach((revenue, index) => {
+                            if (getQuarterFromMonth(index) === selectedQuarter) {
+                                clientTotalRevenue += revenue;
+                            }
+                        });
+                    }
+                    clientRevenueMap[d.name] = (clientRevenueMap[d.name] || 0) + clientTotalRevenue;
+                });
+                const sortedTopClients = Object.entries(clientRevenueMap).sort(([, a], [, b]) => b - a).slice(0, 3);
+                const topClientsSummary = sortedTopClients.map(([client, rev]) => `${client} (${formatCurrency(rev)})`).join(', ');
+
+                const serviceBreakdown = {};
+                filteredData.forEach(d => {
+                    d.services.forEach(service => {
+                        serviceBreakdown[service] = (serviceBreakdown[service] || 0) + 1;
+                    });
+                });
+                const serviceSummary = Object.entries(serviceBreakdown).map(([service, count]) => `${service} (${count} clients)`).join(', ');
+
+                const filterDetails = `Current filters: Year=${selectedYear}, Quarter=${selectedQuarter}, Industry=${selectedIndustry}, Service=${selectedServiceType}, Tenure=${selectedTenure}.`;
+
+                let basePrompt = `You are an AI financial assistant for an accounting firm. Provide actionable insights and analysis based on the provided data.
+                Current aggregated data:
+                - Total Revenue: ${formatCurrency(totalRevenue)}
+                - Average Billable Hours per Client: ${avgBillableHours} hours
+                - Client Retention Rate: ${clientRetentionRate}
+                - Outstanding Invoices: ${formatCurrency(outstandingInvoices)}
+                - Top Clients by Revenue: ${topClientsSummary || 'N/A'}
+                - Services Sold Breakdown: ${serviceSummary || 'N/A'}
+                ${filterDetails}
+
+                `;
+
+                if (query) {
+                    basePrompt += `The user has asked: "${query}". Please respond specifically to this query, using the provided data context.`;
+                } else {
+                    basePrompt += `Provide a concise, professional summary of key financial performance, identify trends, potential risks, and suggest actionable strategies for the accounting firm. Focus on what is most impactful given the current filters.`;
+                }
+                
+                // Keep chat history for context, but limit its length to avoid token limits
+                const currentChatContext = aiChatHistory.slice(-5); // Keep last 5 messages for context
+                const fullPromptWithContext = currentChatContext.map(msg => `${msg.role}: ${msg.parts[0].text}`).join('\n') + `\nassistant: ${basePrompt}`;
+
+
+                const payload = { contents: [{ role: "user", parts: [{ text: basePrompt }] }] };
+                const apiKey = ""; // Canvas will provide this at runtime
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                let aiResponseText;
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    aiResponseText = result.candidates[0].content.parts[0].text;
+                } else {
+                    aiResponseText = "I'm sorry, I couldn't generate insights at this moment. Please try again or rephrase your question.";
+                }
+
+                aiChatHistory.push({ role: "assistant", parts: [{ text: aiResponseText }] });
+                const aiBubble = document.createElement('div');
+                aiBubble.className = 'ai-chat-bubble text-gray-300 text-sm md:text-base';
+                aiBubble.innerText = aiResponseText;
+                aiInsightsChat.appendChild(aiBubble);
+                aiInsightsChat.scrollTop = aiInsightsChat.scrollHeight; // Scroll to bottom
+            } catch (error) {
+                console.error("Error generating AI insights:", error);
+                const errorBubble = document.createElement('div');
+                errorBubble.className = 'ai-chat-bubble text-red-400 text-sm md:text-base';
+                errorBubble.innerText = "Error generating AI insights. Please check your network connection or try again.";
+                aiInsightsChat.appendChild(errorBubble);
+                aiInsightsChat.scrollTop = aiInsightsChat.scrollHeight;
+            } finally {
+                aiInsightsLoading.classList.add('hidden');
+                aiQuestionInput.disabled = false; // Re-enable input
+                aiQuestionInput.focus(); // Put focus back on input
+            }
+        }
+
+        // Main update function that orchestrates everything
+        function updateDashboard() {
+            const filteredData = getFilteredData();
+            const currentYear = document.getElementById('year-select').value;
+            updateKeyMetrics(filteredData, currentYear);
+            updateDashboardCharts(filteredData);
+            generateAIInsights(); // Trigger initial AI insight generation based on filters
+        }
+
+        // Event listeners for all filter selections
+        document.getElementById('year-select').addEventListener('change', updateDashboard);
+        document.getElementById('quarter-select').addEventListener('change', updateDashboard);
+        document.getElementById('industry-select').addEventListener('change', updateDashboard);
+        document.getElementById('service-type-select').addEventListener('change', updateDashboard);
+        document.getElementById('tenure-select').addEventListener('change', updateDashboard);
+
+        // Event listener for AI question input
+        document.getElementById('ai-send-button').addEventListener('click', () => {
+            const question = document.getElementById('ai-question-input').value.trim();
+            if (question) {
+                generateAIInsights(question);
+            }
+        });
+
+        document.getElementById('ai-question-input').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                const question = document.getElementById('ai-question-input').value.trim();
+                if (question) {
+                    generateAIInsights(question);
+                }
+            }
+        });
+
+        // Initial dashboard load on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof Chart !== 'undefined') {
+                updateDashboard();
+            } else {
+                console.error("Chart.js not loaded!");
+            }
+        });
     </script>
 
 </body>
