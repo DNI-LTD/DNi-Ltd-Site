@@ -1,6 +1,63 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
+  
+  <style>
+  .input-filter {
+    background-color: #1f2937;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #374151;
+    font-size: 0.875rem;
+  }
+
+  .metric-card {
+    background-color: #1f2937;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid #374151;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 20px rgba(0, 255, 153, 0.1);
+  }
+
+  .chart-box {
+    background-color: #1f2937;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid #374151;  
+    position: relative;
+    min-height: 280px;
+  }
+
+  .chart-title {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+  }
+
+  .custom-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scroll::-webkit-scrollbar-thumb {
+    background-color: #4b5563;
+    border-radius: 3px;
+  }
+
+  .custom-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #4b5563 transparent;
+  }
+</style>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DNI Limited – AI Dashboards for Visionaries</title>
@@ -791,125 +848,111 @@
 
   </div>
 </section>
+            <!-- Interactive Demo Dashboard Section -->
+<section id="interactive-dashboard-demo" class="py-20 bg-[#14181f] border-t border-gray-800 overflow-hidden" data-aos="fade-up">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-screen-xl text-center">
+    <h2 class="text-3xl sm:text-4xl font-bold mb-6 md:mb-10 leading-tight">
+      Interactive <span class="text-gradient-green-purple">Financial Dashboard</span>
+    </h2>
+    <p class="text-sm sm:text-base md:text-lg mb-10 max-w-2xl mx-auto text-gray-300">
+      Experience real-time financial clarity built for accounting firms. Preview insights powered by Power BI, AI, and next-gen storytelling.
+    </p>
 
-          
-          <!-- Interactive Demo Dashboard Section -->
-            <section id="interactive-dashboard-demo" class="py-16 bg-[#14181f] border-t border-gray-800">
-                <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-screen-lg text-center">
-                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 md:mb-12">Interactive <span class="text-gradient-green-purple">Financial Dashboard</span></h2>
-                    <p class="text-sm sm:text-base md:text-lg mb-8 max-w-2xl mx-auto">
-                        Experience a slice of the financial clarity we bring. This Power BI-inspired demo showcases real-time insights for accounting firms.
-                    </p>
+    <div class="bg-gray-900 p-4 md:p-8 rounded-2xl shadow-xl border border-gray-700 max-w-full overflow-hidden">
+      
+    </p>
 
-                    <div class="bg-gray-900 p-4 md:p-8 rounded-xl shadow-lg border border-gray-700">
-                        <!-- Filters -->
-                        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 md:gap-6 flex-wrap">
-                            <h3 class="text-lg sm:text-xl font-semibold text-white mb-2 md:mb-0">Performance Overview</h3>
-                            <div class="flex flex-wrap items-center justify-center gap-2 md:gap-4 text-sm">
-                                <div class="flex items-center space-x-1 md:space-x-2">
-                                    <label for="year-select" class="text-gray-300 text-xs md:text-sm">Year:</label>
-                                    <select id="year-select" class="bg-gray-800 text-white border border-gray-700 rounded-md p-1.5 text-xs md:text-sm focus:ring-blue-500 focus:border-blue-500">
-                                        <option value="2023">2023</option>
-                                        <option value="2024" selected>2024</option>
-                                        <option value="2025">2025</option>
-                                    </select>
-                                </div>
-                                <div class="flex items-center space-x-1 md:space-x-2">
-                                    <label for="quarter-select" class="text-gray-300 text-xs md:text-sm">Quarter:</label>
-                                    <select id="quarter-select" class="bg-gray-800 text-white border border-gray-700 rounded-md p-1.5 text-xs md:text-sm focus:ring-blue-500 focus:border-blue-500">
-                                        <option value="All">All</option>
-                                        <option value="Q1">Q1</option>
-                                        <option value="Q2">Q2</option>
-                                        <option value="Q3">Q3</option>
-                                        <option value="Q4">Q4</option>
-                                    </select>
-                                </div>
-                                <div class="flex items-center space-x-1 md:space-x-2">
-                                    <label for="industry-select" class="text-gray-300 text-xs md:text-sm">Industry:</label>
-                                    <select id="industry-select" class="bg-gray-800 text-white border border-gray-700 rounded-md p-1.5 text-xs md:text-sm focus:ring-blue-500 focus:border-blue-500">
-                                        <option value="All">All</option>
-                                        <option value="Manufacturing">Manufacturing</option>
-                                        <option value="Retail">Retail</option>
-                                        <option value="Tech">Tech</option>
-                                        <option value="Healthcare">Healthcare</option>
-                                        <option value="Services">Services</option>
-                                    </select>
-                                </div>
-                                <div class="flex items-center space-x-1 md:space-x-2">
-                                    <label for="service-type-select" class="text-gray-300 text-xs md:text-sm">Service:</label>
-                                    <select id="service-type-select" class="bg-gray-800 text-white border border-gray-700 rounded-md p-1.5 text-xs md:text-sm focus:ring-blue-500 focus:border-blue-500">
-                                        <option value="All">All</option>
-                                        <option value="Tax Prep">Tax Prep</option>
-                                        <option value="Payroll">Payroll</option>
-                                        <option value="Bookkeeping">Bookkeeping</option>
-                                        <option value="Advisory">Advisory</option>
-                                    </select>
-                                </div>
-                                <div class="flex items-center space-x-1 md:space-x-2">
-                                    <label for="tenure-select" class="text-gray-300 text-xs md:text-sm">Tenure:</label>
-                                    <select id="tenure-select" class="bg-gray-800 text-white border border-gray-700 rounded-md p-1.5 text-xs md:text-sm focus:ring-blue-500 focus:border-blue-500">
-                                        <option value="All">All</option>
-                                        <option value="0-6 months">0-6 months</option>
-                                        <option value="6-12 months">6-12 months</option>
-                                        <option value="1+ year">1+ year</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+    <div data-aos="zoom-in" data-aos-delay="200" class="bg-[#111827] rounded-2xl border border-gray-700 p-6 md:p-10 shadow-[0_0_60px_rgba(0,0,0,0.4)]">
+      <div class="flex flex-col gap-6 md:flex-row md:items-center justify-between mb-10 text-left">
+        <h3 class="text-white text-xl sm:text-2xl font-bold">Performance Overview</h3>
+        <div class="flex flex-wrap gap-4">
+          <div class="flex items-center space-x-2">
+            <label for="year-select" class="text-sm text-gray-300">Year</label>
+            <select id="year-select" class="input-filter">
+              <option>2023</option>
+              <option selected>2024</option>
+              <option>2025</option>
+            </select>
+          </div>
+          <div class="flex items-center space-x-2">
+            <label for="quarter-select" class="text-sm text-gray-300">Quarter</label>
+            <select id="quarter-select" class="input-filter">
+              <option>All</option><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option>
+            </select>
+          </div>
+          <div class="flex items-center space-x-2">
+            <label for="industry-select" class="text-sm text-gray-300">Industry</label>
+            <select id="industry-select" class="input-filter">
+              <option>All</option><option>Retail</option><option>Tech</option><option>Healthcare</option><option>Services</option>
+            </select>
+          </div>
+          <div class="flex items-center space-x-2">
+            <label for="service-type-select" class="text-sm text-gray-300">Service</label>
+            <select id="service-type-select" class="input-filter">
+              <option>All</option><option>Tax Prep</option><option>Payroll</option><option>Bookkeeping</option><option>Advisory</option>
+            </select>
+          </div>
+          <div class="flex items-center space-x-2">
+            <label for="tenure-select" class="text-sm text-gray-300">Tenure</label>
+            <select id="tenure-select" class="input-filter">
+              <option>All</option><option>0–6 months</option><option>6–12 months</option><option>1+ year</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-                        <!-- Key Metrics -->
-                        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
-                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 text-center transform hover:scale-105 transition duration-300">
-                                <p class="text-gray-400 text-xs sm:text-sm">Total Revenue</p>
-                                <p id="total-revenue" class="text-2xl md:text-3xl font-bold text-green-400 mt-1 md:mt-2">£0.00</p>
-                            </div>
-                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 text-center transform hover:scale-105 transition duration-300">
-                                <p class="text-gray-400 text-xs sm:text-sm">Avg. Billable Hours/Client</p>
-                                <p id="avg-billable-hours" class="text-2xl md:text-3xl font-bold text-blue-400 mt-1 md:mt-2">0</p>
-                            </div>
-                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 text-center transform hover:scale-105 transition duration-300">
-                                <p class="text-gray-400 text-xs sm:text-sm">Client Retention Rate</p>
-                                <p id="retention-rate" class="text-2xl md:text-3xl font-bold text-purple-400 mt-1 md:mt-2">0%</p>
-                            </div>
-                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 text-center transform hover:scale-105 transition duration-300">
-                                <p class="text-gray-400 text-xs sm:text-sm">Outstanding Invoices</p>
-                                <p id="outstanding-invoices" class="text-2xl md:text-3xl font-bold text-red-400 mt-1 md:mt-2">£0.00</p>
-                            </div>
-                        </div>
+      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10">
+  <div class="bg-[#1e1e2e] p-5 md:p-6 rounded-xl border border-gray-700 text-center shadow-md hover:shadow-green-400/20 transition-all duration-300 ease-in-out hover:scale-[1.03]">
+    <p class="text-gray-400 text-xs sm:text-sm">Total Revenue</p>
+    <p id="total-revenue" class="text-2xl md:text-3xl font-bold text-green-400 mt-2 tracking-tight">£0.00</p>
+  </div>
+  <div class="bg-[#1e1e2e] p-5 md:p-6 rounded-xl border border-gray-700 text-center shadow-md hover:shadow-blue-400/20 transition-all duration-300 ease-in-out hover:scale-[1.03]">
+    <p class="text-gray-400 text-xs sm:text-sm">Avg. Billable Hours/Client</p>
+    <p id="avg-billable-hours" class="text-2xl md:text-3xl font-bold text-blue-400 mt-2 tracking-tight">0</p>
+  </div>
+  <div class="bg-[#1e1e2e] p-5 md:p-6 rounded-xl border border-gray-700 text-center shadow-md hover:shadow-purple-400/20 transition-all duration-300 ease-in-out hover:scale-[1.03]">
+    <p class="text-gray-400 text-xs sm:text-sm">Client Retention Rate</p>
+    <p id="retention-rate" class="text-2xl md:text-3xl font-bold text-purple-400 mt-2 tracking-tight">0%</p>
+  </div>
+  <div class="bg-[#1e1e2e] p-5 md:p-6 rounded-xl border border-gray-700 text-center shadow-md hover:shadow-red-400/20 transition-all duration-300 ease-in-out hover:scale-[1.03]">
+    <p class="text-gray-400 text-xs sm:text-sm">Outstanding Invoices</p>
+    <p id="outstanding-invoices" class="text-2xl md:text-3xl font-bold text-red-400 mt-2 tracking-tight">£0.00</p>
+  </div>
+</div>
 
-                        <!-- Charts and AI Insights -->
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 chart-container">
-                                <h4 class="text-lg sm:text-xl font-semibold text-white mb-4 absolute top-6 left-6">Revenue Trend Over Time</h4>
-                                <canvas id="revenueTrendChart"></canvas>
-                            </div>
-                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 chart-container">
-                                <h4 class="text-lg sm:text-xl font-semibold text-white mb-4 absolute top-6 left-6">Top 5 Clients by Revenue</h4>
-                                <canvas id="topClientsChart"></canvas>
-                            </div>
-                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 chart-container">
-                                <h4 class="text-lg sm:text-xl font-semibold text-white mb-4 absolute top-6 left-6">Services Sold per Client</h4>
-                                <canvas id="servicesSoldChart"></canvas>
-                            </div>
-                            <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 flex flex-col relative overflow-hidden chart-container">
-                                <h4 class="text-lg sm:text-xl font-semibold text-white mb-4">AI-Powered Insights</h4>
-                                <div id="ai-insights-chat" class="flex flex-col flex-grow overflow-y-auto custom-scroll p-2 pr-4 mb-4">
-                                    <!-- AI and user messages will be appended here -->
-                                </div>
-                                <div id="ai-insights-loading" class="flex justify-center items-center h-full absolute inset-0 bg-gray-800/80 hidden">
-                                    <div class="loader"></div>
-                                </div>
-                                <div class="flex mt-auto">
-                                    <input type="text" id="ai-question-input" placeholder="Ask about the data..." class="flex-grow bg-gray-700 text-white rounded-l-md p-3 text-sm border border-gray-600 focus:outline-none focus:border-blue-500">
-                                    <button id="ai-send-button" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-md text-sm font-semibold transition duration-200">
-                                        Send
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+        <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 chart-container max-h-[500px] overflow-hidden" data-aos="zoom-in-up">
+          <h4 class="text-lg sm:text-xl font-semibold text-white mb-4">Revenue Trend Over Time</h4>
+          <canvas id="revenueTrendChart"></canvas>
+        </div>
+        <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 chart-container max-h-[500px] overflow-hidden" data-aos="zoom-in-up">
+          <h4 class="text-lg sm:text-xl font-semibold text-white mb-4">Top 5 Clients by Revenue</h4>
+          <canvas id="topClientsChart"></canvas>
+        </div>
+        <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 chart-container max-h-[500px] overflow-hidden" data-aos="zoom-in-up">
+          <h4 class="text-lg sm:text-xl font-semibold text-white mb-4">Services Sold per Client</h4>
+          <canvas id="servicesSoldChart"></canvas>
+        </div>
+        <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 flex flex-col relative overflow-hidden chart-container" data-aos="fade-left">
+          <h4 class="text-lg sm:text-xl font-semibold text-white mb-4">AI-Powered Insights</h4>
+          <div id="ai-insights-chat" class="flex flex-col flex-grow overflow-y-auto custom-scroll p-2 pr-4 mb-4 max-h-[250px] sm:max-h-[300px]">
+            <!-- AI messages appear here -->
+          </div>
+          <div id="ai-insights-loading" class="flex justify-center items-center h-full absolute inset-0 bg-gray-800/80 hidden">
+            <div class="loader"></div>
+          </div>
+          <div class="flex mt-auto">
+            <input type="text" id="ai-question-input" placeholder="Ask about the data..." class="flex-grow bg-gray-700 text-white rounded-l-md p-3 text-sm border border-gray-600 focus:outline-none focus:border-blue-500">
+            <button id="ai-send-button" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-md text-sm font-semibold transition duration-200">
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
             <!-- Client Partners Section -->
             <section id="client-partners" class="py-16 bg-[#14181f] border-t border-gray-800">
