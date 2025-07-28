@@ -1,7 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-  
+  <style>
+    
+    #ai-insights-chat::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+#ai-insights-chat::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+    
+    .chart-container canvas {
+  width: 100% !important;
+  height: 300px !important;
+  max-height: 300px !important;
+}
+
+  .filter-dropdown {
+    background-color: #1f2937;
+    color: white;
+    border: 1px solid #374151;
+    padding: 0.375rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    outline: none;
+    transition: border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+
+  .filter-dropdown:focus {
+    border-color: #60a5fa; /* blue-400 */
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.4);
+  }
+</style>
+
   <style>
   .input-filter {
     background-color: #1f2937;
@@ -848,112 +881,134 @@
 
   </div>
 </section>
-            <!-- Interactive Demo Dashboard Section -->
-<section id="interactive-dashboard-demo" class="py-20 bg-[#14181f] border-t border-gray-800 overflow-hidden" data-aos="fade-up">
+<!-- Interactive Demo Dashboard Section -->
+<section id="interactive-dashboard-demo" class="py-24 bg-[#14181f] border-t border-gray-800 overflow-hidden" data-aos="fade-up">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-screen-xl text-center">
-    <h2 class="text-3xl sm:text-4xl font-bold mb-6 md:mb-10 leading-tight">
+    <h2 class="text-3xl sm:text-4xl font-bold mb-4 leading-tight">
       Interactive <span class="text-gradient-green-purple">Financial Dashboard</span>
     </h2>
-    <p class="text-sm sm:text-base md:text-lg mb-10 max-w-2xl mx-auto text-gray-300">
+    <p class="text-sm sm:text-base md:text-lg text-gray-300 max-w-2xl mx-auto mb-12">
       Experience real-time financial clarity built for accounting firms. Preview insights powered by Power BI, AI, and next-gen storytelling.
     </p>
 
-    <div class="bg-gray-900 p-4 md:p-8 rounded-2xl shadow-xl border border-gray-700 max-w-full overflow-hidden">
-      
-    </p>
-
-    <div data-aos="zoom-in" data-aos-delay="200" class="bg-[#111827] rounded-2xl border border-gray-700 p-6 md:p-10 shadow-[0_0_60px_rgba(0,0,0,0.4)]">
-      <div class="flex flex-col gap-6 md:flex-row md:items-center justify-between mb-10 text-left">
-        <h3 class="text-white text-xl sm:text-2xl font-bold">Performance Overview</h3>
-        <div class="flex flex-wrap gap-4">
+    <!-- Filters -->
+    <div class="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8 mb-10">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4 flex-wrap">
+        <h3 class="text-white font-semibold text-lg">Performance Overview</h3>
+        <div class="flex flex-wrap justify-center items-center gap-3 text-sm">
           <div class="flex items-center space-x-2">
-            <label for="year-select" class="text-sm text-gray-300">Year</label>
-            <select id="year-select" class="input-filter">
+            <label for="year-select" class="text-gray-300">Year:</label>
+            <select id="year-select" class="filter-dropdown">
               <option>2023</option>
               <option selected>2024</option>
               <option>2025</option>
             </select>
           </div>
           <div class="flex items-center space-x-2">
-            <label for="quarter-select" class="text-sm text-gray-300">Quarter</label>
-            <select id="quarter-select" class="input-filter">
-              <option>All</option><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option>
+            <label for="quarter-select" class="text-gray-300">Quarter:</label>
+            <select id="quarter-select" class="filter-dropdown">
+              <option>All</option>
+              <option>Q1</option>
+              <option>Q2</option>
+              <option>Q3</option>
+              <option>Q4</option>
             </select>
           </div>
           <div class="flex items-center space-x-2">
-            <label for="industry-select" class="text-sm text-gray-300">Industry</label>
-            <select id="industry-select" class="input-filter">
-              <option>All</option><option>Retail</option><option>Tech</option><option>Healthcare</option><option>Services</option>
+            <label for="industry-select" class="text-gray-300">Industry:</label>
+            <select id="industry-select" class="filter-dropdown">
+              <option>All</option>
+              <option>Manufacturing</option>
+              <option>Retail</option>
+              <option>Tech</option>
+              <option>Healthcare</option>
+              <option>Services</option>
             </select>
           </div>
           <div class="flex items-center space-x-2">
-            <label for="service-type-select" class="text-sm text-gray-300">Service</label>
-            <select id="service-type-select" class="input-filter">
-              <option>All</option><option>Tax Prep</option><option>Payroll</option><option>Bookkeeping</option><option>Advisory</option>
+            <label for="service-type-select" class="text-gray-300">Service:</label>
+            <select id="service-type-select" class="filter-dropdown">
+              <option>All</option>
+              <option>Tax Prep</option>
+              <option>Payroll</option>
+              <option>Bookkeeping</option>
+              <option>Advisory</option>
             </select>
           </div>
           <div class="flex items-center space-x-2">
-            <label for="tenure-select" class="text-sm text-gray-300">Tenure</label>
-            <select id="tenure-select" class="input-filter">
-              <option>All</option><option>0–6 months</option><option>6–12 months</option><option>1+ year</option>
+            <label for="tenure-select" class="text-gray-300">Tenure:</label>
+            <select id="tenure-select" class="filter-dropdown">
+              <option>All</option>
+              <option>0-6 months</option>
+              <option>6-12 months</option>
+              <option>1+ year</option>
             </select>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10">
-  <div class="bg-[#1e1e2e] p-5 md:p-6 rounded-xl border border-gray-700 text-center shadow-md hover:shadow-green-400/20 transition-all duration-300 ease-in-out hover:scale-[1.03]">
-    <p class="text-gray-400 text-xs sm:text-sm">Total Revenue</p>
-    <p id="total-revenue" class="text-2xl md:text-3xl font-bold text-green-400 mt-2 tracking-tight">£0.00</p>
-  </div>
-  <div class="bg-[#1e1e2e] p-5 md:p-6 rounded-xl border border-gray-700 text-center shadow-md hover:shadow-blue-400/20 transition-all duration-300 ease-in-out hover:scale-[1.03]">
-    <p class="text-gray-400 text-xs sm:text-sm">Avg. Billable Hours/Client</p>
-    <p id="avg-billable-hours" class="text-2xl md:text-3xl font-bold text-blue-400 mt-2 tracking-tight">0</p>
-  </div>
-  <div class="bg-[#1e1e2e] p-5 md:p-6 rounded-xl border border-gray-700 text-center shadow-md hover:shadow-purple-400/20 transition-all duration-300 ease-in-out hover:scale-[1.03]">
-    <p class="text-gray-400 text-xs sm:text-sm">Client Retention Rate</p>
-    <p id="retention-rate" class="text-2xl md:text-3xl font-bold text-purple-400 mt-2 tracking-tight">0%</p>
-  </div>
-  <div class="bg-[#1e1e2e] p-5 md:p-6 rounded-xl border border-gray-700 text-center shadow-md hover:shadow-red-400/20 transition-all duration-300 ease-in-out hover:scale-[1.03]">
-    <p class="text-gray-400 text-xs sm:text-sm">Outstanding Invoices</p>
-    <p id="outstanding-invoices" class="text-2xl md:text-3xl font-bold text-red-400 mt-2 tracking-tight">£0.00</p>
-  </div>
-</div>
+    <!-- KPI Tiles -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-10">
+      <div class="tile-card border-green-400 hover:shadow-green-400/20">
+        <p class="tile-label">Total Revenue</p>
+        <p class="tile-value text-green-400" id="total-revenue">£0.00</p>
+      </div>
+      <div class="tile-card border-blue-400 hover:shadow-blue-400/20">
+        <p class="tile-label">Avg. Billable Hours/Client</p>
+        <p class="tile-value text-blue-400" id="avg-billable-hours">0</p>
+      </div>
+      <div class="tile-card border-purple-400 hover:shadow-purple-400/20">
+        <p class="tile-label">Client Retention Rate</p>
+        <p class="tile-value text-purple-400" id="retention-rate">0%</p>
+      </div>
+      <div class="tile-card border-red-400 hover:shadow-red-400/20">
+        <p class="tile-label">Outstanding Invoices</p>
+        <p class="tile-value text-red-400" id="outstanding-invoices">£0.00</p>
+      </div>
+    </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-        <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 chart-container max-h-[500px] overflow-hidden" data-aos="zoom-in-up">
-          <h4 class="text-lg sm:text-xl font-semibold text-white mb-4">Revenue Trend Over Time</h4>
-          <canvas id="revenueTrendChart"></canvas>
+    <!-- Charts + AI -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+
+      <!-- Chart: Revenue Trend -->
+      <div class="chart-box" data-aos="fade-up" data-aos-delay="100">
+        <div class="chart-title">Revenue Trend Over Time</div>
+        <canvas id="revenueTrendChart" class="z-0 relative"></canvas>
+      </div>
+
+      <!-- Chart: Top Clients -->
+      <div class="chart-box" data-aos="fade-up" data-aos-delay="200">
+        <div class="chart-title">Top 5 Clients by Revenue</div>
+        <canvas id="topClientsChart" class="z-0 relative"></canvas>
+      </div>
+
+      <!-- Chart: Services Sold -->
+      <div class="chart-box" data-aos="fade-up" data-aos-delay="300">
+        <div class="chart-title">Services Sold per Client</div>
+        <canvas id="servicesSoldChart" class="z-0 relative"></canvas>
+      </div>
+
+      <!-- AI Assistant -->
+      <div class="chart-box flex flex-col justify-between" data-aos="fade-up" data-aos-delay="400">
+        <div>
+          <h4 class="text-white text-base font-semibold mb-3 flex items-center justify-between">
+            AI-Powered Insights 
+            <span class="bg-purple-800 px-2 py-0.5 rounded text-xs text-white">Client Exclusive</span>
+          </h4>
+          <div id="ai-insights-chat" class="bg-gray-900/50 border border-gray-700 p-4 rounded h-[220px] overflow-y-auto text-left text-sm text-white shadow-inner"></div>
         </div>
-        <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 chart-container max-h-[500px] overflow-hidden" data-aos="zoom-in-up">
-          <h4 class="text-lg sm:text-xl font-semibold text-white mb-4">Top 5 Clients by Revenue</h4>
-          <canvas id="topClientsChart"></canvas>
+        <div class="flex mt-4">
+          <input id="ai-question-input" type="text" placeholder="Ask about the data..." class="flex-grow bg-gray-800 border border-gray-700 text-white text-sm px-4 py-2 rounded-l-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <button id="ai-send-button" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-r-md text-sm">Send</button>
         </div>
-        <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 chart-container max-h-[500px] overflow-hidden" data-aos="zoom-in-up">
-          <h4 class="text-lg sm:text-xl font-semibold text-white mb-4">Services Sold per Client</h4>
-          <canvas id="servicesSoldChart"></canvas>
-        </div>
-        <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md border border-gray-700 flex flex-col relative overflow-hidden chart-container" data-aos="fade-left">
-          <h4 class="text-lg sm:text-xl font-semibold text-white mb-4">AI-Powered Insights</h4>
-          <div id="ai-insights-chat" class="flex flex-col flex-grow overflow-y-auto custom-scroll p-2 pr-4 mb-4 max-h-[250px] sm:max-h-[300px]">
-            <!-- AI messages appear here -->
-          </div>
-          <div id="ai-insights-loading" class="flex justify-center items-center h-full absolute inset-0 bg-gray-800/80 hidden">
-            <div class="loader"></div>
-          </div>
-          <div class="flex mt-auto">
-            <input type="text" id="ai-question-input" placeholder="Ask about the data..." class="flex-grow bg-gray-700 text-white rounded-l-md p-3 text-sm border border-gray-600 focus:outline-none focus:border-blue-500">
-            <button id="ai-send-button" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-md text-sm font-semibold transition duration-200">
-              Send
-            </button>
-          </div>
+        <div id="ai-insights-loading" class="absolute inset-0 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center rounded-lg z-10">
+          <span class="text-white animate-pulse text-sm">Generating insight...</span>
         </div>
       </div>
     </div>
   </div>
 </section>
-
-
             <!-- Client Partners Section -->
             <section id="client-partners" class="py-16 bg-[#14181f] border-t border-gray-800">
                 <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-screen-lg text-center">
@@ -2038,6 +2093,17 @@
                 }
             });
         }
+// Create styled chat bubble
+function createChatBubble(text, sender = "assistant") {
+    const bubble = document.createElement('div');
+    bubble.className = `w-fit max-w-[85%] px-4 py-2 my-1 rounded-lg ${
+        sender === "user"
+            ? 'ml-auto bg-blue-700 text-white self-end'
+            : 'bg-gray-700 text-gray-200 self-start'
+    } text-sm md:text-base whitespace-pre-wrap break-words`;
+    bubble.innerText = text || "No response.";
+    return bubble;
+}
 
         // --- AI Insights Generation ---
         async function generateAIInsights(query = null) {
@@ -2052,20 +2118,18 @@
             // Add user query to chat history if it's a new question
             if (query) {
                 aiChatHistory.push({ role: "user", parts: [{ text: query }] });
-                const userBubble = document.createElement('div');
-                userBubble.className = 'user-chat-bubble text-gray-200 text-sm md:text-base';
-                userBubble.innerText = query;
-                aiInsightsChat.appendChild(userBubble);
+                const userBubble = createChatBubble(query, "user");
+aiInsightsChat.appendChild(userBubble);
+
                 aiInsightsChat.scrollTop = aiInsightsChat.scrollHeight; // Scroll to bottom
                 aiQuestionInput.value = ''; // Clear input
             } else {
                 // If no specific query, it's an filter-triggered insight generation
                 aiChatHistory = []; // Clear history for new filter context
                 aiInsightsChat.innerHTML = ''; // Clear chat bubbles
-                const initialMessage = document.createElement('div');
-                initialMessage.className = 'ai-chat-bubble text-gray-300 text-sm md:text-base';
-                initialMessage.innerText = 'Hello! I\'m your AI financial assistant. I\'m analyzing the data based on your current filters...';
-                aiInsightsChat.appendChild(initialMessage);
+                const initialMessage = createChatBubble("Hello! I’m your AI financial assistant. I’m analyzing the data based on your current filters...");
+aiInsightsChat.appendChild(initialMessage);
+
                 aiInsightsChat.scrollTop = aiInsightsChat.scrollHeight;
             }
 
@@ -2159,14 +2223,12 @@
                     result.candidates[0].content.parts.length > 0) {
                     aiResponseText = result.candidates[0].content.parts[0].text;
                 } else {
-                    aiResponseText = "I'm sorry, I couldn't generate insights at this moment. Please try again or rephrase your question.";
                 }
 
                 aiChatHistory.push({ role: "assistant", parts: [{ text: aiResponseText }] });
-                const aiBubble = document.createElement('div');
-                aiBubble.className = 'ai-chat-bubble text-gray-300 text-sm md:text-base';
-                aiBubble.innerText = aiResponseText;
-                aiInsightsChat.appendChild(aiBubble);
+               const aiBubble = createChatBubble(aiResponseText);
+aiInsightsChat.appendChild(aiBubble);
+
                 aiInsightsChat.scrollTop = aiInsightsChat.scrollHeight; // Scroll to bottom
             } catch (error) {
                 console.error("Error generating AI insights:", error);
@@ -2234,5 +2296,38 @@
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>AOS.init();</script>
  
+          <script>
+  const sendBtn = document.getElementById("ai-send-button");
+  const input = document.getElementById("ai-question-input");
+  const chatBox = document.getElementById("ai-insights-chat");
+  const overlay = document.getElementById("ai-disabled-overlay");
+
+  sendBtn.addEventListener("click", () => {
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  chatBox.appendChild(createChatBubble(msg, "user"));
+  input.value = "";
+
+  // Delay before showing overlay
+  setTimeout(() => {
+    overlay.classList.remove("hidden");
+  }, 400);
+});
+
+
+  // Allow pressing "Enter" to send
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      sendBtn.click();
+    }
+  });
+
+  // Dummy modal trigger function
+  function openContactModal() {
+    const contactModal = document.getElementById("contact-modal");
+    if (contactModal) contactModal.classList.remove("hidden");
+  }
+</script>
 </body>
 </html>
