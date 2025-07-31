@@ -58,6 +58,7 @@
     box-shadow: 0 0 20px rgba(0, 255, 153, 0.1);
   }
 
+  /* Original chart-box definition, keeping min-height */
   .chart-box {
     background-color: #1f2937;
     padding: 1.5rem;
@@ -408,11 +409,12 @@
 
         /* Chart container height constraint */
         .chart-container {
-            height: 300px; /* Fixed height for charts for consistency */
+            /* This rule is for the div that contains the canvas */
             display: flex; /* Use flex to ensure canvas fills available space */
             align-items: center;
             justify-content: center;
             position: relative; /* Added for absolute positioning of title */
+            flex-grow: 1; /* Allow it to take up remaining height within chart-box */
         }
 
         /* Styles for AI chat bubbles */
@@ -471,6 +473,196 @@
           width: 32px; /* Set to 32px as requested */
           height: 32px; /* Set to 32px as requested */
           filter: drop-shadow(0 0 8px currentColor); /* Enhanced glow */
+        }
+
+        /* Dashboard specific styles */
+        #interactive-dashboard-demo {
+            background: radial-gradient(circle at center, #1a202c 0%, #0d1117 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        #interactive-dashboard-demo::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            background: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 L 0 10" fill="none" stroke="%232d3748" stroke-width="0.2" /></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)" /></svg>') repeat;
+            opacity: 0.05;
+            z-index: 0;
+            animation: backgroundPan 60s linear infinite;
+        }
+
+        @keyframes backgroundPan {
+            from { background-position: 0% 0%; }
+            to { background-position: 100% 100%; }
+        }
+
+        .filter-dropdown {
+            background-color: #2d3748; /* Darker, more integrated */
+            border: 1px solid #4a5568;
+            color: #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            transition: all 0.2s ease-in-out;
+            appearance: none; /* Remove default arrow */
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 0.65em auto;
+        }
+
+        .filter-dropdown:hover {
+            border-color: #6366f1; /* Indigo-500 */
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+        }
+
+        .filter-dropdown:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+        }
+
+        .tile-card {
+            background: linear-gradient(145deg, #1f2937, #111827); /* Subtle gradient */
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid; /* Border color set by JS */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .tile-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--tw-gradient-stops));
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .tile-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .tile-card .tile-label {
+            font-size: 0.9rem;
+            color: #a0aec0; /* Lighter gray */
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .tile-card .tile-value {
+            font-size: 2.5rem; /* Larger value */
+            font-weight: 800; /* Extra bold */
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 10px rgba(var(--value-color-rgb), 0.5); /* Dynamic text shadow */
+        }
+
+        /* Specific colors for tile values */
+        .tile-value.text-green-400 { --value-color-rgb: 74, 222, 128; }
+        .tile-value.text-blue-400 { --value-color-rgb: 96, 165, 250; }
+        .tile-value.text-purple-400 { --value-color-rgb: 192, 132, 252; }
+        .tile-value.text-red-400 { --value-color-rgb: 248, 113, 113; }
+
+        .tile-card .tile-icon {
+            width: 2.5rem; /* Larger icons */
+            height: 2.5rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px currentColor); /* More pronounced glow */
+        }
+
+        /* Updated chart-box to have a fixed height */
+        .chart-box {
+            background: linear-gradient(145deg, #1f2937, #111827);
+            border-radius: 1rem;
+            padding: 2rem; /* Increased padding */
+            border: 1px solid #374151;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            height: 400px; /* Set a fixed height for the chart box */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .chart-box .chart-title {
+            position: static; /* Remove absolute positioning */
+            text-align: left;
+            font-size: 1.25rem; /* Larger title */
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08); /* Subtle separator */
+        }
+
+        /* The chart-container itself should just be a flex container for the canvas */
+        .chart-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1; /* Allow it to take up remaining height within chart-box */
+        }
+
+        .ai-chat-bubble, .user-chat-bubble {
+            border-radius: 1.25rem; /* More rounded corners */
+            padding: 0.75rem 1.25rem; /* More padding */
+            margin-bottom: 0.75rem; /* More space between bubbles */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .ai-chat-bubble {
+            background-color: #2d3748;
+            border: 1px solid #4a5568;
+        }
+
+        .user-chat-bubble {
+            background-color: #4a5568;
+            border: 1px solid #64748b;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #ai-insights-loading {
+            background-color: rgba(13, 17, 23, 0.8); /* Darker overlay */
+            border-radius: 1rem;
+            animation: pulseFade 1.5s infinite alternate;
+        }
+
+        @keyframes pulseFade {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+        .ai-chat-input-group {
+            display: flex;
+            border-top: 1px solid #374151;
+            padding-top: 1rem;
+            margin-top: 1rem;
         }
     </style>
 </head>
@@ -898,7 +1090,7 @@
 </section>
 <!-- Interactive Demo Dashboard Section -->
 <section id="interactive-dashboard-demo" class="py-24 bg-[#14181f] border-t border-gray-800 overflow-hidden" data-aos="fade-up">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-screen-xl text-center">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-screen-xl text-center relative z-10">
     <h2 class="text-3xl sm:text-4xl font-bold mb-4 leading-tight">
       Interactive <span class="text-gradient-green-purple">Financial Dashboard</span>
     </h2>
@@ -907,9 +1099,11 @@
     </p>
 
     <!-- Filters -->
-    <div class="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8 mb-10">
+    <div class="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8 mb-10 shadow-xl">
       <div class="flex flex-col md:flex-row justify-between items-center gap-4 flex-wrap">
-        <h3 class="text-white font-semibold text-lg">Performance Overview</h3>
+        <h3 class="text-white font-semibold text-lg flex items-center gap-2">
+            <i data-lucide="settings-2" class="w-5 h-5 text-blue-400"></i> Performance Overview Filters
+        </h3>
         <div class="flex flex-wrap justify-center items-center gap-3 text-sm">
           <div class="flex items-center space-x-2">
             <label for="year-select" class="text-gray-300">Year:</label>
@@ -965,42 +1159,46 @@
 
     <!-- KPI Tiles -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-10">
-      <div class="tile-card border-green-400 hover:shadow-green-400/20">
+      <div class="tile-card" style="border-color: #34D399; --tw-gradient-stops: #00C853, transparent;">
+        <i data-lucide="trending-up" class="tile-icon text-green-400"></i>
         <p class="tile-label">Total Revenue</p>
         <p class="tile-value text-green-400" id="total-revenue">£0.00</p>
       </div>
-      <div class="tile-card border-blue-400 hover:shadow-blue-400/20">
+      <div class="tile-card" style="border-color: #60A5FA; --tw-gradient-stops: #3B82F6, transparent;">
+        <i data-lucide="clock" class="tile-icon text-blue-400"></i>
         <p class="tile-label">Avg. Billable Hours/Client</p>
         <p class="tile-value text-blue-400" id="avg-billable-hours">0</p>
       </div>
-      <div class="tile-card border-purple-400 hover:shadow-purple-400/20">
+      <div class="tile-card" style="border-color: #C084FC; --tw-gradient-stops: #8B5CF6, transparent;">
+        <i data-lucide="users" class="tile-icon text-purple-400"></i>
         <p class="tile-label">Client Retention Rate</p>
         <p class="tile-value text-purple-400" id="retention-rate">0%</p>
       </div>
-      <div class="tile-card border-red-400 hover:shadow-red-400/20">
+      <div class="tile-card" style="border-color: #F87171; --tw-gradient-stops: #EF4444, transparent;">
+        <i data-lucide="wallet" class="tile-icon text-red-400"></i>
         <p class="tile-label">Outstanding Invoices</p>
         <p class="tile-value text-red-400" id="outstanding-invoices">£0.00</p>
       </div>
     </div>
 
-    <!-- Charts + AI -->
+   <!-- Charts + AI -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
 
       <!-- Chart: Revenue Trend -->
       <div class="chart-box" data-aos="fade-up" data-aos-delay="100">
-        <div class="chart-title">Revenue Trend Over Time</div>
+        <div class="chart-title mb-6 tracking-wide">Revenue Trend Over Time</div>
         <canvas id="revenueTrendChart" class="z-0 relative"></canvas>
       </div>
 
       <!-- Chart: Top Clients -->
       <div class="chart-box" data-aos="fade-up" data-aos-delay="200">
-        <div class="chart-title">Top 5 Clients by Revenue</div>
+        <div class="chart-title mb-6 tracking-wide">Top 5 Clients by Revenue</div>
         <canvas id="topClientsChart" class="z-0 relative"></canvas>
       </div>
 
       <!-- Chart: Services Sold -->
       <div class="chart-box" data-aos="fade-up" data-aos-delay="300">
-        <div class="chart-title">Services Sold per Client</div>
+        <div class="chart-title mb-6 tracking-wide">Services Sold per Client</div>
         <canvas id="servicesSoldChart" class="z-0 relative"></canvas>
       </div>
 
@@ -1011,11 +1209,11 @@
             AI-Powered Insights 
             <span class="bg-purple-800 px-2 py-0.5 rounded text-xs text-white">Client Exclusive</span>
           </h4>
-          <div id="ai-insights-chat" class="bg-gray-900/50 border border-gray-700 p-4 rounded h-[220px] overflow-y-auto text-left text-sm text-white shadow-inner"></div>
+          <div id="ai-insights-chat" class="bg-gray-900/50 border border-gray-700 p-4 rounded h-[220px] overflow-y-auto text-left text-sm text-white shadow-inner custom-scroll"></div>
         </div>
-        <div class="flex mt-4">
+        <div class="ai-chat-input-group">
           <input id="ai-question-input" type="text" placeholder="Ask about the data..." class="flex-grow bg-gray-800 border border-gray-700 text-white text-sm px-4 py-2 rounded-l-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          <button id="ai-send-button" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-r-md text-sm">Send</button>
+          <button id="ai-send-button" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-r-md text-sm transition duration-200">Send</button>
         </div>
         <div id="ai-insights-loading" class="absolute inset-0 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center rounded-lg z-10">
           <span class="text-white animate-pulse text-sm">Generating insight...</span>
@@ -1121,7 +1319,7 @@
                     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 md:mb-12">Security & <span class="text-gradient-blue-green">Governance</span></h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                         <div class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                            <svg class="w-10 h-10 md:w-12 md:h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2S10 7.9 10 9v6c0 1.1.9 2 2 2zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V8zm-2 9H7v2h2v-2zm-2-4H7v2h2v-2zM7 7h2v2H7V7zm12-4h-4V1h-2v2H9V1H7v2H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM21 19H3V5h18v14z"/></svg>
+                            <svg class="w-10 h-10 md:w-12 md:h-12 text-green-400 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2S10 7.9 10 9v6c0 1.1.9 2 2 2zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V8zm-2 9H7v2h2v-2zm-2-4H7v2h2v-2zM7 7h2v2H7V7zm12-4h-4V1h-2v2H9V1H7v2H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM21 19H3V5h18v14z"/></svg>
                             <h3 class="text-lg sm:text-xl font-semibold text-white mb-2">Advanced Data Encryption</h3>
                             <p class="text-gray-300 text-sm">We use AES-256 encryption to secure all data both in transit and at rest, ensuring your information is always protected.</p>
                         </div>
@@ -1417,7 +1615,7 @@
 
             <h3 class="text-xl font-semibold text-white mt-6 mb-2">3. Managing Cookies</h3>
             <p class="text-gray-300 mb-2">You can accept, reject, or customise your cookie preferences via our cookie banner or your browser settings.</p>
-            <p class="text-gray-300 mb-4">Disabling cookies may affect site functionality.</p>
+            <p class="text-300 mb-4">Disabling cookies may affect site functionality.</p>
 
             <h3 class="text-xl font-semibold text-white mt-6 mb-2">4. Updates</h3>
             <p class="text-gray-300 mb-4">We may update this Cookie Policy to reflect changes in technology or regulation. Check this page regularly for updates.</p>
@@ -1562,7 +1760,7 @@
 
                 const fadeInterval = setInterval(() => {
                     if (starMaterial.opacity > targetOpacity) {
-                        starMaterial.opacity -= step;
+                        starMaterial.opacity = Math.max(targetOpacity, starMaterial.opacity - step); // Ensure it doesn't go below target
                     } else {
                         starMaterial.opacity = targetOpacity;
                         clearInterval(fadeInterval);
@@ -1691,85 +1889,188 @@
         // Register the datalabels plugin globally
         Chart.register(ChartDataLabels);
 
-        // Mock Data for the Dashboard
-        const dashboardData = {
-            "2023": {
-                clients: [
-                    { id: "C001", name: "Alpha Dynamics", industry: "Manufacturing", tenure: "1+ year", services: ["Tax Prep", "Advisory"], monthlyRevenue: [12500, 13200, 14100, 13800, 15000, 14500, 15800, 16200, 17000, 16500, 17200, 18000], billableHours: [50, 52, 55, 53, 58, 56, 60, 62, 65, 63, 67, 70], outstanding: 0 },
-                    { id: "C002", name: "Beta Innovations", industry: "Tech", tenure: "0-6 months", services: ["Payroll", "Bookkeeping"], monthlyRevenue: [2800, 3100, 3500, 3300, 3600, 3400, 3800, 3900, 4100, 4000, 4200, 4500], billableHours: [12, 13, 15, 14, 16, 15, 17, 18, 19, 18, 20, 22], outstanding: 750 },
-                    { id: "C003", name: "Gamma Retail Solutions", industry: "Retail", tenure: "6-12 months", services: ["Bookkeeping", "Tax Prep"], monthlyRevenue: [4200, 4500, 4800, 4600, 4900, 4700, 5100, 5200, 5400, 5300, 5500, 5800], billableHours: [18, 19, 20, 19, 21, 20, 22, 23, 24, 23, 25, 26], outstanding: 0 },
-                    { id: "C004", name: "Delta Healthcare", industry: "Healthcare", tenure: "1+ year", services: ["Advisory"], monthlyRevenue: [7500, 7800, 8100, 7900, 8300, 8100, 8500, 8700, 8900, 8800, 9000, 9200], billableHours: [30, 31, 32, 31, 33, 32, 34, 35, 36, 35, 37, 38], outstanding: 0 },
-                    { id: "C005", name: "Epsilon Services Group", industry: "Services", tenure: "0-6 months", services: ["Tax Prep"], monthlyRevenue: [2200, 2400, 2600, 2500, 2700, 2600, 2800, 2900, 3000, 2900, 3100, 3200], billableHours: [10, 11, 12, 11, 13, 12, 14, 14, 15, 14, 15, 16], outstanding: 300 },
-                    { id: "C006", name: "Fusion Manufacturing", industry: "Manufacturing", tenure: "1+ year", services: ["Payroll", "Bookkeeping"], monthlyRevenue: [6800, 7100, 7400, 7200, 7600, 7400, 7800, 8000, 8200, 8100, 8300, 8500], billableHours: [28, 29, 30, 29, 31, 30, 32, 33, 34, 33, 35, 36], outstanding: 0 },
-                    { id: "C007", name: "Global Tech Solutions", industry: "Tech", tenure: "6-12 months", services: ["Advisory"], monthlyRevenue: [5500, 5700, 5900, 5800, 6100, 6000, 6300, 6500, 6700, 6600, 6800, 7000], billableHours: [22, 23, 24, 23, 25, 24, 26, 27, 28, 27, 28, 29], outstanding: 0 },
-                    { id: "C008", name: "Horizon Retail", industry: "Retail", tenure: "1+ year", services: ["Tax Prep", "Advisory"], monthlyRevenue: [8800, 9100, 9400, 9200, 9600, 9400, 9800, 10000, 10200, 10100, 10300, 10500], billableHours: [35, 36, 37, 36, 38, 37, 39, 40, 41, 40, 41, 42], outstanding: 0 },
-                    { id: "C009", name: "Infinity Health", industry: "Healthcare", tenure: "0-6 months", services: ["Bookkeeping"], monthlyRevenue: [3800, 4000, 4200, 4100, 4300, 4200, 4400, 4500, 4600, 4500, 4700, 4800], billableHours: [16, 17, 18, 17, 19, 18, 19, 20, 21, 20, 21, 22], outstanding: 500 },
-                    { id: "C010", name: "Jupiter Services", industry: "Services", tenure: "6-12 months", services: ["Payroll"], monthlyRevenue: [5200, 5400, 5600, 5500, 5700, 5600, 5800, 5900, 6000, 5900, 6100, 6200], billableHours: [20, 21, 22, 21, 23, 22, 24, 24, 25, 24, 25, 26], outstanding: 0 },
-                    { id: "C011", name: "Krypton Industries", industry: "Manufacturing", tenure: "1+ year", services: ["Advisory", "Tax Prep"], monthlyRevenue: [10500, 10800, 11100, 10900, 11300, 11100, 11500, 11700, 11900, 11800, 12000, 12200], billableHours: [40, 41, 42, 41, 43, 42, 44, 45, 46, 45, 46, 47], outstanding: 0 },
-                    { id: "C012", name: "Lunar Tech", industry: "Tech", tenure: "0-6 months", services: ["Tax Prep"], monthlyRevenue: [3500, 3700, 3900, 3800, 4000, 3900, 4100, 4200, 4300, 4200, 4400, 4500], billableHours: [14, 15, 16, 15, 17, 16, 17, 18, 19, 18, 19, 20], outstanding: 150 },
-                    { id: "C017", name: "Vanguard Ventures", industry: "Tech", tenure: "0-6 months", services: ["Advisory"], monthlyRevenue: [1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600], billableHours: [8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14], outstanding: 0 },
-                    { id: "C018", name: "Vivid Solutions", industry: "Services", tenure: "0-6 months", services: ["Bookkeeping"], monthlyRevenue: [1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900], billableHours: [7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13], outstanding: 0 },
-                    { id: "C019", name: "Apex Manufacturing", industry: "Manufacturing", tenure: "0-6 months", services: ["Payroll"], monthlyRevenue: [2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600], billableHours: [10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16], outstanding: 0 },
-                    { id: "C020", name: "Bright Retail", industry: "Retail", tenure: "0-6 months", services: ["Tax Prep"], monthlyRevenue: [2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100], billableHours: [8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14], outstanding: 0 },
-                ],
-                newClientIDs: ["C002", "C003", "C005", "C007", "C009", "C010", "C012", "C017", "C018", "C019", "C020"],
-                retainedClientIDs: []
-            },
-            "2024": {
-                clients: [
-                    { id: "C001", name: "Alpha Dynamics", industry: "Manufacturing", tenure: "1+ year", services: ["Tax Prep", "Advisory", "Payroll"], monthlyRevenue: [13500, 14200, 15100, 14800, 16000, 15500, 16800, 17200, 18000, 17500, 18200, 19000], billableHours: [55, 57, 60, 58, 62, 60, 64, 66, 68, 67, 69, 72], outstanding: 0 },
-                    { id: "C002", name: "Beta Innovations", industry: "Tech", tenure: "6-12 months", services: ["Payroll", "Bookkeeping"], monthlyRevenue: [3000, 3300, 3700, 3500, 3800, 3600, 4000, 4100, 4300, 4200, 4400, 4700], billableHours: [13, 14, 16, 15, 17, 16, 18, 19, 20, 19, 21, 23], outstanding: 0 },
-                    { id: "C003", name: "Gamma Retail Solutions", industry: "Retail", tenure: "1+ year", services: ["Bookkeeping", "Tax Prep"], monthlyRevenue: [4500, 4800, 5100, 4900, 5200, 5000, 5400, 5500, 5700, 5600, 5800, 6100], billableHours: [19, 20, 21, 20, 22, 21, 23, 24, 25, 24, 26, 27], outstanding: 0 },
-                    { id: "C004", name: "Delta Healthcare", industry: "Healthcare", tenure: "1+ year", services: ["Advisory", "Tax Prep"], monthlyRevenue: [8000, 8300, 8600, 8400, 8800, 8600, 9000, 9200, 9400, 9300, 9500, 9700], billableHours: [32, 33, 34, 33, 35, 34, 36, 37, 38, 37, 39, 40], outstanding: 0 },
-                    { id: "C005", name: "Epsilon Services Group", industry: "Services", tenure: "6-12 months", services: ["Tax Prep", "Bookkeeping"], monthlyRevenue: [2400, 2600, 2800, 2700, 2900, 2800, 3000, 3100, 3200, 3100, 3300, 3400], billableHours: [11, 12, 13, 12, 14, 13, 15, 15, 16, 15, 16, 17], outstanding: 0 },
-                    { id: "C006", name: "Fusion Manufacturing", industry: "Manufacturing", tenure: "1+ year", services: ["Payroll", "Bookkeeping"], monthlyRevenue: [7200, 7500, 7800, 7600, 8000, 7800, 8200, 8400, 8600, 8500, 8700, 8900], billableHours: [30, 31, 32, 31, 33, 32, 34, 35, 36, 35, 37, 38], outstanding: 0 },
-                    { id: "C007", name: "Global Tech Solutions", industry: "Tech", tenure: "1+ year", services: ["Advisory"], monthlyRevenue: [5800, 6000, 6200, 6100, 6400, 6300, 6600, 6800, 7000, 6900, 7100, 7300], billableHours: [23, 24, 25, 24, 26, 25, 27, 28, 29, 28, 29, 30], outstanding: 0 },
-                    { id: "C008", name: "Horizon Retail", industry: "Retail", tenure: "1+ year", services: ["Tax Prep", "Advisory", "Payroll"], monthlyRevenue: [9500, 9800, 10100, 9900, 10300, 10100, 10500, 10700, 10900, 10800, 11000, 11200], billableHours: [38, 39, 40, 39, 41, 40, 42, 43, 44, 43, 44, 45], outstanding: 0 },
-                    { id: "C009", name: "Infinity Health", industry: "Healthcare", tenure: "6-12 months", services: ["Bookkeeping", "Advisory"], monthlyRevenue: [4000, 4200, 4400, 4300, 4500, 4400, 4600, 4700, 4800, 4700, 4900, 5000], billableHours: [17, 18, 19, 18, 20, 19, 20, 21, 22, 21, 22, 23], outstanding: 0 },
-                    { id: "C010", name: "Jupiter Services", industry: "Services", tenure: "1+ year", services: ["Payroll", "Tax Prep"], monthlyRevenue: [5500, 5700, 5900, 5800, 6100, 6000, 6300, 6500, 6700, 6600, 6800, 7000], billableHours: [21, 22, 23, 22, 24, 23, 25, 25, 26, 25, 26, 27], outstanding: 0 },
-                    { id: "C011", name: "Krypton Industries", industry: "Manufacturing", tenure: "1+ year", services: ["Advisory", "Tax Prep", "Bookkeeping"], monthlyRevenue: [11500, 11800, 12100, 11900, 12300, 12100, 12500, 12700, 12900, 12800, 13000, 13200], billableHours: [44, 45, 46, 45, 47, 46, 48, 49, 50, 49, 50, 51], outstanding: 0 },
-                    { id: "C012", name: "Lunar Tech", industry: "Tech", tenure: "6-12 months", services: ["Tax Prep", "Payroll"], monthlyRevenue: [3700, 3900, 4100, 4000, 4200, 4100, 4300, 4400, 4500, 4400, 4600, 4700], billableHours: [15, 16, 17, 16, 18, 17, 18, 19, 20, 19, 20, 21], outstanding: 0 },
-                    // New clients for 2024
-                    { id: "C013", name: "Nova Logistics", industry: "Services", tenure: "0-6 months", services: ["Bookkeeping"], monthlyRevenue: [2000, 2100, 2200, 2150, 2300, 2250, 2400, 2450, 2500, 2480, 2550, 2600], billableHours: [8, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 12], outstanding: 0 },
-                    { id: "C014", name: "Orion Pharma", industry: "Healthcare", tenure: "0-6 months", services: ["Advisory"], monthlyRevenue: [6000, 6200, 6400, 6300, 6500, 6400, 6600, 6700, 6800, 6750, 6900, 7000], billableHours: [25, 26, 27, 26, 28, 27, 28, 29, 30, 29, 30, 31], outstanding: 0 },
-                    { id: "C017", name: "Vanguard Ventures", industry: "Tech", tenure: "6-12 months", services: ["Advisory"], monthlyRevenue: [1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700], billableHours: [8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14], outstanding: 0 },
-                    { id: "C018", name: "Vivid Solutions", industry: "Services", tenure: "6-12 months", services: ["Bookkeeping"], monthlyRevenue: [1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000], billableHours: [7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13], outstanding: 0 },
-                    { id: "C019", name: "Apex Manufacturing", industry: "Manufacturing", tenure: "6-12 months", services: ["Payroll"], monthlyRevenue: [2600, 2700, 2800, 2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600, 3700], billableHours: [10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16], outstanding: 0 },
-                    { id: "C020", name: "Bright Retail", industry: "Retail", tenure: "6-12 months", services: ["Tax Prep"], monthlyRevenue: [2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200], billableHours: [8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14], outstanding: 0 },
-                ],
-                newClientIDs: ["C013", "C014"],
-                retainedClientIDs: ["C001", "C002", "C003", "C004", "C005", "C006", "C007", "C008", "C009", "C010", "C011", "C012", "C017", "C018", "C019", "C020"]
-            },
-            "2025": {
-                clients: [
-                    { id: "C001", name: "Alpha Dynamics", industry: "Manufacturing", tenure: "1+ year", services: ["Tax Prep", "Advisory", "Payroll", "Bookkeeping"], monthlyRevenue: [14500, 15200, 16100, 15800, 17000, 16500, 17800, 18200, 19000, 18500, 19200, 20000], billableHours: [60, 62, 65, 63, 68, 66, 70, 72, 75, 73, 77, 80], outstanding: 0 },
-                    { id: "C002", name: "Beta Innovations", industry: "Tech", tenure: "1+ year", services: ["Payroll", "Bookkeeping"], monthlyRevenue: [3200, 3500, 3900, 3700, 4000, 3800, 4200, 4300, 4500, 4400, 4600, 4900], billableHours: [14, 15, 17, 16, 18, 17, 19, 20, 21, 20, 22, 24], outstanding: 0 },
-                    { id: "C003", name: "Gamma Retail Solutions", industry: "Retail", tenure: "1+ year", services: ["Bookkeeping", "Tax Prep"], monthlyRevenue: [4800, 5100, 5400, 5200, 5500, 5300, 5700, 5800, 6000, 5900, 6100, 6400], billableHours: [20, 21, 22, 21, 23, 22, 24, 25, 26, 25, 27, 28], outstanding: 0 },
-                    { id: "C004", name: "Delta Healthcare", industry: "Healthcare", tenure: "1+ year", services: ["Advisory", "Tax Prep", "Payroll"], monthlyRevenue: [8500, 8800, 9100, 8900, 9300, 9100, 9500, 9700, 9900, 9800, 10000, 10200], billableHours: [34, 35, 36, 35, 37, 36, 38, 39, 40, 39, 41, 42], outstanding: 0 },
-                    { id: "C005", name: "Epsilon Services Group", industry: "Services", tenure: "1+ year", services: ["Tax Prep", "Bookkeeping"], monthlyRevenue: [2600, 2800, 3000, 2900, 3100, 3000, 3200, 3300, 3400, 3300, 3500, 3600], billableHours: [12, 13, 14, 13, 15, 14, 16, 16, 17, 16, 17, 18], outstanding: 0 },
-                    { id: "C006", name: "Fusion Manufacturing", industry: "Manufacturing", tenure: "1+ year", services: ["Payroll", "Bookkeeping"], monthlyRevenue: [7500, 7800, 8100, 7900, 8300, 8100, 8500, 8700, 8900, 8800, 9000, 9200], billableHours: [31, 32, 33, 32, 34, 33, 35, 36, 37, 36, 38, 39], outstanding: 0 },
-                    { id: "C007", name: "Global Tech Solutions", industry: "Tech", tenure: "1+ year", services: ["Advisory"], monthlyRevenue: [6000, 6200, 6400, 6300, 6600, 6500, 6800, 7000, 7200, 7100, 7300, 7500], billableHours: [24, 25, 26, 25, 27, 26, 28, 29, 30, 29, 30, 31], outstanding: 0 },
-                    { id: "C008", name: "Horizon Retail", industry: "Retail", tenure: "1+ year", services: ["Tax Prep", "Advisory", "Payroll"], monthlyRevenue: [10000, 10300, 10600, 10400, 10800, 10600, 11000, 11200, 11400, 11300, 11500, 11700], billableHours: [40, 41, 42, 41, 43, 42, 44, 45, 46, 45, 46, 47], outstanding: 0 },
-                    { id: "C009", name: "Infinity Health", industry: "Healthcare", tenure: "1+ year", services: ["Bookkeeping", "Advisory"], monthlyRevenue: [4200, 4400, 4600, 4500, 4700, 4600, 4800, 4900, 5000, 4900, 5100, 5200], billableHours: [18, 19, 20, 19, 21, 20, 21, 22, 23, 22, 23, 24], outstanding: 0 },
-                    { id: "C010", name: "Jupiter Services", industry: "Services", tenure: "1+ year", services: ["Payroll", "Tax Prep"], monthlyRevenue: [5800, 6000, 6200, 6100, 6400, 6300, 6600, 6800, 7000, 6900, 7100, 7300], billableHours: [22, 23, 24, 23, 25, 24, 26, 26, 27, 26, 27, 28], outstanding: 0 },
-                    { id: "C011", name: "Krypton Industries", industry: "Manufacturing", tenure: "1+ year", services: ["Advisory", "Tax Prep", "Bookkeeping"], monthlyRevenue: [12000, 12300, 12600, 12400, 12800, 12600, 13000, 13200, 13400, 13300, 13500, 13700], billableHours: [46, 47, 48, 47, 49, 48, 50, 51, 52, 51, 52, 53], outstanding: 0 },
-                    { id: "C012", name: "Lunar Tech", industry: "Tech", tenure: "1+ year", services: ["Tax Prep", "Payroll"], monthlyRevenue: [3900, 4100, 4300, 4200, 4400, 4300, 4500, 4600, 4700, 4600, 4800, 4900], billableHours: [16, 17, 18, 17, 19, 18, 19, 20, 21, 20, 21, 22], outstanding: 0 },
-                    { id: "C013", name: "Nova Logistics", industry: "Services", tenure: "6-12 months", services: ["Bookkeeping"], monthlyRevenue: [2200, 2300, 2400, 2350, 2500, 2450, 2600, 2650, 2700, 2680, 2750, 2800], billableHours: [9, 10, 10, 10, 11, 11, 11, 11, 12, 12, 12, 13], outstanding: 0 },
-                    { id: "C014", name: "Orion Pharma", industry: "Healthcare", tenure: "6-12 months", services: ["Advisory"], monthlyRevenue: [6500, 6700, 6900, 6800, 7000, 6900, 7100, 7200, 7300, 7250, 7400, 7500], billableHours: [27, 28, 29, 28, 30, 29, 30, 31, 32, 31, 32, 33], outstanding: 0 },
-                    // New clients for 2025
-                    { id: "C015", name: "Pioneer Foods", industry: "Retail", tenure: "0-6 months", services: ["Bookkeeping", "Payroll"], monthlyRevenue: [3000, 3100, 3200, 3150, 3300, 3250, 3400, 3450, 3500, 3480, 3550, 3600], billableHours: [12, 13, 13, 13, 14, 14, 14, 14, 15, 15, 15, 16], outstanding: 0 },
-                    { id: "C016", name: "Quantum Energy", industry: "Manufacturing", tenure: "0-6 months", services: ["Advisory"], monthlyRevenue: [9000, 9200, 9400, 9300, 9500, 9400, 9600, 9700, 9800, 9750, 9900, 10000], billableHours: [35, 36, 37, 36, 38, 37, 38, 39, 40, 39, 40, 41], outstanding: 0 },
-                    { id: "C021", name: "Vivid Solutions", industry: "Services", tenure: "1+ year", services: ["Bookkeeping", "Tax Prep"], monthlyRevenue: [2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100], billableHours: [8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14], outstanding: 0 },
-                    { id: "C022", name: "Apex Manufacturing", industry: "Manufacturing", tenure: "1+ year", services: ["Payroll", "Advisory"], monthlyRevenue: [2800, 2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600, 3700, 3800, 3900], billableHours: [11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17], outstanding: 0 },
-                    { id: "C023", name: "Bright Retail", industry: "Retail", tenure: "1+ year", services: ["Tax Prep", "Bookkeeping"], monthlyRevenue: [2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3300, 3400], billableHours: [9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15], outstanding: 0 },
-                    { id: "C024", name: "Zenith Services", industry: "Services", tenure: "0-6 months", services: ["Advisory"], monthlyRevenue: [1000, 1100, 1200, 1150, 1300, 1250, 1400, 1450, 1500, 1480, 1550, 1600], billableHours: [5, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 9], outstanding: 0 },
-                    { id: "C025", name: "Vanguard Ventures", industry: "Tech", tenure: "1+ year", services: ["Advisory", "Payroll"], monthlyRevenue: [1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900], billableHours: [9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15], outstanding: 0 },
-                    { id: "C026", name: "Stellar Healthcare", industry: "Healthcare", tenure: "0-6 months", services: ["Bookkeeping"], monthlyRevenue: [3500, 3600, 3700, 3800, 3900, 4000, 4100, 4200, 4300, 4400, 4500, 4600], billableHours: [14, 15, 15, 16, 16, 17, 17, 18, 18, 19, 19, 20], outstanding: 0 },
-                ],
-                newClientIDs: ["C015", "C016", "C024", "C026"],
-                retainedClientIDs: ["C001", "C002", "C003", "C004", "C005", "C006", "C007", "C008", "C009", "C010", "C011", "C012", "C013", "C014", "C017", "C018", "C019", "C020"]
+        // Helper function to generate monthly data with seasonality
+        function generateMonthlyData(baseValue, seasonalityFactors, numMonths = 12) {
+            const data = [];
+            for (let i = 0; i < numMonths; i++) {
+                let value = baseValue;
+                // Apply seasonality
+                if (i === 7) { // August (index 7) dip
+                    value *= (1 - seasonalityFactors.augustDip);
+                } else if (i >= 9 && i <= 11) { // Q4 spike (Oct, Nov, Dec)
+                    value *= (1 + seasonalityFactors.q4Spike);
+                } else if (i >= 0 && i <= 2) { // Q1 bump (Jan, Feb, Mar)
+                    value *= (1 + seasonalityFactors.q1Bump);
+                }
+                data.push(Math.round(value));
             }
+            return data;
+        }
+
+        const seasonality = {
+            augustDip: 0.15, // 15% dip
+            q4Spike: 0.10,   // 10% spike
+            q1Bump: 0.05     // 5% bump
         };
+
+        // Helper function to create a client object
+        function createClient(id, name, industry, initialTenureMonths, services, baseMonthlyRevenue, baseBillableHours, churnRisk = false, paymentBehavior = 'good') {
+            const monthlyRevenue = generateMonthlyData(baseMonthlyRevenue, seasonality);
+            const billableHours = generateMonthlyData(baseBillableHours, seasonality);
+            const totalRevenue = monthlyRevenue.reduce((sum, val) => sum + val, 0);
+
+            let outstanding = 0;
+            let invoiceStatus = 'Paid';
+            let avgDaysToPay = 30;
+
+            if (paymentBehavior === 'late') {
+                outstanding = Math.round(monthlyRevenue[monthlyRevenue.length - 1] * (0.1 + Math.random() * 0.2)); // 10-30% of last month's revenue
+                invoiceStatus = 'Overdue';
+                avgDaysToPay = 45 + Math.floor(Math.random() * 15); // 45-60 days
+            } else if (paymentBehavior === 'unpaid_new_client') {
+                if (initialTenureMonths < 6) { // Only new clients
+                    outstanding = Math.round(monthlyRevenue[monthlyRevenue.length - 1] * (0.3 + Math.random() * 0.3)); // 30-60%
+                    invoiceStatus = 'Unpaid';
+                    avgDaysToPay = 60 + Math.floor(Math.random() * 30); // 60-90 days
+                }
+            }
+
+            const isActive = !churnRisk; // Simple churn logic for now
+            let churnReason = null;
+            if (churnRisk) {
+                const reasons = ["Switched to competitor", "Didn't see value", "Budget cuts", "Acquired by larger firm"];
+                churnReason = reasons[Math.floor(Math.random() * reasons.length)];
+            }
+
+            return {
+                id,
+                name,
+                industry,
+                tenure: initialTenureMonths,
+                services,
+                monthlyRevenue,
+                billableHours,
+                totalRevenue,
+                outstanding,
+                invoiceStatus,
+                avgDaysToPay,
+                satisfactionScore: Math.floor(Math.random() * 4) + 7, // 7-10
+                isActive,
+                churnReason
+            };
+        }
+
+        // Function to generate a client's data for a specific year, handling retention and new clients
+        function generateClientDataForYear(year, previousYearClients = []) {
+            const currentYearClients = [];
+            const newClientIDs = [];
+            const retainedClientIDs = [];
+
+            // Process existing clients (from previousYearClients)
+            previousYearClients.forEach(prevClient => {
+                let currentTenure = prevClient.tenure + 12; // Add 12 months for the new year
+                let isActive = prevClient.isActive;
+                let churnReason = prevClient.churnReason;
+
+                // Simulate churn for some clients based on criteria (e.g., low satisfaction, specific service)
+                if (prevClient.satisfactionScore <= 7 && prevClient.services.length === 1 && Math.random() < 0.2) { // 20% chance to churn if conditions met
+                    isActive = false;
+                    churnReason = "Didn't see value / Low engagement";
+                } else if (prevClient.outstanding > 0 && prevClient.avgDaysToPay > 60 && Math.random() < 0.15) { // 15% chance to churn if bad payment behavior
+                    isActive = false;
+                    churnReason = "Persistent payment issues";
+                }
+
+                if (isActive) {
+                    retainedClientIDs.push(prevClient.id);
+
+                    // Adjust base revenue/hours for growth or stability
+                    let revenueMultiplier = 1;
+                    let hoursMultiplier = 1;
+                    if (prevClient.tenure >= 12 && prevClient.satisfactionScore > 8) { // Loyal, happy clients grow
+                        revenueMultiplier = 1.05 + Math.random() * 0.05; // 5-10% growth
+                        hoursMultiplier = 1.03 + Math.random() * 0.03; // 3-6% growth
+                    } else if (prevClient.tenure < 12 && prevClient.services.length > 1) { // Newer clients with multiple services grow faster
+                        revenueMultiplier = 1.10 + Math.random() * 0.05; // 10-15% growth
+                        hoursMultiplier = 1.08 + Math.random() * 0.05; // 8-13% growth
+                    }
+
+                    const newBaseRevenue = prevClient.monthlyRevenue.reduce((a, b) => a + b, 0) / 12 * revenueMultiplier;
+                    const newBaseHours = prevClient.billableHours.reduce((a, b) => a + b, 0) / 12 * hoursMultiplier;
+
+                    const updatedClient = {
+                        ...prevClient,
+                        tenure: currentTenure,
+                        monthlyRevenue: generateMonthlyData(newBaseRevenue, seasonality),
+                        billableHours: generateMonthlyData(newBaseHours, seasonality),
+                        totalRevenue: generateMonthlyData(newBaseRevenue, seasonality).reduce((sum, val) => sum + val, 0),
+                        outstanding: (Math.random() < 0.2 && currentTenure > 6) ? Math.round(newBaseRevenue * (0.05 + Math.random() * 0.1)) : 0,
+                        invoiceStatus: (Math.random() < 0.2 && currentTenure > 6) ? 'Overdue' : 'Paid',
+                        avgDaysToPay: (Math.random() < 0.2 && currentTenure > 6) ? (35 + Math.floor(Math.random() * 10)) : 30,
+                        satisfactionScore: Math.min(10, Math.max(7, prevClient.satisfactionScore + (Math.random() > 0.5 ? 1 : -1))),
+                        churnReason: null
+                    };
+                    currentYearClients.push(updatedClient);
+                } else {
+                    currentYearClients.push({ ...prevClient, isActive: false, churnReason: churnReason });
+                }
+            });
+
+            // Add new clients for the current year
+            const newClientsThisYearData = [];
+            if (year === 2023) {
+                newClientsThisYearData.push(
+                    createClient("C001", "Alpha Dynamics", "Manufacturing", 24, ["Tax Prep", "Advisory", "Payroll"], 13000, 55),
+                    createClient("C002", "Beta Innovations", "Tech", 5, ["Payroll", "Bookkeeping"], 3000, 13, false, 'late'),
+                    createClient("C003", "Gamma Retail Solutions", "Retail", 10, ["Bookkeeping", "Tax Prep"], 4500, 19),
+                    createClient("C004", "Delta Healthcare", "Healthcare", 18, ["Advisory"], 8000, 32),
+                    createClient("C005", "Epsilon Services Group", "Services", 3, ["Tax Prep"], 2500, true), // Higher churn risk
+                    createClient("C006", "Fusion Manufacturing", "Manufacturing", 15, ["Payroll", "Bookkeeping"], 7000, 30),
+                    createClient("C007", "Global Tech Solutions", "Tech", 8, ["Advisory"], 6000, 23, false, 'late'),
+                    createClient("C008", "Horizon Retail", "Retail", 20, ["Tax Prep", "Advisory"], 9000, 38),
+                    createClient("C009", "Infinity Health", "Healthcare", 4, ["Bookkeeping"], 4000, 17, true), // Higher churn risk
+                    createClient("C010", "Jupiter Services", "Services", 11, ["Payroll"], 5500, 21),
+                    createClient("C011", "Krypton Industries", "Manufacturing", 30, ["Advisory", "Tax Prep", "Bookkeeping"], 11000, 44),
+                    createClient("C012", "Lunar Tech", "Tech", 6, ["Tax Prep"], 3800, 15),
+                    createClient("C017", "Vanguard Ventures", "Tech", 2, ["Advisory"], 1500, 8),
+                    createClient("C018", "Vivid Solutions", "Services", 4, ["Bookkeeping"], 1800, 7),
+                    createClient("C019", "Apex Manufacturing", "Manufacturing", 1, ["Payroll"], 2500, 10),
+                    createClient("C020", "Bright Retail", "Retail", 3, ["Tax Prep"], 2000, 8),
+                );
+            } else if (year === 2024) {
+                newClientsThisYearData.push(
+                    createClient("C013", "Nova Logistics", "Services", 0, ["Bookkeeping"], 2200, 9),
+                    createClient("C014", "Orion Pharma", "Healthcare", 0, ["Advisory"], 6500, 27),
+                    createClient("C027", "GreenTech Solutions", "Tech", 0, ["Advisory", "Tax Prep"], 4500, 18),
+                    createClient("C028", "Urban Living", "Retail", 0, ["Bookkeeping"], 2800, 11)
+                );
+            } else if (year === 2025) {
+                newClientsThisYearData.push(
+                    createClient("C015", "Pioneer Foods", "Retail", 0, ["Bookkeeping", "Payroll"], 3000, 12),
+                    createClient("C016", "Quantum Energy", "Manufacturing", 0, ["Advisory"], 9000, 35),
+                    createClient("C029", "Innovate Labs", "Tech", 0, ["Advisory", "Payroll"], 7000, 28),
+                    createClient("C030", "HealthLink Services", "Healthcare", 0, ["Bookkeeping", "Tax Prep"], 5500, 22),
+                    createClient("C031", "Dynamic Logistics", "Services", 0, ["Tax Prep"], 2500, 10, true, 'unpaid_new_client')
+                );
+            }
+
+            newClientsThisYearData.forEach(client => {
+                currentYearClients.push(client);
+                newClientIDs.push(client.id);
+            });
+
+            return {
+                clients: currentYearClients,
+                newClientIDs,
+                retainedClientIDs
+            };
+        }
+
+        const dashboardData = {};
+        dashboardData["2023"] = generateClientDataForYear(2023);
+        dashboardData["2024"] = generateClientDataForYear(2024, dashboardData["2023"].clients.filter(c => c.isActive));
+        dashboardData["2025"] = generateClientDataForYear(2025, dashboardData["2024"].clients.filter(c => c.isActive));
+
 
         let revenueTrendChartInstance;
         let topClientsChartInstance;
@@ -1820,8 +2121,15 @@
                 }
 
                 // Filter by Client Tenure
-                if (selectedTenure !== "All" && client.tenure !== selectedTenure) {
-                    matches = false;
+                if (selectedTenure !== "All") {
+                    const tenureMonths = client.tenure;
+                    if (selectedTenure === "0-6 months" && (tenureMonths < 0 || tenureMonths > 6)) {
+                        matches = false;
+                    } else if (selectedTenure === "6-12 months" && (tenureMonths < 6 || tenureMonths > 12)) {
+                        matches = false;
+                    } else if (selectedTenure === "1+ year" && tenureMonths < 12) {
+                        matches = false;
+                    }
                 }
 
                 return matches;
@@ -1863,17 +2171,17 @@
 
             let retentionRate = 'N/A';
             if (previousYearData && currentYearData) {
-                const clientsPreviousYear = new Set(previousYearData.retainedClientIDs.concat(previousYearData.newClientIDs));
-                const clientsCurrentYear = new Set(currentYearData.retainedClientIDs.concat(currentYearData.newClientIDs));
+                const clientsPreviousYearActive = previousYearData.clients.filter(c => c.isActive).map(c => c.id);
+                const clientsCurrentYearActive = currentYearData.clients.filter(c => c.isActive).map(c => c.id);
 
                 let retainedCount = 0;
-                clientsCurrentYear.forEach(clientId => {
-                    if (clientsPreviousYear.has(clientId)) {
+                clientsPreviousYearActive.forEach(prevClientId => {
+                    if (clientsCurrentYearActive.includes(prevClientId)) {
                         retainedCount++;
                     }
                 });
-                // Base for retention is clients from previous year who were active
-                const baseClients = clientsPreviousYear.size;
+                
+                const baseClients = clientsPreviousYearActive.length;
                 if (baseClients > 0) {
                     retentionRate = ((retainedCount / baseClients) * 100).toFixed(1);
                 }
@@ -2094,7 +2402,7 @@ function createChatBubble(text, sender = "assistant") {
             ? 'ml-auto bg-blue-700 text-white self-end'
             : 'bg-gray-700 text-gray-200 self-start'
     } text-sm md:text-base whitespace-pre-wrap break-words`;
-    bubble.innerText = text || "No response.";
+    bubble.innerHTML = text || "No response."; // Use innerHTML to render Markdown
     return bubble;
 }
 
@@ -2112,7 +2420,7 @@ function createChatBubble(text, sender = "assistant") {
             if (query) {
                 aiChatHistory.push({ role: "user", parts: [{ text: query }] });
                 const userBubble = createChatBubble(query, "user");
-aiInsightsChat.appendChild(userBubble);
+                aiInsightsChat.appendChild(userBubble);
 
                 aiInsightsChat.scrollTop = aiInsightsChat.scrollHeight; // Scroll to bottom
                 aiQuestionInput.value = ''; // Clear input
@@ -2120,8 +2428,8 @@ aiInsightsChat.appendChild(userBubble);
                 // If no specific query, it's an filter-triggered insight generation
                 aiChatHistory = []; // Clear history for new filter context
                 aiInsightsChat.innerHTML = ''; // Clear chat bubbles
-                const initialMessage = createChatBubble("Hello! I’m your AI financial assistant. I’m analyzing the data based on your current filters...");
-aiInsightsChat.appendChild(initialMessage);
+                const initialMessage = createChatBubble("Hi there👋! I’m your AI Financial Analyst. I’m analyzing the data based on your current filters...");
+                aiInsightsChat.appendChild(initialMessage);
 
                 aiInsightsChat.scrollTop = aiInsightsChat.scrollHeight;
             }
@@ -2144,8 +2452,8 @@ aiInsightsChat.appendChild(initialMessage);
                     if (selectedQuarter === "All") return sum + d.billableHours.reduce((s, v) => s + v, 0);
                     return sum + d.billableHours.filter((_, idx) => getQuarterFromMonth(idx) === selectedQuarter).reduce((s, v) => s + v, 0);
                 }, 0);
-                const uniqueClientIDs = new Set(filteredData.map(d => d.id)).size;
-                const avgBillableHours = uniqueClientIDs > 0 ? (totalBillableHours / uniqueClientIDs.size).toFixed(0) : '0';
+                const activeClientCount = new Set(filteredData.filter(c => c.isActive).map(d => d.id)).size;
+                const avgBillableHours = activeClientCount > 0 ? (totalBillableHours / activeClientCount).toFixed(0) : '0';
                 const outstandingInvoices = filteredData.reduce((sum, d) => sum + d.outstanding, 0);
 
                 const clientRetentionRate = document.getElementById('retention-rate').innerText;
@@ -2177,8 +2485,71 @@ aiInsightsChat.appendChild(initialMessage);
 
                 const filterDetails = `Current filters: Year=${selectedYear}, Quarter=${selectedQuarter}, Industry=${selectedIndustry}, Service=${selectedServiceType}, Tenure=${selectedTenure}.`;
 
+                // Calculate Churn Rate by Service Type
+                const allClientsForChurnCalc = Object.values(dashboardData).flatMap(yearData => yearData.clients);
+                const serviceChurnCounts = {};
+                const serviceTotalClients = {};
+
+                allClientsForChurnCalc.forEach(client => {
+                    client.services.forEach(service => {
+                        serviceTotalClients[service] = (serviceTotalClients[service] || 0) + 1;
+                        if (!client.isActive && client.churnReason) {
+                            serviceChurnCounts[service] = (serviceChurnCounts[service] || 0) + 1;
+                        }
+                    });
+                });
+
+                let payrollChurnRate = 0;
+                let advisoryChurnRate = 0;
+                if (serviceTotalClients["Payroll"]) {
+                    payrollChurnRate = (serviceChurnCounts["Payroll"] || 0) / serviceTotalClients["Payroll"];
+                }
+                if (serviceTotalClients["Advisory"]) {
+                    advisoryChurnRate = (serviceChurnCounts["Advisory"] || 0) / serviceTotalClients["Advisory"];
+                }
+
+                let churnRateInsight = "";
+                if (payrollChurnRate > 0 && advisoryChurnRate > 0) {
+                    if (payrollChurnRate > advisoryChurnRate * 2) {
+                        churnRateInsight = `* **Churn Alert**: Clients utilizing primarily Payroll services show a significantly higher churn rate compared to those engaged in Advisory services. This suggests a potential need to enhance value proposition or cross-sell additional services to Payroll-only clients.`;
+                    }
+                }
+
+                // Revenue Boost by Service Type (Q4 Advisory example)
+                const q4RevenueAdvisory = filteredData.reduce((sum, client) => {
+                    if (client.services.includes("Advisory")) {
+                        return sum + client.monthlyRevenue[9] + client.monthlyRevenue[10] + client.monthlyRevenue[11];
+                    }
+                    return sum;
+                }, 0);
+
+                const q4RevenueTotal = filteredData.reduce((sum, client) => {
+                    return sum + client.monthlyRevenue[9] + client.monthlyRevenue[10] + client.monthlyRevenue[11];
+                }, 0);
+
+                let advisoryRevenueInsight = "";
+                if (q4RevenueAdvisory > 0 && q4RevenueTotal > 0) {
+                    const advisoryContribution = (q4RevenueAdvisory / q4RevenueTotal) * 100;
+                    advisoryRevenueInsight = `* **Q4 Performance**: Advisory services contributed **${advisoryContribution.toFixed(1)}%** of the total Q4 revenue for the currently filtered data, highlighting its significant impact during year-end planning.`;
+                }
+
+                // Outstanding Invoices by Tenure
+                const outstandingNewClients = filteredData.filter(client => client.tenure < 6 && client.outstanding > 0);
+                const totalOutstandingAll = filteredData.reduce((sum, client) => sum + client.outstanding, 0);
+
+                let outstandingInvoiceInsight = "";
+                if (outstandingNewClients.length > 0 && totalOutstandingAll > 0) {
+                    const totalOutstandingNew = outstandingNewClients.reduce((sum, client) => sum + client.outstanding, 0);
+                    const percentageNewClientOutstanding = (totalOutstandingNew / totalOutstandingAll) * 100;
+                    outstandingInvoiceInsight = `* **Invoice Alert**: Approximately **${percentageNewClientOutstanding.toFixed(0)}%** of outstanding invoices are linked to clients with less than 6 months tenure. This suggests a need for stricter onboarding payment terms or proactive follow-up for new clients.`;
+                }
+
                 let basePrompt = `You are an AI financial assistant for an accounting firm. Provide actionable insights and analysis based on the provided data.
-                Current aggregated data:
+                Always start your response with a friendly greeting.
+                Format your response using Markdown, including headings, bullet points, and bold text for key figures.
+                Focus on providing concise and actionable insights.
+
+                Here's the current aggregated data:
                 - Total Revenue: ${formatCurrency(totalRevenue)}
                 - Average Billable Hours per Client: ${avgBillableHours} hours
                 - Client Retention Rate: ${clientRetentionRate}
@@ -2187,6 +2558,21 @@ aiInsightsChat.appendChild(initialMessage);
                 - Services Sold Breakdown: ${serviceSummary || 'N/A'}
                 ${filterDetails}
 
+                Based on this data, provide:
+                ### Key Metrics Overview
+                * Summarize the current financial health based on Total Revenue and Outstanding Invoices.
+                * Comment on the Average Billable Hours and Client Retention Rate.
+
+                ### Client Performance Highlights
+                * Identify any notable trends or outliers among the Top Clients.
+                * Analyze the Services Sold Breakdown – are there any services performing exceptionally well or poorly?
+                ${churnRateInsight}
+                ${advisoryRevenueInsight}
+
+                ### Strategic Recommendations
+                * Suggest one or two actionable strategies based on the insights to improve revenue, reduce outstanding invoices, or enhance client retention.
+                * Consider how the current filters might impact these recommendations.
+                ${outstandingInvoiceInsight}
                 `;
                 
                 // Construct the full prompt including chat history for context
@@ -2216,18 +2602,19 @@ aiInsightsChat.appendChild(initialMessage);
                     result.candidates[0].content.parts.length > 0) {
                     aiResponseText = result.candidates[0].content.parts[0].text;
                 } else {
+                    aiResponseText = "We know you want an integrated AI Agent in your Dashboards too!😉 Book your 90 Day Free Trial! Lets show you just whats possible!";
                 }
 
                 aiChatHistory.push({ role: "assistant", parts: [{ text: aiResponseText }] });
-               const aiBubble = createChatBubble(aiResponseText);
-aiInsightsChat.appendChild(aiBubble);
+                const aiBubble = createChatBubble(aiResponseText);
+                aiInsightsChat.appendChild(aiBubble);
 
                 aiInsightsChat.scrollTop = aiInsightsChat.scrollHeight; // Scroll to bottom
             } catch (error) {
                 console.error("Error generating AI insights:", error);
                 const errorBubble = document.createElement('div');
                 errorBubble.className = 'ai-chat-bubble text-red-400 text-sm md:text-base';
-                errorBubble.innerText = "Error generating AI insights. Please check your network connection or try again.";
+                errorBubble.innerText = "We know you want it 😉 Book your 90 Day Free Trial! Lets sort it out for you!";
                 aiInsightsChat.appendChild(errorBubble);
                 aiInsightsChat.scrollTop = aiInsightsChat.scrollHeight;
             } finally {
@@ -2293,7 +2680,7 @@ aiInsightsChat.appendChild(aiBubble);
   const sendBtn = document.getElementById("ai-send-button");
   const input = document.getElementById("ai-question-input");
   const chatBox = document.getElementById("ai-insights-chat");
-  const overlay = document.getElementById("ai-disabled-overlay");
+  const overlay = document.getElementById("ai-insights-loading"); // Corrected ID
 
   sendBtn.addEventListener("click", () => {
   const msg = input.value.trim();
@@ -2323,4 +2710,4 @@ aiInsightsChat.appendChild(aiBubble);
   }
 </script>
 </body>
-</html>
+</html>  
