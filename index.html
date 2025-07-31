@@ -690,8 +690,8 @@
                     <a href="#profit-purpose" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap px-2 py-1">Our Mission</a>
                     <a href="#what-we-deliver" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap px-2 py-1">Our Edge</a>
                     <a href="#ai-features" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap px-2 py-1">AI Features</a>
-                    <a href="#services-pricing" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap px-2 py-1">Pricing</a>
-                    <a href="#client-partners" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap px-2 py-1">Clients</a>
+                    <a href="#packages" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap px-2 py-1">Pricing</a>
+                    
                     <a href="#security-governance" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap px-2 py-1">Security</a>
                     <a href="#client-faq" class="text-gray-300 hover:text-white font-medium transition duration-200 whitespace-nowrap px-2 py-1">FAQ</a>
                     <!-- Book a Call button, adjusted padding for mobile and desktop -->
@@ -709,8 +709,8 @@
                     <a href="#profit-purpose" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Our Mission</a>
                     <a href="#what-we-deliver" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Our Edge</a>
                     <a href="#ai-features" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">AI Features</a>
-                    <a href="#services-pricing" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Pricing</a>
-                    <a href="#client-partners" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Clients</a>
+                    <a href="#packages" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Pricing</a>
+                    
                     <a href="#security-governance" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Security</a>
                     <a href="#client-faq" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">FAQ</a>
                     <!-- Changed to open modal -->
@@ -1040,7 +1040,7 @@
   </ul>
 
   </p>
-  <button class="mt-6 w-full bg-[#1e293b] hover:bg-[#334155] text-white py-2 rounded font-semibold transition">Get Started</button>
+  <button onclick="openModal('contactEmailModal')" class="mt-6 w-full bg-[#1e293b] hover:bg-[#334155] text-white py-2 rounded font-semibold transition">Get Started</button>
 </div>
 
     <!-- GROWTH -->
@@ -1067,7 +1067,7 @@
 
       </ul>
       </p>
-      <button class="mt-6 w-full bg-white text-black hover:bg-gray-100 py-2 rounded font-semibold transition">Choose Plan</button>
+      <button onclick="openModal('contactEmailModal')" class="mt-6 w-full bg-white text-black hover:bg-gray-100 py-2 rounded font-semibold transition">Choose Plan</button>
     </div>
 
     <!-- ENTERPRISE -->
@@ -1087,7 +1087,7 @@
         <li class="flex items-center gap-2"><i data-lucide="headphones" class="w-5 h-5 text-purple-400"></i> 24/7 Premium Support</li>
         <li class="flex items-center gap-2"><i data-lucide="shield-check" class="w-5 h-5 text-purple-400"></i> 90-Day ROI Guarantee</li>
       </p>
-      <button class="mt-6 w-full bg-[#1e293b] hover:bg-[#334155] text-white py-2 rounded font-semibold transition">Contact for Quote</button>
+      <button onclick="openModal('contactEmailModal')" class="mt-6 w-full bg-[#1e293b] hover:bg-[#334155] text-white py-2 rounded font-semibold transition">Contact for Quote</button>
     </div>
 
   </div>
@@ -1381,8 +1381,8 @@
                 <div class="flex flex-col space-y-3 items-start">
                     <h3 class="text-white text-lg font-semibold">Pricing</h3>
                     <ul class="space-y-2">
-                        <li><a href="#services-pricing" class="text-gray-300 hover:text-white transition duration-200 text-sm">Pricing</a></li>
-                        <li><a href="#client-partners" class="text-gray-300 hover:text-white transition duration-200 text-sm">Clients</a></li>
+                        <li><a href="#packages" class="text-gray-300 hover:text-white transition duration-200 text-sm">Pricing</a></li>
+                        
                     </ul>
                 </div>
 
@@ -1803,9 +1803,16 @@
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
 
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) { // Check if the element exists before trying to scroll
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                } else {
+                    console.warn(`Element with ID '${targetId}' not found for scrolling.`);
+                }
 
                 // Close mobile menu if open
                 if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
@@ -1993,6 +2000,9 @@
                     if (prevClient.tenure >= 12 && prevClient.satisfactionScore > 8) { // Loyal, happy clients grow
                         revenueMultiplier = 1.05 + Math.random() * 0.05; // 5-10% growth
                         hoursMultiplier = 1.03 + Math.random() * 0.03; // 3-6% growth
+                    } else if (prevClient.tenure < 12 && prevClient.services.length > 1) { // Newer clients with multiple services grow faster
+                        revenueMultiplier = 1.10 + Math.random() * 0.05; // 10-15% growth
+                        hoursMultiplier = 1.08 + Math.random() * 0.05; // 8-13% growth
                     }
 
                     const newBaseRevenue = prevClient.monthlyRevenue.reduce((a, b) => a + b, 0) / 12 * revenueMultiplier;
@@ -2383,7 +2393,8 @@
                         x: { grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#cbd5e0' } },
                         y: {
                             grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                            ticks: { color: '#cbd5e0', precision: 0 }
+                            ticks: { color: '#cbd5e0', precision: 0 },
+                            max: 10 // Set Y-axis maximum to 10
                         }
                     },
                     animation: {
