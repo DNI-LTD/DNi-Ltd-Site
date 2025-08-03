@@ -699,9 +699,12 @@
                         Book a Call
                     </a>
                 </nav>
-                <button id="mobile-menu-button" class="md:hidden text-gray-400 hover:text-white">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                </button>
+                <button id="mobile-menu-button" class="md:hidden flex flex-col justify-center items-center space-y-1 w-8 h-8 focus:outline-none group">
+  <span class="block w-6 h-0.5 bg-white transform transition duration-300 ease-in-out group-[.open]:rotate-45 group-[.open]:translate-y-1.5"></span>
+  <span class="block w-6 h-0.5 bg-white transition duration-300 ease-in-out group-[.open]:opacity-0"></span>
+  <span class="block w-6 h-0.5 bg-white transform transition duration-300 ease-in-out group-[.open]:-rotate-45 group-[.open]:-translate-y-1.5"></span>
+</button>
+
             </div>
             <!-- Mobile Menu (initially hidden) -->
             <div id="mobile-menu" class="md:hidden hidden bg-[#0d1117] py-4 border-t border-gray-800">
@@ -1788,15 +1791,24 @@
         };
 
 
-        // --- Mobile Menu Toggle Script ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
+const mobileMenuButton = document.getElementById('mobile-menu-button');
+const mobileMenu = document.getElementById('mobile-menu');
 
-        if (mobileMenuButton && mobileMenu) {
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
+if (mobileMenuButton && mobileMenu) {
+  mobileMenuButton.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    mobileMenuButton.classList.toggle('open'); // This adds the "open" class for animation
+  });
+}
+
+// Optional: Auto-close menu and animate back to hamburger on link click
+document.querySelectorAll('#mobile-menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.add('hidden');
+    mobileMenuButton.classList.remove('open');
+  });
+});
+
 
         // --- Smooth Scrolling for Anchor Links Script ---
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -2546,4 +2558,4 @@ function createChatBubble(text, sender = "assistant") {
   }
 </script>
 </body>
-</html>
+</html> 
