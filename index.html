@@ -699,29 +699,27 @@
                         Book a Call
                     </a>
                 </nav>
-                <button id="mobile-menu-button" class="md:hidden flex flex-col justify-center items-center space-y-1 w-8 h-8 focus:outline-none group">
-  <span class="block w-6 h-0.5 bg-white transform transition duration-300 ease-in-out group-[.open]:rotate-45 group-[.open]:translate-y-1.5"></span>
-  <span class="block w-6 h-0.5 bg-white transition duration-300 ease-in-out group-[.open]:opacity-0"></span>
-  <span class="block w-6 h-0.5 bg-white transform transition duration-300 ease-in-out group-[.open]:-rotate-45 group-[.open]:-translate-y-1.5"></span>
+                <button id="mobile-menu-button" class="md:hidden flex flex-col justify-center items-center space-y-1 w-8 h-8 focus:outline-none group transition-all duration-300 ease-in-out">
+  <span class="block w-6 h-0.5 bg-white transition-all duration-300 ease-in-out group-[.open]:rotate-45 group-[.open]:translate-y-1.5"></span>
+  <span class="block w-6 h-0.5 bg-white transition-all duration-300 ease-in-out group-[.open]:opacity-0"></span>
+  <span class="block w-6 h-0.5 bg-white transition-all duration-300 ease-in-out group-[.open]:-rotate-45 group-[.open]:-translate-y-1.5"></span>
 </button>
+
 
             </div>
             <!-- Mobile Menu (initially hidden) -->
-            <div id="mobile-menu" class="md:hidden hidden bg-[#0d1117] py-4 border-t border-gray-800">
-                <div class="flex flex-col items-center space-y-4 text-sm">
-                    <a href="#profit-purpose" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Our Mission</a>
-                    <a href="#what-we-deliver" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Our Edge</a>
-                    <a href="#ai-features" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">AI Features</a>
-                    <a href="#packages" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Pricing</a>
-                    
-                    <a href="#security-governance" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Security</a>
-                    <a href="#client-faq" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">FAQ</a>
-                    <!-- Changed to open modal -->
-                    <a href="javascript:void(0)" onclick="openModal('contactEmailModal'); document.getElementById('mobile-menu').classList.add('hidden');" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded-full text-sm font-semibold transition duration-200 w-max">
-                        Book a Call
-                    </a>
-                </div>
-            </div>
+            <div id="mobile-menu" class="md:hidden hidden opacity-0 -translate-y-4 transition-all duration-300 ease-in-out bg-[#0d1117] py-4 border-t border-gray-800">
+  <div class="flex flex-col items-center space-y-4 text-sm">
+    <a href="#profit-purpose" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2">Our Mission</a>
+    <a href="#what-we-deliver" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2">Our Edge</a>
+    <a href="#ai-features" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2">AI Features</a>
+    <a href="#packages" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2">Pricing</a>
+    <a href="#security-governance" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2">Security</a>
+    <a href="#client-faq" class="text-gray-300 hover:text-white font-medium transition duration-200 py-2">FAQ</a>
+    <a href="javascript:void(0)" onclick="openModal('contactEmailModal')" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded-full text-sm font-semibold transition duration-200 w-max">Book a Call</a>
+  </div>
+</div>
+
         </header>
 
         <main>
@@ -1796,21 +1794,37 @@ const mobileMenu = document.getElementById('mobile-menu');
 
 if (mobileMenuButton && mobileMenu) {
   mobileMenuButton.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-    mobileMenuButton.classList.toggle('open'); // This adds the "open" class for animation
+    const isOpen = mobileMenuButton.classList.toggle('open');
+
+    // Toggle visibility
+    if (isOpen) {
+      mobileMenu.classList.remove('hidden');
+      setTimeout(() => {
+        mobileMenu.classList.remove('opacity-0', '-translate-y-4');
+        mobileMenu.classList.add('opacity-100', 'translate-y-0');
+      }, 10);
+    } else {
+      mobileMenu.classList.remove('opacity-100', 'translate-y-0');
+      mobileMenu.classList.add('opacity-0', '-translate-y-4');
+      setTimeout(() => {
+        mobileMenu.classList.add('hidden');
+      }, 300); // match duration in CSS
+    }
+  });
+
+  // Auto-close when a link is tapped
+  document.querySelectorAll('#mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenuButton.classList.remove('open');
+      mobileMenu.classList.remove('opacity-100', 'translate-y-0');
+      mobileMenu.classList.add('opacity-0', '-translate-y-4');
+      setTimeout(() => {
+        mobileMenu.classList.add('hidden');
+      }, 300);
+    });
   });
 }
-
-// Optional: Auto-close menu and animate back to hamburger on link click
-document.querySelectorAll('#mobile-menu a').forEach(link => {
-  link.addEventListener('click', () => {
-    mobileMenu.classList.add('hidden');
-    mobileMenuButton.classList.remove('open');
-  });
-});
-
-
-        // --- Smooth Scrolling for Anchor Links Script ---
+      // --- Smooth Scrolling for Anchor Links Script ---
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
